@@ -1,0 +1,1014 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="主要介绍指令分区、指令后缀以及各个类型的指令用法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARM微处理器编程｜指令系统-算术指令">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B%EF%BD%9C%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F-%E7%AE%97%E6%9C%AF%E6%8C%87%E4%BB%A4/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="主要介绍指令分区、指令后缀以及各个类型的指令用法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507191847743.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507193746395.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507194515538.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507195444442.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507195910770.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507200035199.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507200142574.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507200217229.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507200710828.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507200654385.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507202528458.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507202716846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021050720274189.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507202909284.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507203513311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507203909394.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507204150610.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507204332756.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507204758117.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507204931946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021050721045049.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021050721082463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507210829191.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021050721181143.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507211953772.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507212142185.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507212724896.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507213750629.jpg">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507215059944.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210507215506657.png">
+<meta property="article:published_time" content="2021-05-07T14:03:54.000Z">
+<meta property="article:modified_time" content="2022-03-09T04:16:19.734Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="arm">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210507191847743.png">
+  
+  
+  <title>ARM微处理器编程｜指令系统-算术指令 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="ARM微处理器编程｜指令系统-算术指令">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-05-07 22:03" pubdate>
+        2021年5月7日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      55 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">ARM微处理器编程｜指令系统-算术指令</h1>
+            
+            <div class="markdown-body">
+              <h1 id="arm指令"><a class="markdownIt-Anchor" href="#arm指令"></a> ARM指令</h1>
+<h2 id="指令分区"><a class="markdownIt-Anchor" href="#指令分区"></a> 指令分区</h2>
+<p><img src="https://img-blog.csdnimg.cn/20210507191847743.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>ARM指令代码一般可以分为五个域
+<ul>
+<li><strong>条件码域</strong>[31:28] ，4位条件码共有16种组合</li>
+<li><strong>指令代码域</strong>[27:20]，除指令编码外、还包含几个很重要的指令特征位和可选后缀的编码</li>
+<li>地址<strong>基址Rn域</strong>[19:16]，4位可编码R0-R15共16个寄存器</li>
+<li><strong>目标或源寄存器Rd域</strong>[15:12]，4位可编码R0-R15共16个寄存器</li>
+<li><strong>地址偏移或操作寄存器、操作数域</strong>[11:0]</li>
+</ul>
+</li>
+</ul>
+<h2 id="指令可选后缀"><a class="markdownIt-Anchor" href="#指令可选后缀"></a> 指令可选后缀</h2>
+<h3 id="s-后缀"><a class="markdownIt-Anchor" href="#s-后缀"></a> S 后缀</h3>
+<ul>
+<li>含义：使用S后缀时，指令执行后程序状态寄存器的条件标志位将刷新；如：<code>ADDS R3,R5,R8</code></li>
+<li>使用范围
+<ul>
+<li>有些指令不需要加S后缀，在执行时同样可以刷新条件标志位。如：CMP, TEQ, TST等。</li>
+<li>有些指令不会引起条件标志位的变化，如：<code>STR R5, [R7]</code></li>
+</ul>
+</li>
+<li>在书写时，<code>S后缀紧跟在指令助记符后面</code></li>
+</ul>
+<h3 id="后缀"><a class="markdownIt-Anchor" href="#后缀"></a> ！后缀</h3>
+<ul>
+<li>含义：在指令的地址表达式中含有！后缀时，指令执行后，基址寄存器中的地址将发生变化（事先访问方式）</li>
+</ul>
+<blockquote>
+<p>基址寄存器中的地址值 <strong>（指令执行后）</strong> ＝指令执行前的值＋地址偏移量</p>
+</blockquote>
+<ul>
+<li>位置和范围
+<ul>
+<li>！后缀必须紧跟在表达地址的表达式后面，<code>而地址表达式要有明确的地址偏移量</code></li>
+<li><code>！后缀不能用在R15的后面</code></li>
+<li>当使用在单个地址寄存器后面时，<code>必须确信这个寄存器有隐性的偏移量</code>，如：<code>STMDB R1!, &#123;R3,R14&#125;</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="b-后缀-h-后缀"><a class="markdownIt-Anchor" href="#b-后缀-h-后缀"></a> B 后缀 / H 后缀</h3>
+<ul>
+<li>
+<p>含义：</p>
+<ul>
+<li>B后缀的含义：指令所涉及的数据是一字节，不是一字或半字。</li>
+<li>H后缀的含义：指令所涉及的数据是二字节，不是一字。</li>
+</ul>
+</li>
+<li>
+<p>位置</p>
+<ul>
+<li>B后缀紧跟在指令助记符后面。</li>
+<li>H后缀紧跟在指令助记符后面。</li>
+</ul>
+</li>
+</ul>
+<h3 id="t-后缀"><a class="markdownIt-Anchor" href="#t-后缀"></a> T 后缀</h3>
+<ul>
+<li>含义：指令在特权模式下对存储器的访问，将被存储器看成是用户模式的访问。</li>
+<li>限制：
+<ul>
+<li>一般只用在字传送和无符号字节传送中</li>
+<li>在用户模式下不可选用，选用是没有意义的</li>
+<li>不能与事先更新寻址一起使用</li>
+</ul>
+</li>
+</ul>
+<h3 id="条件后缀"><a class="markdownIt-Anchor" href="#条件后缀"></a> 条件后缀</h3>
+<p><img src="https://img-blog.csdnimg.cn/20210507193746395.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>被测试条件位有Z、C、N和V</li>
+<li>在汇编语言中，条件码助记符紧接在指令助记符后面，如果既选条件后缀也选S后缀，则书写中“S”排列在后面。</li>
+<li>条件后缀是要测试条件标志位，而S后缀是要刷新条件标志位</li>
+<li>条件后缀要测试的是指令执行前的标志位，而S后缀是依据指令执行的结果改变条件标志</li>
+</ul>
+<h1 id="指令类型"><a class="markdownIt-Anchor" href="#指令类型"></a> 指令类型</h1>
+<h2 id="跳转指令"><a class="markdownIt-Anchor" href="#跳转指令"></a> 跳转指令</h2>
+<h3 id="实现跳转的两种方法"><a class="markdownIt-Anchor" href="#实现跳转的两种方法"></a> 实现跳转的两种方法</h3>
+<ul>
+<li>
+<p>使用专门的跳转指令（短跳转，从当前指令向前或向后的<code>32MB</code>的地址空间的跳转）</p>
+<ul>
+<li>B   跳转指令</li>
+<li>BL  <code>带返回</code>的跳转指令（函数调用）</li>
+<li>BX  <code>带状态切换</code>的跳转指令</li>
+<li>BLX  带返回和状态切换的跳转指令<code>（ARM7不支持）</code></li>
+</ul>
+</li>
+<li>
+<p>直接向程序计数器PC写入跳转地址值（长跳转，可以实现在<code>4GB</code>的地址空间中的任意跳转）</p>
+</li>
+</ul>
+<h3 id="跳转指令的编码"><a class="markdownIt-Anchor" href="#跳转指令的编码"></a> 跳转指令的编码</h3>
+<p><img src="https://img-blog.csdnimg.cn/20210507194515538.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>存储在跳转指令中的实际值是相对当前PC值的一个<code>偏移量</code>，而不是一个绝对地址</li>
+<li>处理器把偏移量（24 位有符号数）左移两位，进行<code>符号扩展</code>后再与PC相加。</li>
+<li><code>左移两位</code>：机器字长32位，指令中给出的偏移量是按字(32位)寻址的，而PC寄存器的内容按字节(8位)寻址，也就是说假如给出的偏移量是0x0100，那么对应按字节寻址的地址就应该是0x0400，即按字寻址的偏移量的4倍，也就是左移2位，才能与PC内容相加。</li>
+</ul>
+<h3 id="b-指令"><a class="markdownIt-Anchor" href="#b-指令"></a> B 指令</h3>
+<blockquote>
+<p>B{条件}  目标地址</p>
+</blockquote>
+<ul>
+<li>B指令是最简单的跳转指令。一旦遇到一个 B 指令，ARM 处理器将立即跳转到给定的目标地址，从那里继续执行。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210507195444442.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h3 id="bl-指令"><a class="markdownIt-Anchor" href="#bl-指令"></a> BL 指令</h3>
+<blockquote>
+<p>BL{条件} 目标地址</p>
+</blockquote>
+<ul>
+<li>该指令是实现子程序调用的一个基本而常用的手段：跳转之前，会<code>在寄存器R14中保存PC的当前内容（下一条指令）</code>，因此，可以通过<code>将R14(LR) 的内容重新加载到PC中</code>，来返回到跳转指令之后的那个指令处执行。<br />
+<img src="https://img-blog.csdnimg.cn/20210507195910770.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+</ul>
+<h3 id="条件跳转"><a class="markdownIt-Anchor" href="#条件跳转"></a> 条件跳转</h3>
+<p><img src="https://img-blog.csdnimg.cn/20210507200035199.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h3 id="bx指令"><a class="markdownIt-Anchor" href="#bx指令"></a> BX指令</h3>
+<blockquote>
+<p>BX{条件}  &lt;Rm&gt;</p>
+</blockquote>
+<ul>
+<li>BX指令跳转到指令中所指定的目标地址，目标地址处的指令既可以是ARM指令，也可以是Thumb指令。</li>
+<li>目标地址处的指令类型由寄存器<Rm>的bit[0]决定。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210507200142574.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>伪代码：<br />
+<img src="https://img-blog.csdnimg.cn/20210507200217229.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+</ul>
+<h3 id="blx-指令"><a class="markdownIt-Anchor" href="#blx-指令"></a> BLX 指令</h3>
+<blockquote>
+<p>BLX  目标地址</p>
+</blockquote>
+<ul>
+<li><code>BLX 目标地址</code>指令从ARM指令集跳转到指令中所指定的目标地址，并将处理器的工作状态<code>由ARM状态切换到Thumb状态</code>，该指令同时<code>将PC的当前内容保存到寄存器R14中</code>。</li>
+<li>子程序的返回可以通过将寄存器R14值复制到PC中来完成。</li>
+<li>从ARM到Thumb的状态切换，并可以通过BX R14返回。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210507200710828.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<blockquote>
+<p>BLX{条件}   &lt;Rm&gt;</p>
+</blockquote>
+<ul>
+<li><code>BLX&#123;条件&#125; &lt;Rm&gt;</code>指令跳转到指令中所指定的目标地址，目标地址处的指令既可以是ARM指令，也可以是Thumb指令。目标地址处的<code>指令类型由寄存器&lt;Rm&gt;的bit[0]决定</code>。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210507200654385.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h3 id="子程序的返回方法"><a class="markdownIt-Anchor" href="#子程序的返回方法"></a> 子程序的返回方法</h3>
+<ul>
+<li><code>MOV PC, R14</code></li>
+<li><code>BX R14</code></li>
+<li>当子程序入口中使用了<code>STMFD R13!, &#123;&lt;registers&gt;,R14&#125;</code>时，可以用指令<code>LDMFD R13!, &#123;&lt;registers&gt;,PC&#125;</code>返回</li>
+</ul>
+<h2 id="数据处理指令"><a class="markdownIt-Anchor" href="#数据处理指令"></a> 数据处理指令</h2>
+<p><img src="https://img-blog.csdnimg.cn/20210507202528458.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<blockquote>
+<p>&lt;操作&gt;{&lt;cond&gt;}{S} Rd, Rn, Operand2</p>
+</blockquote>
+<ul>
+<li>比较指令影响标志位，不指定Rd</li>
+<li>数据搬移不指定Rn</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210507202716846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>第二个操作数通过桶型移位器送到ALU中。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2021050720274189.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h3 id="数据搬移"><a class="markdownIt-Anchor" href="#数据搬移"></a> 数据搬移</h3>
+<h4 id="mov-指令"><a class="markdownIt-Anchor" href="#mov-指令"></a> MOV 指令</h4>
+<p><img src="https://img-blog.csdnimg.cn/20210507202909284.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<blockquote>
+<p>MOV{条件}{S} 目的寄存器，源操作数</p>
+</blockquote>
+<ul>
+<li>MOV指令可完成从另一个寄存器、被移位的寄存器或将一个立即数加载到目的寄存器。</li>
+<li>其中S选项决定指令的操作是否影响CPSR中条件标志位的值，当没有S时指令不更新CPSR中条件标志位的值。
+<ul>
+<li><code>当PC作为目标寄存器且指令中S位被置位时</code>，指令在执行跳转操作的同时，将当前处理器模式的SPSR内容复制到CPSR中。</li>
+<li><code>MOVS PC, LR</code>可以实现从某些异常中断中返回</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210507203513311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">MOV</span>   <span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R0</span> ；将寄存器<span class="hljs-built_in">R0</span>的值传送到寄存器<span class="hljs-built_in">R1</span><br><span class="hljs-keyword">MOV</span>   <span class="hljs-built_in">PC</span>，<span class="hljs-built_in">R14</span> ；将寄存器<span class="hljs-built_in">R14</span>的值传送到<span class="hljs-built_in">PC</span>，常用于子程序返回<br><span class="hljs-keyword">MOV</span>   <span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R0</span>，LSL＃<span class="hljs-number">3</span> ；将寄存器<span class="hljs-built_in">R0</span>的值左移<span class="hljs-number">3</span>位后传送到<span class="hljs-built_in">R1</span><br><span class="hljs-keyword">MOV</span>   <span class="hljs-built_in">R1</span>，＃<span class="hljs-number">123</span> ；将立即数<span class="hljs-number">123</span>传送到<span class="hljs-built_in">R1</span><br></code></pre></td></tr></table></figure>
+<h4 id="mvn-指令"><a class="markdownIt-Anchor" href="#mvn-指令"></a> MVN 指令</h4>
+<blockquote>
+<p>MVN{条件}{S} 目的寄存器，源操作数</p>
+</blockquote>
+<ul>
+<li>MVN指令可完成从另一个寄存器、被移位的寄存器、或将一个立即数加载到目的寄存器。</li>
+<li>与MOV指令不同之处是<code>在传送之前按位被取反了</code>，即把一个<code>被取反的值</code>传送到目的寄存器中。<br />
+<img src="https://img-blog.csdnimg.cn/20210507203909394.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+</ul>
+<h3 id="比较指令"><a class="markdownIt-Anchor" href="#比较指令"></a> 比较指令</h3>
+<h4 id="cmp-指令"><a class="markdownIt-Anchor" href="#cmp-指令"></a> CMP 指令</h4>
+<blockquote>
+<p>CMP{条件} 操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>CMP指令用于把一个寄存器的内容和另一个寄存器的内容或立即数进行<code>比较</code>，同时<code>更新CPSR中条件标志位的值</code>。</li>
+<li>该指令进行一次<code>减法</code>运算，但<code>不存储结果</code>，只更改条件标志位。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210507204150610.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">CMP</span>   <span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R0</span>  ；将寄存器<span class="hljs-built_in">R1</span>的值与寄存器<span class="hljs-built_in">R0</span>的值相减，并根据结果设置CPSR的标志位<br><span class="hljs-keyword">CMP</span>   <span class="hljs-built_in">R1</span>，＃<span class="hljs-number">100</span>  ；将寄存器<span class="hljs-built_in">R1</span>的值与立即数<span class="hljs-number">100</span>相减，并根据结果设置CPSR的标志位<br></code></pre></td></tr></table></figure>
+<h4 id="cmn-指令"><a class="markdownIt-Anchor" href="#cmn-指令"></a> CMN 指令</h4>
+<blockquote>
+<p>CMN{条件} 操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>CMN指令用于<code>把一个寄存器的内容和另一个寄存器的内容或立即数取反后进行比较</code>，同时更新CPSR中条件标志位的值。</li>
+<li>该指令实际完成操作数1和操作数2<code>相加</code>，并根据结果更改条件标志位。<br />
+<img src="https://img-blog.csdnimg.cn/20210507204332756.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">CMN</span>   <span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R0</span> ；将寄存器<span class="hljs-built_in">R1</span>的值与寄存器<span class="hljs-built_in">R0</span>的值相			加，并根据结果设置CPSR的标志位<br><span class="hljs-keyword">CMN</span>   <span class="hljs-built_in">R1</span>，＃<span class="hljs-number">100</span>  ；将寄存器<span class="hljs-built_in">R1</span>的值与立即数<span class="hljs-number">100</span>相			加，并根据结果设置CPSR的标志位<br></code></pre></td></tr></table></figure>
+<h4 id="tst-指令"><a class="markdownIt-Anchor" href="#tst-指令"></a> TST 指令</h4>
+<blockquote>
+<p>TST{条件} 操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>TST指令用于把一个寄存器的内容和另一个寄存器的内容或立即数<code>进行按位与运算</code>，并根据运算结果更新CPSR中条件标志位的值。</li>
+<li>操作数1是要测试的数据，而操作数2是一个位掩码，该指令一般用来检测是否设置了特定的位。<code>TST指令用于测试寄存器中某些位是1还是0</code></li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210507204758117.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">TST</span>   <span class="hljs-built_in">R1</span>，＃％<span class="hljs-number">1</span> ；用于测试在寄存器<span class="hljs-built_in">R1</span>中是否设置了最低			位（％表示二进制数）<br><span class="hljs-keyword">TST</span>   <span class="hljs-built_in">R1</span>，＃<span class="hljs-number">0xfe</span> ；将寄存器<span class="hljs-built_in">R1</span>的值与立即数<span class="hljs-number">0xfe</span>按位			与，并根据结果设置CPSR的标志位<br></code></pre></td></tr></table></figure>
+<h4 id="teq-指令"><a class="markdownIt-Anchor" href="#teq-指令"></a> TEQ 指令</h4>
+<blockquote>
+<p>TEQ{条件} 操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>TEQ指令用于把一个寄存器的内容和另一个寄存器的内容或立即数进行<code>按位异或运算</code>，并根据运算结果更新CPSR中条件标志位的值。</li>
+<li>TEQ指令通常用于比较操作数1和操作数2<code>是否相等</code><br />
+<img src="https://img-blog.csdnimg.cn/20210507204931946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></li>
+</ul>
+<h3 id="算术指令"><a class="markdownIt-Anchor" href="#算术指令"></a> 算术指令</h3>
+<h4 id="add-指令"><a class="markdownIt-Anchor" href="#add-指令"></a> ADD 指令</h4>
+<blockquote>
+<p>ADD{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>ADD指令用于把两个操作数相加，并将结果存放到目的寄存器中。</li>
+<li>操作数1应是一个寄存器，<code>操作数2可以是一个寄存器，被移位的寄存器，或一个立即数</code>。</li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">ADD</span>    <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span>  ； <span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R1</span> + <span class="hljs-built_in">R2</span><br><span class="hljs-keyword">ADD</span>    <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-number">#256</span>  ； <span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R1</span> + <span class="hljs-number">256</span><br><span class="hljs-keyword">ADDS</span>   <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R2</span>，<span class="hljs-built_in">R3</span>，LSL<span class="hljs-number">#1</span>  ； <span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R2</span> + (<span class="hljs-built_in">R3</span> &lt;&lt; <span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+<h4 id="adc-指令"><a class="markdownIt-Anchor" href="#adc-指令"></a> ADC 指令</h4>
+<blockquote>
+<p>ADC{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>ADC指令用于把两个操作数相加，<code>再加上CPSR中的C条件标志位的值</code>，并将结果存放到目的寄存器中。</li>
+<li>它使用一个进位标志位，这样就可以<code>做比32位大的数的加法，注意不要忘记设置S后缀来更改进位标志。</code></li>
+<li><code>ADC指令和ADD指令联合使用可以实现64位、128位的加法操作</code></li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2021050721045049.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>以下指令序列<code>完成两个128位数的加法</code>，第一个数由高到低存放在寄存器R7～R4，第二个数由高到低存放在寄存器R11～R8，运算结果由高到低存放在寄存器R3～R0</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">ADDS</span>   <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R4</span>，<span class="hljs-built_in">R8</span>     ； 加低端的字<br><span class="hljs-keyword">ADCS</span>   <span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R5</span>，<span class="hljs-built_in">R9</span>     ； 加第二个字，带进位<br><span class="hljs-keyword">ADCS</span>   <span class="hljs-built_in">R2</span>，<span class="hljs-built_in">R6</span>，<span class="hljs-built_in">R10</span>   ； 加第三个字，带进位<br><span class="hljs-keyword">ADC</span>     <span class="hljs-built_in">R3</span>，<span class="hljs-built_in">R7</span>，<span class="hljs-built_in">R11</span>    ； 加第四个字，带进位<br></code></pre></td></tr></table></figure>
+<h4 id="sub-指令"><a class="markdownIt-Anchor" href="#sub-指令"></a> SUB 指令</h4>
+<blockquote>
+<p>SUB{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>SUB指令用于把操作数1减去操作数2，并将结果存放到目的寄存器中。</li>
+<li>该指令可用于有符号数或无符号数的减法运算。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2021050721082463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">SUB</span>     <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span>   ； <span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R1</span> - <span class="hljs-built_in">R2</span><br><span class="hljs-keyword">SUB</span>     <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-number">#256</span>   ； <span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R1</span> - <span class="hljs-number">256</span><br><span class="hljs-keyword">SUBS</span>   <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R2</span>，<span class="hljs-built_in">R3</span>，LSL<span class="hljs-number">#1</span>  ； <span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R2</span> - (<span class="hljs-built_in">R3</span> &lt;&lt; <span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20210507210829191.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h4 id="sbc-指令"><a class="markdownIt-Anchor" href="#sbc-指令"></a> SBC 指令</h4>
+<blockquote>
+<p>SBC{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>SBC指令用于把操作数1减去操作数2，再减去<code>CPSR中的C条件标志位的反码</code>，并将结果存放到目的寄存器中。</li>
+<li>该指令使用进位标志来<code>表示借位</code>，这样就可以做大于32位的减法，注意不要忘记设置S后缀来更改进位标志。</li>
+<li>SBC指令和SUB指令联合使用可以实现64位、128位的减法操作</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2021050721181143.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">SBC</span> <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span>  ；<span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R1</span> - <span class="hljs-built_in">R2</span> - ！C，并根据结果设置CPSR的进位标志位<br></code></pre></td></tr></table></figure>
+<h4 id="rsb-指令"><a class="markdownIt-Anchor" href="#rsb-指令"></a> RSB 指令</h4>
+<blockquote>
+<p>RSB{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>RSB指令称为<code>逆向减法指令</code>，用于把操作数2减去操作数1，并将结果存放到目的寄存器中。</li>
+<li>该指令可用于有符号数或无符号数的减法运算。</li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">RSB</span>     <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span>  ； <span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R2</span> – <span class="hljs-built_in">R1</span><br><span class="hljs-keyword">RSB</span>     <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-number">#256</span>  ； <span class="hljs-built_in">R0</span> = <span class="hljs-number">256</span> – <span class="hljs-built_in">R1</span><br><span class="hljs-keyword">RSBS</span>   <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R2</span>，<span class="hljs-built_in">R3</span>，LSL<span class="hljs-number">#1</span>  ； <span class="hljs-built_in">R0</span> = (<span class="hljs-built_in">R3</span> &lt;&lt; <span class="hljs-number">1</span>) - <span class="hljs-built_in">R2</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20210507211953772.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h4 id="rsc-指令"><a class="markdownIt-Anchor" href="#rsc-指令"></a> RSC 指令</h4>
+<blockquote>
+<p>RSC{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>RSC指令用于把操作数2减去操作数1，<code>再减去CPSR中的C条件标志位的反码</code>，并将结果存放到目的寄存器中。</li>
+<li>该指令使用进位标志来表示借位，这样就可以做大于32位的减法，<code>注意不要忘记设置S后缀来更改进位标志。</code></li>
+<li>RSC指令和RSB指令联合使用可以实现64位、128位的减法操作</li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">RSC</span>   <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span>   ； <span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R2</span> – <span class="hljs-built_in">R1</span> - ！C<br></code></pre></td></tr></table></figure>
+<h3 id="逻辑指令"><a class="markdownIt-Anchor" href="#逻辑指令"></a> 逻辑指令</h3>
+<h4 id="and-指令"><a class="markdownIt-Anchor" href="#and-指令"></a> AND 指令</h4>
+<blockquote>
+<p>AND{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>AND指令用于在两个操作数上进行<code>逻辑与运算</code>，并把结果放置到目的寄存器中。</li>
+<li>该指令常用于<code>屏蔽操作数1的某些位。</code></li>
+<li><code>设置一个掩码值，AND指令可以提取寄存器中某些位的值</code></li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210507212142185.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">AND</span>   <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R0</span>，＃<span class="hljs-number">3</span>   ； 该指令保持<span class="hljs-built_in">R0</span>的<span class="hljs-number">0</span>、<span class="hljs-number">1</span>位，其余位				清零。<br></code></pre></td></tr></table></figure>
+<h4 id="orr-指令"><a class="markdownIt-Anchor" href="#orr-指令"></a> ORR 指令</h4>
+<blockquote>
+<p>ORR{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>ORR指令用于在两个操作数上进行<code>逻辑或</code>运算，并把结果放置到目的寄存器中。</li>
+<li>该指令常用于设置操作数1的某些位。</li>
+<li>设置一个掩码值，ORR指令可以<code>设置寄存器中某些位的值为1</code></li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">ORR</span>   <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R0</span>，＃<span class="hljs-number">3</span> ； 该指令设置<span class="hljs-built_in">R0</span>的<span class="hljs-number">0</span>、<span class="hljs-number">1</span>位，其余位保持不变。<br></code></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20210507212724896.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h4 id="eor-指令"><a class="markdownIt-Anchor" href="#eor-指令"></a> EOR 指令</h4>
+<blockquote>
+<p>EOR{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>EOR指令用于在两个操作数上进行<code>逻辑异或运算</code>，并把结果放置到目的寄存器中。</li>
+<li>该指令常用于反转操作数1的某些位。</li>
+<li>设置一个掩码值，EOR指令可以将寄存器中某些位的值<code>取反</code></li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">EOR</span>   <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R0</span>，＃<span class="hljs-number">3</span>   ； 该指令反转<span class="hljs-built_in">R0</span>的<span class="hljs-number">0</span>、<span class="hljs-number">1</span>位，其余位保持不变。<br></code></pre></td></tr></table></figure>
+<h4 id="bic-指令"><a class="markdownIt-Anchor" href="#bic-指令"></a> BIC 指令</h4>
+<blockquote>
+<p>BIC{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>BIC指令用于<code>清除操作数1的某些位</code>，并把结果放置到目的寄存器中。</li>
+<li>操作数2为32位的掩码，<code>如果在掩码中设置了某一位，则清除这一位，未设置的掩码位保持不变。</code></li>
+<li>设置一个掩码值，BIC指令可以<code>将寄存器中某些位的值设置成0</code></li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">BIC</span>   R0，R0，＃％<span class="hljs-number">1011</span>  ； 该指令清除 R0 中的位 <span class="hljs-number">0</span>、<span class="hljs-number">1</span>、和<span class="hljs-number">3</span>，其余的位保持不变。<br></code></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20210507213750629.jpg" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h3 id="乘法指令与乘加指令"><a class="markdownIt-Anchor" href="#乘法指令与乘加指令"></a> 乘法指令与乘加指令</h3>
+<ul>
+<li>ARM微处理器支持的乘法指令与乘加指令共有6条，可<code>分为运算结果为32位和运算结果为64位</code>两类，与前面的数据处理指令不同
+<ul>
+<li><code>指令中的所有操作数、目的寄存器必须为通用寄存器，不能对操作数使用立即数或被移位的寄存器</code></li>
+<li><code>目的寄存器和操作数1必须是不同的寄存器。</code></li>
+</ul>
+</li>
+<li>乘法指令与乘加指令共有以下6条
+<ul>
+<li>MUL     32位乘法指令</li>
+<li>MLA     32位乘加指令</li>
+<li>SMULL   64位有符号数乘法指令</li>
+<li>SMLAL   64位有符号数乘加指令</li>
+<li>UMULL   64位无符号数乘法指令</li>
+<li>UMLAL   64位无符号数乘加指令</li>
+</ul>
+</li>
+</ul>
+<h4 id="mul-指令"><a class="markdownIt-Anchor" href="#mul-指令"></a> MUL 指令</h4>
+<blockquote>
+<p>MUL{条件}{S} 目的寄存器，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>MUL指令完成将操作数1与操作数2的乘法运算，并把结果放置到目的寄存器中，同时可以根据运算结果设置CPSR中相应的条件标志位。
+<ul>
+<li>其中，操作数1和操作数2<code>均为32位的有符号数或无符号数。</code></li>
+</ul>
+</li>
+<li><code>结果仅保存了64位的低32位</code></li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">MUL</span>     <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span> ；<span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R1</span> × <span class="hljs-built_in">R2</span><br><span class="hljs-keyword">MULS</span>    <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span> ；<span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R1</span> × <span class="hljs-built_in">R2</span>，同时设置CPSR中的相关条件标志位<br></code></pre></td></tr></table></figure>
+<ul>
+<li>在早期的ARM版本中，<code>如果Rd和Rm是同一寄存器，则该行为是不可预测的。</code>（ARM Wiki和ARM官方文档）。<br />
+<img src="https://img-blog.csdnimg.cn/20210507215059944.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+</ul>
+<h4 id="mla-指令"><a class="markdownIt-Anchor" href="#mla-指令"></a> MLA 指令</h4>
+<blockquote>
+<p>MLA{条件}{S}   目的寄存器， 操作数1，操作数2，操作数3</p>
+</blockquote>
+<ul>
+<li>MLA指令完成将操作数1与操作数2的乘法运算，<code>再将乘积加上操作数3</code>，并把结果放置到目的寄存器中，同时可以根据运算结果设置CPSR中相应的条件标志位。</li>
+<li>其中，操作数1和操作数2均为32位的<code>有符号数或无符号数。</code></li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">MLA</span>     <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span>，<span class="hljs-built_in">R3</span>  ；<span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R1</span> × <span class="hljs-built_in">R2</span> + <span class="hljs-built_in">R3</span><br><span class="hljs-keyword">MLAS</span>    <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span>，<span class="hljs-built_in">R3</span>   ；<span class="hljs-built_in">R0</span> = <span class="hljs-built_in">R1</span> × <span class="hljs-built_in">R2</span> + <span class="hljs-built_in">R3</span>，同时设置CPSR中的相关条件标志位<br></code></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20210507215506657.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h4 id="smull-指令"><a class="markdownIt-Anchor" href="#smull-指令"></a> SMULL 指令</h4>
+<blockquote>
+<p>SMULL{条件}{S}   目的寄存器Low，目的寄存器低High，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>SMULL指令完成将操作数1与操作数2的乘法运算，<code>并把结果的低32位放置到目的寄存器Low中，结果的高32位放置到目的寄存器High中</code>，同时可以根据运算结果设置CPSR中相应的条件标志位。</li>
+<li>其中，操作数1和操作数2均为32位的<code>有符号数。</code></li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-keyword">SMULL</span> <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span>，<span class="hljs-built_in">R3</span>  <br>				；<span class="hljs-built_in">R0</span> = （<span class="hljs-built_in">R2</span> × <span class="hljs-built_in">R3</span>）的低<span class="hljs-number">32</span>位<br>                ；<span class="hljs-built_in">R1</span> = （<span class="hljs-built_in">R2</span> × <span class="hljs-built_in">R3</span>）的高<span class="hljs-number">32</span>位 <br></code></pre></td></tr></table></figure>
+<h4 id="smlal-指令"><a class="markdownIt-Anchor" href="#smlal-指令"></a> SMLAL 指令</h4>
+<blockquote>
+<p>SMLAL{条件}{S}   目的寄存器Low，目的寄存器低High，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>SMLAL指令完成将操作数1与操作数2的乘法运算，<code>并把结果的低32位同目的寄存器Low中的值相加后又放置到目的寄存器Low中，结果的高32位同目的寄存器High中的值相加后又放置到目的寄存器High中</code>，同时可以根据运算结果设置CPSR中相应的条件标志位。</li>
+<li>对于目的寄存器Low，在指令执行前存放64位加数的低32位，指令执行后存放结果的低32位。</li>
+<li>对于目的寄存器High，在指令执行前存放64位加数的高32位，指令执行后存放结果的高32位。</li>
+<li>其中，操作数1和操作数2均为32位的<code>有符号数。</code></li>
+<li>指令示例</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-symbol">SMLAL</span> <span class="hljs-built_in">R0</span>，<span class="hljs-built_in">R1</span>，<span class="hljs-built_in">R2</span>，<span class="hljs-built_in">R3</span><br>				；<span class="hljs-built_in">R0</span> = （<span class="hljs-built_in">R2</span> × <span class="hljs-built_in">R3</span>）的低<span class="hljs-number">32</span>位 ＋ <span class="hljs-built_in">R0</span><br>                ；<span class="hljs-built_in">R1</span> = （<span class="hljs-built_in">R2</span> × <span class="hljs-built_in">R3</span>）的高<span class="hljs-number">32</span>位 ＋ <span class="hljs-built_in">R1</span> ＋ C<br></code></pre></td></tr></table></figure>
+<h4 id="umull-指令"><a class="markdownIt-Anchor" href="#umull-指令"></a> UMULL 指令</h4>
+<blockquote>
+<p>UMULL{条件}{S}   目的寄存器Low，目的寄存器低High，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>UMULL指令完成操作同SMULL</li>
+<li>其中，操作数1和操作数2均为<code>32位的无符号数。</code></li>
+</ul>
+<h4 id="umlal-指令"><a class="markdownIt-Anchor" href="#umlal-指令"></a> UMLAL 指令</h4>
+<blockquote>
+<p>UMLAL{条件}{S}   目的寄存器Low，目的寄存器低			High，操作数1，操作数2</p>
+</blockquote>
+<ul>
+<li>UMLAL指令完成操作同SMLAL</li>
+<li>其中，操作数1和操作数2均为<code>32位的无符号数。</code></li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B/">ARM微处理器编程</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/arm/">arm</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B%EF%BD%9C%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F-%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ARM微处理器编程｜指令系统-寻址方式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/EOJ%E9%A2%98%E8%A7%A3/eoj-3294/">
+                        <span class="hidden-mobile">EOJ 3294. WiFi</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

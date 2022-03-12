@@ -1,0 +1,565 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="一道多项式相关的实训题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EOJ 2891. 多次函数">
+<meta property="og:url" content="http://example.com/EOJ%E9%A2%98%E8%A7%A3/EOJ%202891.%20%E5%A4%9A%E6%AC%A1%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="一道多项式相关的实训题">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-10T07:34:21.000Z">
+<meta property="article:modified_time" content="2022-03-12T07:09:39.515Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="EOJ">
+<meta property="article:tag" content="实训">
+<meta property="article:tag" content="多项式">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>EOJ 2891. 多次函数 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="EOJ 2891. 多次函数">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-06-10 15:34" pubdate>
+        2020年6月10日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.3k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      45 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">EOJ 2891. 多次函数</h1>
+            
+            <div class="markdown-body">
+              <!--more-->
+<h1 id="题面"><a class="markdownIt-Anchor" href="#题面"></a> <a target="_blank" rel="noopener" href="https://acm.ecnu.edu.cn/problem/2891/">题面</a></h1>
+<p><strong>单点时限: 2.0 sec<br />
+内存限制: 256 MB</strong></p>
+<p>在一个平面坐标系统中显示一个多次函数的图像。</p>
+<p>为简化起见，设多次函数的最大次数为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span>，系数最多为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 位数。函数表示为： <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>c</mi><mn>3</mn></msub><msup><mi>x</mi><mn>3</mn></msup><mo>+</mo><msub><mi>c</mi><mn>2</mn></msub><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msub><mi>c</mi><mn>1</mn></msub><mi>x</mi><mo>+</mo><msub><mi>c</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">f(x)=c_3x^3+c_2x^2+c_1x+c_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.964108em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.964108em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.73333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 。给出的函数是最简形式。 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>c</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">c_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 时可省略， <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>c</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">c_3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 为正数时可省略 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>+</mo></mrow><annotation encoding="application/x-tex">+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">+</span></span></span></span> ，次方为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 时可省略 ^1。</p>
+<p>坐标系统的 x 轴和 y 轴范围限制在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">[</mo><mo>−</mo><mn>20</mn><mo separator="true">,</mo><mn>20</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[-20,20]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">−</span><span class="mord">2</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mord">0</span><span class="mclose">]</span></span></span></span> ，具体格式见样例。</p>
+<p><strong>输入格式</strong><br />
+不多于 20 行，每行一个最多为 3 次的函数。形式： <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>c</mi><mn>3</mn></msub><msup><mi>x</mi><mn>3</mn></msup><mo>+</mo><msub><mi>c</mi><mn>2</mn></msub><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msub><mi>c</mi><mn>1</mn></msub><mi>x</mi><mo>+</mo><msub><mi>c</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">f(x)=c_3x^3+c_2x^2+c_1x+c_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.964108em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.964108em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.73333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 。</p>
+<p><strong>输出格式</strong><br />
+显示每个函数的图像。两个函数之间用一个空行分隔，最后一个函数之后没有空行。</p>
+<p><strong>样例</strong><br />
+略</p>
+<h1 id="解题思路"><a class="markdownIt-Anchor" href="#解题思路"></a> 解题思路</h1>
+<ul>
+<li>把整个解题分为：多项式处理，计算，绘图。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span><br>&#123;<br>	<span class="hljs-keyword">public</span>:<br>		<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">slove</span><span class="hljs-params">(<span class="hljs-type">char</span> s[])</span></span>;<br>		<span class="hljs-built_in">Solution</span>();<br>		<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">read</span><span class="hljs-params">(<span class="hljs-type">char</span> s[])</span></span>;<br>		<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span></span>;<br>	<span class="hljs-keyword">private</span>:<br>		<span class="hljs-type">int</span> ceof[<span class="hljs-number">4</span>];<br>		<span class="hljs-type">char</span> dot[<span class="hljs-number">41</span>][<span class="hljs-number">41</span>];<br>&#125;;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>处理多项式的思路和<a target="_blank" rel="noopener" href="https://acm.ecnu.edu.cn/problem/2/">一元多项式乘法</a>那题类似，按照元素出现顺序依次处理，将系数按照指数大小存进ceof数组。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Solution::read</span><span class="hljs-params">(<span class="hljs-type">char</span> s[])</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">int</span> ceoft,exp;<br>	<span class="hljs-type">int</span> sign=<span class="hljs-number">1</span>;<br>	<span class="hljs-type">int</span> i=<span class="hljs-number">5</span>;<br>	<span class="hljs-keyword">while</span>(s[i])<br>	&#123;<br>		ceoft=<span class="hljs-number">0</span>,exp=<span class="hljs-number">0</span>,sign=<span class="hljs-number">1</span>;<br>		<span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;+&#x27;</span>)<br>		&#123;<br>			sign=<span class="hljs-number">1</span>;<br>			i++;<br>		&#125;<br>		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;-&#x27;</span>)<br>		&#123;<br>			sign=<span class="hljs-number">-1</span>;<br>			i++;<br>		&#125;<br>		<span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;x&#x27;</span>)<br>		&#123;<br>			ceoft=<span class="hljs-number">1</span>;<br>			i++;<br>			<span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;^&#x27;</span>)<br>			&#123;<br>				i++;<br>				<span class="hljs-keyword">while</span>(s[i]&gt;=<span class="hljs-string">&#x27;0&#x27;</span>&amp;&amp;s[i]&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)<br>				&#123;<br>					exp=exp*<span class="hljs-number">10</span>+s[i]-<span class="hljs-string">&#x27;0&#x27;</span>;<br>					i++;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">else</span><br>			&#123;<br>				exp=<span class="hljs-number">1</span>;<br>			&#125;<br>			ceof[exp]=sign*ceoft;<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br>		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(s[i]&gt;=<span class="hljs-string">&#x27;0&#x27;</span>&amp;&amp;s[i]&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)<br>		&#123;<br>			<span class="hljs-keyword">while</span>(s[i]&gt;=<span class="hljs-string">&#x27;0&#x27;</span>&amp;&amp;s[i]&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)<br>			&#123;<br>				ceoft=ceoft*<span class="hljs-number">10</span>+s[i]-<span class="hljs-string">&#x27;0&#x27;</span>;<br>				i++;<br>			&#125;<br>			<span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;x&#x27;</span>)<br>			&#123;<br>				i++;<br>				<span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;^&#x27;</span>)<br>				&#123;<br>					i++;<br>					<span class="hljs-keyword">while</span>(s[i]&gt;=<span class="hljs-string">&#x27;0&#x27;</span>&amp;&amp;s[i]&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)<br>					&#123;<br>						exp=exp*<span class="hljs-number">10</span>+s[i]-<span class="hljs-string">&#x27;0&#x27;</span>;<br>						i++;<br>					&#125;<br>				&#125;<br>				<span class="hljs-keyword">else</span><br>				&#123;<br>					exp=<span class="hljs-number">1</span>;<br>				&#125;<br>				ceof[exp]=sign*ceoft;<br>				<span class="hljs-keyword">continue</span>;<br>			&#125;<br>			<span class="hljs-keyword">else</span><br>			&#123;<br>				exp=<span class="hljs-number">0</span>;<br>				ceof[exp]=sign*ceoft;<br>				<span class="hljs-keyword">continue</span>;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<ul>
+<li>因为次数最高只有三次，所以可以手动乘而不需要把各项的指数分别记录下来。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Solution::slove</span><span class="hljs-params">(<span class="hljs-type">char</span> s[])</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-built_in">read</span>(s);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">-20</span>;i&lt;<span class="hljs-number">21</span>; i++)<br>    &#123;<br>    	<span class="hljs-type">int</span> num=<span class="hljs-number">0</span>;<br>        num=ceof[<span class="hljs-number">3</span>]*i*i*i+ceof[<span class="hljs-number">2</span>]*i*i+ceof[<span class="hljs-number">1</span>]*i+ceof[<span class="hljs-number">0</span>];<br>        <span class="hljs-keyword">if</span>(num&gt;<span class="hljs-number">-21</span> &amp;&amp; num&lt;<span class="hljs-number">21</span>) dot[<span class="hljs-number">20</span>-num][i+<span class="hljs-number">20</span>]=<span class="hljs-string">&#x27;*&#x27;</span>;<br>    &#125;<br>	<span class="hljs-built_in">print</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>把坐标系的初始化工作交给构造函数来做，注意一定要仔细，不然容易出错，最后计算完之后一起输出。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Solution::<span class="hljs-built_in">Solution</span>()<br>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">41</span>; i++)<span class="hljs-comment">//初始化坐标系</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>; j&lt;<span class="hljs-number">41</span>; j++)<br>        &#123;<br>            <span class="hljs-keyword">if</span>(i==<span class="hljs-number">20</span>)<br>            &#123;<br>                <span class="hljs-keyword">if</span>(j==<span class="hljs-number">20</span>) dot[i][j]=<span class="hljs-string">&#x27;+&#x27;</span>;<br>                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(j==<span class="hljs-number">40</span>) dot[i][j]=<span class="hljs-string">&#x27;&gt;&#x27;</span>;<br>                <span class="hljs-keyword">else</span> dot[i][j]=<span class="hljs-string">&#x27;-&#x27;</span>;<br>            &#125;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(j==<span class="hljs-number">20</span>)<br>            &#123;<br>                <span class="hljs-keyword">if</span>(i==<span class="hljs-number">0</span>) dot[i][j]=<span class="hljs-string">&#x27;^&#x27;</span>;<br>                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(i==<span class="hljs-number">20</span>) dot[i][j]=<span class="hljs-string">&#x27;+&#x27;</span>;<br>                <span class="hljs-keyword">else</span> dot[i][j]=<span class="hljs-string">&#x27;|&#x27;</span>;<br>            &#125;<br>            <span class="hljs-keyword">else</span> dot[i][j]=<span class="hljs-string">&#x27;.&#x27;</span>;<br>        &#125;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">4</span>;i++)<br>    	ceof[i]=<span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Solution::print</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">41</span>; i++)<br>    &#123;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>; j&lt;<span class="hljs-number">41</span>; j++) <br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%c&quot;</span>,dot[i][j]);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>因为题目对于最后的换行有要求，所以设置了一个check变量来检测是否到了EOF，是否要输出换行。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>** argv)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">char</span> s[<span class="hljs-number">30</span>];<br>	<span class="hljs-type">int</span> check=<span class="hljs-number">0</span>;<br>	check=<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>,s);<br>	<span class="hljs-keyword">while</span>(check!=EOF)<br>    &#123;<br>        Solution k;<br>        k.<span class="hljs-built_in">slove</span>(s);<br>        check=<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>,s);<br>        <span class="hljs-keyword">if</span>(check!=EOF) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="ac代码"><a class="markdownIt-Anchor" href="#ac代码"></a> ac代码</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span><br>&#123;<br>	<span class="hljs-keyword">public</span>:<br>		<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">slove</span><span class="hljs-params">(<span class="hljs-type">char</span> s[])</span></span>;<br>		<span class="hljs-built_in">Solution</span>();<br>		<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">read</span><span class="hljs-params">(<span class="hljs-type">char</span> s[])</span></span>;<br>		<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span></span>;<br>	<span class="hljs-keyword">private</span>:<br>		<span class="hljs-type">int</span> ceof[<span class="hljs-number">4</span>];<br>		<span class="hljs-type">char</span> dot[<span class="hljs-number">41</span>][<span class="hljs-number">41</span>];<br>&#125;;<br><br>Solution::<span class="hljs-built_in">Solution</span>()<br>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">41</span>; i++)<span class="hljs-comment">//画坐标系</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>; j&lt;<span class="hljs-number">41</span>; j++)<br>        &#123;<br>            <span class="hljs-keyword">if</span>(i==<span class="hljs-number">20</span>)<br>            &#123;<br>                <span class="hljs-keyword">if</span>(j==<span class="hljs-number">20</span>) dot[i][j]=<span class="hljs-string">&#x27;+&#x27;</span>;<br>                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(j==<span class="hljs-number">40</span>) dot[i][j]=<span class="hljs-string">&#x27;&gt;&#x27;</span>;<br>                <span class="hljs-keyword">else</span> dot[i][j]=<span class="hljs-string">&#x27;-&#x27;</span>;<br>            &#125;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(j==<span class="hljs-number">20</span>)<br>            &#123;<br>                <span class="hljs-keyword">if</span>(i==<span class="hljs-number">0</span>) dot[i][j]=<span class="hljs-string">&#x27;^&#x27;</span>;<br>                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(i==<span class="hljs-number">20</span>) dot[i][j]=<span class="hljs-string">&#x27;+&#x27;</span>;<br>                <span class="hljs-keyword">else</span> dot[i][j]=<span class="hljs-string">&#x27;|&#x27;</span>;<br>            &#125;<br>            <span class="hljs-keyword">else</span> dot[i][j]=<span class="hljs-string">&#x27;.&#x27;</span>;<br>        &#125;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">4</span>;i++)<br>    	ceof[i]=<span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Solution::slove</span><span class="hljs-params">(<span class="hljs-type">char</span> s[])</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-built_in">read</span>(s);<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">-20</span>;i&lt;<span class="hljs-number">21</span>; i++)<br>    &#123;<br>    	<span class="hljs-type">int</span> num=<span class="hljs-number">0</span>;<br>        num=ceof[<span class="hljs-number">3</span>]*i*i*i+ceof[<span class="hljs-number">2</span>]*i*i+ceof[<span class="hljs-number">1</span>]*i+ceof[<span class="hljs-number">0</span>];<br>        <span class="hljs-keyword">if</span>(num&gt;<span class="hljs-number">-21</span> &amp;&amp; num&lt;<span class="hljs-number">21</span>) dot[<span class="hljs-number">20</span>-num][i+<span class="hljs-number">20</span>]=<span class="hljs-string">&#x27;*&#x27;</span>;<br>    &#125;<br>	<span class="hljs-built_in">print</span>();<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Solution::print</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">41</span>; i++)<br>    &#123;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>; j&lt;<span class="hljs-number">41</span>; j++) <br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%c&quot;</span>,dot[i][j]);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Solution::read</span><span class="hljs-params">(<span class="hljs-type">char</span> s[])</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">int</span> ceoft,exp;<br>	<span class="hljs-type">int</span> sign=<span class="hljs-number">1</span>;<br>	<span class="hljs-type">int</span> i=<span class="hljs-number">5</span>;<br>	<span class="hljs-keyword">while</span>(s[i])<br>	&#123;<br>		ceoft=<span class="hljs-number">0</span>,exp=<span class="hljs-number">0</span>,sign=<span class="hljs-number">1</span>;<br>		<span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;+&#x27;</span>)<br>		&#123;<br>			sign=<span class="hljs-number">1</span>;<br>			i++;<br>		&#125;<br>		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;-&#x27;</span>)<br>		&#123;<br>			sign=<span class="hljs-number">-1</span>;<br>			i++;<br>		&#125;<br>		<span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;x&#x27;</span>)<br>		&#123;<br>			ceoft=<span class="hljs-number">1</span>;<br>			i++;<br>			<span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;^&#x27;</span>)<br>			&#123;<br>				i++;<br>				<span class="hljs-keyword">while</span>(s[i]&gt;=<span class="hljs-string">&#x27;0&#x27;</span>&amp;&amp;s[i]&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)<br>				&#123;<br>					exp=exp*<span class="hljs-number">10</span>+s[i]-<span class="hljs-string">&#x27;0&#x27;</span>;<br>					i++;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">else</span><br>			&#123;<br>				exp=<span class="hljs-number">1</span>;<br>			&#125;<br>			ceof[exp]=sign*ceoft;<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br>		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(s[i]&gt;=<span class="hljs-string">&#x27;0&#x27;</span>&amp;&amp;s[i]&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)<br>		&#123;<br>			<span class="hljs-keyword">while</span>(s[i]&gt;=<span class="hljs-string">&#x27;0&#x27;</span>&amp;&amp;s[i]&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)<br>			&#123;<br>				ceoft=ceoft*<span class="hljs-number">10</span>+s[i]-<span class="hljs-string">&#x27;0&#x27;</span>;<br>				i++;<br>			&#125;<br>			<span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;x&#x27;</span>)<br>			&#123;<br>				i++;<br>				<span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;^&#x27;</span>)<br>				&#123;<br>					i++;<br>					<span class="hljs-keyword">while</span>(s[i]&gt;=<span class="hljs-string">&#x27;0&#x27;</span>&amp;&amp;s[i]&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)<br>					&#123;<br>						exp=exp*<span class="hljs-number">10</span>+s[i]-<span class="hljs-string">&#x27;0&#x27;</span>;<br>						i++;<br>					&#125;<br>				&#125;<br>				<span class="hljs-keyword">else</span><br>				&#123;<br>					exp=<span class="hljs-number">1</span>;<br>				&#125;<br>				ceof[exp]=sign*ceoft;<br>				<span class="hljs-keyword">continue</span>;<br>			&#125;<br>			<span class="hljs-keyword">else</span><br>			&#123;<br>				exp=<span class="hljs-number">0</span>;<br>				ceof[exp]=sign*ceoft;<br>				<span class="hljs-keyword">continue</span>;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>** argv)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">char</span> s[<span class="hljs-number">30</span>];<br>	<span class="hljs-type">int</span> check=<span class="hljs-number">0</span>;<br>	check=<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>,s);<br>	<span class="hljs-keyword">while</span>(check!=EOF)<br>    &#123;<br>        Solution k;<br>        k.<span class="hljs-built_in">slove</span>(s);<br>        check=<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>,s);<br>        <span class="hljs-keyword">if</span>(check!=EOF) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/EOJ%E9%A2%98%E8%A7%A3/">EOJ题解</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/EOJ/">EOJ</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%AE%9E%E8%AE%AD/">实训</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%9A%E9%A1%B9%E5%BC%8F/">多项式</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/EOJ%E9%A2%98%E8%A7%A3/EOJ%202845.%E7%AC%A6%E5%8F%B7%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">EOJ 2845.符号方程求解</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/EOJ%E9%A2%98%E8%A7%A3/EOJ%203126.%20%E5%95%86%E5%93%81%E6%8E%A8%E8%8D%90/">
+                        <span class="hidden-mobile">EOJ 3126. 商品推荐</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

@@ -1,0 +1,882 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="词法分析器 &#x3D; 扫描+词法分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译原理｜词法分析-1">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="词法分析器 &#x3D; 扫描+词法分析">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/1.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/2.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/5.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/3.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/4.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/6.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/7.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/8.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/9.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/10.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/11.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/12.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/13.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/14.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/15.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/16.png">
+<meta property="article:published_time" content="2022-03-11T16:19:06.000Z">
+<meta property="article:modified_time" content="2022-03-12T05:10:17.521Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="编译原理">
+<meta property="article:tag" content="正则表达式">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/1.png">
+  
+  
+  <title>编译原理｜词法分析-1 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="编译原理｜词法分析-1">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-12 00:19" pubdate>
+        2022年3月12日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      34 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">编译原理｜词法分析-1</h1>
+            
+            <div class="markdown-body">
+              <h1 id="lexical-analysis-词法分析-1"><a class="markdownIt-Anchor" href="#lexical-analysis-词法分析-1"></a> Lexical Analysis 词法分析-1</h1>
+<h2 id="词法分析器的作用"><a class="markdownIt-Anchor" href="#词法分析器的作用"></a> 词法分析器的作用</h2>
+<ul>
+<li><strong>Lexical Analyzer (词法分析)</strong> 是编译器的第一阶段，它<code>逐字符</code>读取源程序，将它们组成词素，生成并输出一个词法单元(token)序列，每个词法单元对应于一个词素。
+<ul>
+<li>这个词法单元序列被输出到语法分析器进行语法分析。</li>
+<li>词法分析器通常还要和符号表进行交互。当词法分析器发现了一个标识符的词素时，它要将这个词素添加到符号表中。</li>
+</ul>
+</li>
+<li>通常，词法分析器不会一次返回词法单元列表，而是<code>在解析器向其请求时</code>返回</li>
+<li><strong>词法分析器 = 扫描+词法分析</strong>
+<ul>
+<li><strong>扫描阶段</strong>主要负责完成一些不需要生成词法单元的简单处理，比如删除注释和将多个连续的空白字符压缩成一个字符。<br />
+<img src="1.png" srcset="/img/loading.gif" lazyload alt="Scanner" /></li>
+<li><strong>词法分析</strong>阶段是较为复杂的部分，它处理扫描阶段的输出并生成词法单元。
+<ul>
+<li>将源程序作为字符文件读取</li>
+<li>将文件划分为单词(token)
+<ul>
+<li><strong>Token（单词）</strong>： 表示源程序中的一个信息单元</li>
+<li>例如：keywords（关键词/保留字）, identifiers（标识符）, arithmetic symbols, multicharacter symbols(&gt;=, &lt;&gt;)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>重点：什么是单词？什么是合法单词？
+<ul>
+<li>正则表达式中标记的说明和识别</li>
+<li>如何识别单词 - 有限自动机</li>
+<li>用C或LEX编程的词法分析器的设计</li>
+</ul>
+</li>
+</ul>
+<p><img src="2.png" srcset="/img/loading.gif" lazyload alt="词法分析器与语法分析器的交互" /></p>
+<hr />
+<h3 id="词法分析及语法分析"><a class="markdownIt-Anchor" href="#词法分析及语法分析"></a> 词法分析及语法分析</h3>
+<ul>
+<li>把编译过程的分析部分划分为词法分析和语法分析阶段有如下几个原因：
+<ul>
+<li>词法分析和句法分析的分离提供了一个更简单的概念模型
+<ul>
+<li>高内聚、低耦合、并行实现</li>
+</ul>
+</li>
+<li>提高编译器效率（I/O 技术可以增强词法分析）</li>
+<li>增强编译器的<strong>可移植性(Portability)</strong>。输入设备相关的特殊性可以被限制在词法分析器中。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="词法单元-模式和词素"><a class="markdownIt-Anchor" href="#词法单元-模式和词素"></a> 词法单元、模式和词素</h3>
+<ul>
+<li>Token（词法单元）
+<ul>
+<li>由一个词法单元名和一个可选的属性值组成</li>
+<li>词法单元名是一个表示某种词法单位的抽象符号
+<ul>
+<li>例如：&lt;Identifier&gt;, &lt;number&gt;, etc.<br />
+<img src="5.png" srcset="/img/loading.gif" lazyload alt="词法单元可分为几类" /></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Pattern（模式）
+<ul>
+<li>描述了一个词法单元的词素可能具有的形式。
+<ul>
+<li>当词法单元是一个关键字时，它的模式就是组成这个关键字的字符序列。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Lexeme（词素）
+<ul>
+<li>源程序中的一个字符序列，它和某个词法单元的模式匹配，并被词法分析器识别为该词法单元的一个实例。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="词法单元的属性"><a class="markdownIt-Anchor" href="#词法单元的属性"></a> 词法单元的属性</h3>
+<p><img src="3.png" srcset="/img/loading.gif" lazyload alt="词法单元的例子" /></p>
+<blockquote>
+<p>词法单元是扫描中的逻辑单元；词素是词法单元中的一个实例</p>
+</blockquote>
+<ul>
+<li>
+<p>由于一个词法单元可以代表多个词素，因此应该为该特定词素保留其他信息。此附加信息称为词法单元的<strong>属性(attribute)</strong></p>
+</li>
+<li>
+<p>假设一个词法单元至多有一个相关的属性值，当然这个属性值可能是一个组合了多种信息的结构化数据。</p>
+<ul>
+<li>一般来说，和一个标识符有关的信息 —— 例如它的词素、类型、它第一次出现的位置（在发出一个有关该标识符的错误消息时需要使用这个信息）—— 都保存在<code>符号表</code>中。</li>
+<li>一个标识符的属性值是一个指向符号表中该标识符对应条目的<code>指针</code>。</li>
+</ul>
+</li>
+<li>
+<p><code>词法单元类型及其属性值唯一标识词素</code></p>
+</li>
+<li>
+<p><strong>Regular expressions(正则表达式）</strong> 广泛用于指定模式。</p>
+</li>
+</ul>
+<p><img src="4.png" srcset="/img/loading.gif" lazyload alt="属性的例子" /></p>
+<ul>
+<li>词法单元记录的例子：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><pre><code class="hljs C">Typedef  <span class="hljs-class"><span class="hljs-keyword">struct</span> </span><br><span class="hljs-class">&#123;</span>  <br>    TokenType tokenval;<br>    <span class="hljs-type">char</span> *stringval;<br>    <span class="hljs-type">int</span> numval;<br>&#125; TokenRecord<br></code></pre></td></tr></table></figure>
+<ul>
+<li>一种更常见的安排是：扫描器只返回词法单元的值，并将其他属性放入变量中（例如在LEX和YACC中）。</li>
+<li>输入字符字符串保存在 <strong>缓冲区(buffer)</strong> 中，或由系统输入设备提供。</li>
+</ul>
+<hr />
+<h2 id="输入缓冲"><a class="markdownIt-Anchor" href="#输入缓冲"></a> 输入缓冲</h2>
+<h3 id="带哨兵的缓冲iobuffered-io-with-sentinels"><a class="markdownIt-Anchor" href="#带哨兵的缓冲iobuffered-io-with-sentinels"></a> 带哨兵的缓冲I/O(Buffered I/O with Sentinels)</h3>
+<p><img src="6.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>lexemeBegin指针：该指针指向当前词素的开始处。当前我们正试图确定这个词素的结尾</li>
+<li>forward指针：它一直向前扫描，直到发现某个模式被匹配为止</li>
+<li>“哨兵”（sentinel）字符：
+<ul>
+<li>可以把对缓冲区末端的测试和对当前字符的测试合二为一</li>
+<li>哨兵字符必须是一个不会在源程序中出现的特殊字符，一个自然的选择就是字符eof</li>
+</ul>
+</li>
+</ul>
+<p><img src="7.png" srcset="/img/loading.gif" lazyload alt="带有哨兵标记的forward指针移动算法" /></p>
+<hr />
+<p><img src="8.png" srcset="/img/loading.gif" lazyload alt="逐字符I/O(Character-at-a-time I/O) " /></p>
+<hr />
+<h2 id="词法单元的规约"><a class="markdownIt-Anchor" href="#词法单元的规约"></a> 词法单元的规约</h2>
+<h3 id="串和语言"><a class="markdownIt-Anchor" href="#串和语言"></a> 串和语言</h3>
+<ul>
+<li>
+<p><strong>字母表(Alphabet)</strong>：是一个有限的符号集合</p>
+<ul>
+<li>符号的典型例子包括字母、数位和标点符号</li>
+<li>ASCII是字母表的一个重要例子</li>
+</ul>
+</li>
+<li>
+<p><strong>串(String)</strong></p>
+<ul>
+<li>某个字母表上的一个串是该字母表中符号的一个有穷序列。</li>
+<li>在语言理论中，术语<code>“句子”</code>和<code>“字”</code>常常被当作<code>“串”</code>的同义词</li>
+<li>串s的长度，通常记作<code>|s|</code>，是指s中符号出现的次数</li>
+<li><strong>空串（empty string）</strong> 是长度为0的串，用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>∈</mo></mrow><annotation encoding="application/x-tex">∈</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">∈</span></span></span></span>表示。</li>
+</ul>
+</li>
+<li>
+<p>串的各部分术语：示例串 S 为 banana</p>
+<ul>
+<li>串s的<strong>前缀（prefix）</strong> 是从s的尾部删除0个或多个符号后得到的串。
+<ul>
+<li>ban、banana 和 ∈ 是 banana 的前缀</li>
+</ul>
+</li>
+<li>串s的<strong>后缀（suffix）</strong> 是从s的开始处删除0个或多个符号后得到的串
+<ul>
+<li>nana、banana 和 ∈ 是 banana 的后缀</li>
+</ul>
+</li>
+<li>串s的<strong>真（true）</strong> 前缀、真后缀、真子串分别是 s 的既不等于 ∈，也不等于 s 本身的前缀、后缀和子串</li>
+<li>串s的<strong>子序列（subsequence）</strong> 是从s中删除0个或多个符号后得到的串，这些被删除的符号可能不相邻
+<ul>
+<li>baan是banana的一个子序列</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>串的运算符</p>
+<ul>
+<li><strong>连接（concatenation）</strong>：如果 x 和 y 是串，那么 x 和 y 的 <strong>连接（记作xy）</strong> 是把 y 附加到 x 后面而形成的串
+<ul>
+<li>空串是连接运算的单位元，也就是说，对于任何串 s 都有， <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mo>∈</mo><mo>=</mo><mo>∈</mo><mi>s</mi><mo>=</mo><mi>s</mi></mrow><annotation encoding="application/x-tex">s∈=∈s=s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">s</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span></span></span></span></li>
+</ul>
+</li>
+<li>如果把两个串的连接看成是这两个串的“乘积”，我们可以定义串的“指数”运算：
+<ul>
+<li>定义 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>s</mi><mn>0</mn></msup><mo>=</mo><mo>∈</mo></mrow><annotation encoding="application/x-tex">s^0 = ∈</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">∈</span></span></span></span> ，并且对于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>&gt;</mo><mn>0</mn><mi mathvariant="normal">，</mi><msup><mi>s</mi><mi>i</mi></msup><mo>=</mo><msup><mi>s</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msup><mi>s</mi></mrow><annotation encoding="application/x-tex">i&gt;0，s^i = s^{i-1}s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69862em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.824664em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord cjk_fallback">，</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.824664em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.824664em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.824664em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mord mathdefault">s</span></span></span></span></li>
+<li>由此可知 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>s</mi><mn>1</mn></msup><mo>=</mo><mi>s</mi><mo separator="true">,</mo><msup><mi>s</mi><mn>2</mn></msup><mo>=</mo><mi>s</mi><mi>s</mi><mo separator="true">,</mo><msup><mi>s</mi><mn>3</mn></msup><mo>=</mo><mi>s</mi><mi>s</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">s^1=s, s^2=ss, s^3=sss</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.008548em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.008548em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span></span></span></span> ，以此类推</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<ul>
+<li><strong>语言(Language)</strong>：一个语言 L 就是是某个给定字母表上一个任意的可数的串集合。
+<ul>
+<li>根据这个定义，像空集 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Θ</mi></mrow><annotation encoding="application/x-tex">\Theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">Θ</span></span></span></span> 和仅包含空串的集合<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>∈</mo></mrow><annotation encoding="application/x-tex">{∈}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord"><span class="mrel">∈</span></span></span></span></span>都是语言</li>
+<li>所有可能的标识符集都是一种语言</li>
+</ul>
+</li>
+</ul>
+<p><img src="9.png" srcset="/img/loading.gif" lazyload alt="语言的示例" /></p>
+<hr />
+<h3 id="语言上的运算"><a class="markdownIt-Anchor" href="#语言上的运算"></a> 语言上的运算</h3>
+<p><img src="10.png" srcset="/img/loading.gif" lazyload alt="语言上的运算的定义" /></p>
+<p><img src="11.png" srcset="/img/loading.gif" lazyload alt="语言上的运算的示例" /></p>
+<hr />
+<h3 id="正则表达式regular-expressions"><a class="markdownIt-Anchor" href="#正则表达式regular-expressions"></a> 正则表达式(Regular Expressions)</h3>
+<ul>
+<li>
+<p><strong>正则表达式</strong> 是从字母表中构造符号（字符串）序列的一组<code>规则/技术</code></p>
+<ul>
+<li>正则表达式可以描述所有通过对某个字母表上的符号应用<code>并、连接和闭包</code>这些运算符而得到的<code>语言</code></li>
+</ul>
+<blockquote>
+<p>令 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Σ</mi></mrow><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">Σ</span></span></span></span> 为字母表，r 是一个正则表达式，那么 L(r) 就是以规则 r 为特征的语言</p>
+</blockquote>
+</li>
+<li>
+<p>正则表达式可以由较小的正则表达式按照如下规则递归地构建。</p>
+<ul>
+<li>每个正则表达式 r 表示一个语言 L(r)，这个语言也是根据 r 的子表达式所表示的语言递归地定义的</li>
+</ul>
+</li>
+<li>
+<p>下面的规则定义了某个字母表Σ上的正则表达式以及这些表达式所表示的语言：</p>
+<ul>
+<li>归纳基础
+<ul>
+<li>∈ 是一个正则表达式， L(∈) = {∈} ，即该语言只包含空串。</li>
+<li>如果 a 是 Σ 上的一个符号，那么 a 是一个正则表达式，并且 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><mi>a</mi></mrow><annotation encoding="application/x-tex">L(a) = {a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">L</span><span class="mopen">(</span><span class="mord mathdefault">a</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span></span></span>
+<ul>
+<li>也就是说，这个语言仅包含一个长度为 1 的符号串 a</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>归纳步骤：假定 r 和 s 都是正则表达式，分别表示语言 L(r) 和 L(s)，那么：
+<ul>
+<li><strong>(r) | (s)</strong> 是一个正则表达式，表示语言 L(r) <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>∪</mo></mrow><annotation encoding="application/x-tex">\cup</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.55556em;vertical-align:0em;"></span><span class="mord">∪</span></span></span></span> L(s)</li>
+<li><strong>(r)(s)</strong> 是一个正则表达式，表示语言 <strong>L(r) L(s)</strong></li>
+<li>(r)<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mrow></mrow><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.688696em;vertical-align:0em;"></span><span class="mord"><span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span> 是一个正则表达式，表示语言 (L(r))<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mrow></mrow><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.688696em;vertical-align:0em;"></span><span class="mord"><span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span></li>
+<li><strong>(r)</strong> 是一个正则表达式，表示语言 <strong>L(r)</strong></li>
+</ul>
+</li>
+<li><code>所有这些都是左关联的。优先规则允许删除括号。</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="12.png" srcset="/img/loading.gif" lazyload alt="字母表上的正则表达式" /></p>
+<ul>
+<li><strong>?</strong> 表示出现 0 次或 1 次</li>
+</ul>
+<p><img src="13.png" srcset="/img/loading.gif" lazyload alt="正则表达式示例" /></p>
+<p><img src="14.png" srcset="/img/loading.gif" lazyload alt="正则表达式的代数定律" /></p>
+<hr />
+<h3 id="正则定义regular-definitions"><a class="markdownIt-Anchor" href="#正则定义regular-definitions"></a> 正则定义(Regular Definitions)</h3>
+<ul>
+<li>有些语言的正则表达式可能非常复杂，为方便表示，我们可能希望给某些正则表达式命名，并在之后的正则表达式中用这些名称作为符号来定义其他正则表达式</li>
+<li>一个 <strong>正则定义(regular definition)</strong> 是具有如下形式的定义序列<br />
+<img src="15.png" srcset="/img/loading.gif" lazyload alt="正则定义基本形式" /></li>
+</ul>
+<hr />
+<h3 id="正则表达式的扩展"><a class="markdownIt-Anchor" href="#正则表达式的扩展"></a> 正则表达式的扩展</h3>
+<p><img src="16.png" srcset="/img/loading.gif" lazyload alt="正则表达式的扩展" /></p>
+<hr />
+<h2 id="复习"><a class="markdownIt-Anchor" href="#复习"></a> 复习</h2>
+<ul>
+<li>Lexical analyzer (scanner)   词法分析器</li>
+<li>Syntax analyzer (parser)   语法分析器</li>
+<li>Token 单词</li>
+<li>Attribute 属性</li>
+<li>Regular expression 正规/正则表达式</li>
+<li>Regular definition 正规定义</li>
+</ul>
+<hr />
+<h2 id="练习题"><a class="markdownIt-Anchor" href="#练习题"></a> 练习题</h2>
+<h3 id="31"><a class="markdownIt-Anchor" href="#31"></a> 3.1</h3>
+<p>描述下列正规式（正则）定义的语言（请用汉语直白地描述该语言）</p>
+<ol>
+<li>0 (0 | 1) * 0</li>
+<li>(( e | 0 ) 1*)*</li>
+<li>(0|1)*0(0|1)(0|1)</li>
+<li>0*10*10*10*</li>
+<li>(00 | 11)*((01 | 10)(00 | 11)*(01 | 10)(00 | 11)*)*</li>
+</ol>
+<hr />
+<p><strong>答：</strong></p>
+<ol>
+<li>以 0 开始并以 0 结束的 0 和 1 组成的数串。</li>
+<li>0 和 1 组成的数串。</li>
+<li>倒数第三个数字为 0 的 0 和 1 组成的数串。</li>
+<li>含且只含三个 1 的 0 和 1 组成的数串。</li>
+<li>含有偶数个 0 和 1 的 0 和 1 组成的数串。</li>
+</ol>
+<hr />
+<h3 id="32"><a class="markdownIt-Anchor" href="#32"></a> 3.2</h3>
+<p>为下列语言写出正规定义(或正规式)</p>
+<ol>
+<li>包含五个元音，且按顺序排列的所有字母串（RE）</li>
+<li>字母按字典升序排列的所有字母串（RE）</li>
+<li>以/*开始，*/结束的注释，中间不能包含*/，除非包含在&quot;和&quot;中（RE）</li>
+<li>不包含重复数字的数字串（正规定义）</li>
+<li>包含至多一个重复数字的数字串（正规定义）</li>
+<li>包含偶数个0和奇数个1的0、1串 （正规定义）</li>
+</ol>
+<hr />
+<p><strong>答：</strong></p>
+<ol>
+<li>
+<p>[bcdfghjklmnpqrstvwxyz]* a ([bcdfghjklmnpqrstvwxyz] | a)* e ([bcdfghjklmnpqrstvwxyz] | e)* i ([bcdfghjklmnpqrstvwxyz] | i)* o ([bcdfghjklmnpqrstvwxyz] | o)* u ([bcdfghjklmnpqrstvwxyz] | u)*</p>
+</li>
+<li>
+<p>A*B*C*…Z*a*b*c*…z*</p>
+</li>
+<li>
+<p>\/\*   ( “.*”|\*+[^/]*|[^*&quot;]*)*        \*\/</p>
+</li>
+<li>
+<p>正则规定如下：</p>
+<ul>
+<li>d0 -&gt; 0?</li>
+<li>d1 -&gt; 1?</li>
+<li>d2 -&gt; 2?</li>
+<li>d3 -&gt; 3?</li>
+<li>d4 -&gt; 4?</li>
+<li>d5 -&gt; 5?</li>
+<li>d6 -&gt; 6?</li>
+<li>d7 -&gt; 7?</li>
+<li>d8 -&gt; 8?</li>
+<li>d9 -&gt; 9?</li>
+<li>d10 -&gt; d0d1d2d3d4d5d6d7d8d9 | d0d1d2d3d4d5d6d7d9d8 | …</li>
+<li>d10 后有10！个表达式</li>
+</ul>
+</li>
+<li>
+<p>不会</p>
+</li>
+<li>
+<p>正则规定如下：</p>
+<ul>
+<li>e_0_e_1 -&gt; (00|11)((01|10)(00|11)(01|10)(00|11))</li>
+<li>e_0_o_1 -&gt; 1e_0_e_1|0(00|11)*(01|10)e_0_e_1</li>
+</ul>
+</li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">正则表达式</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-3/">
+                        <span class="hidden-mobile">数据库系统及其应用｜SQL</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

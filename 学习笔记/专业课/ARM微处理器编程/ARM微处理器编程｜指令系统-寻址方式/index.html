@@ -1,0 +1,667 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="寄存器寻址、寄存器间接寻址、基址变址寻址、多寄存器寻址、堆栈寻址、相对寻址">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARM微处理器编程｜指令系统-寻址方式">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B%EF%BD%9C%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F-%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="寄存器寻址、寄存器间接寻址、基址变址寻址、多寄存器寻址、堆栈寻址、相对寻址">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210509155554187.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210509161330444.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210509161612257.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210509161707791.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210509163218271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210509163704206.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210509163736175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210509163800772.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210509163805228.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-05-09T08:55:26.000Z">
+<meta property="article:modified_time" content="2022-03-09T11:40:15.260Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="arm">
+<meta property="article:tag" content="寻址">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210509155554187.png">
+  
+  
+  <title>ARM微处理器编程｜指令系统-寻址方式 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="ARM微处理器编程｜指令系统-寻址方式">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-05-09 16:55" pubdate>
+        2021年5月9日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.9k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      25 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">ARM微处理器编程｜指令系统-寻址方式</h1>
+            
+            <div class="markdown-body">
+              <h1 id="arm汇编语法格式"><a class="markdownIt-Anchor" href="#arm汇编语法格式"></a> ARM汇编语法格式</h1>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>&lt;</mo><mi>o</mi><mi>p</mi><mi>c</mi><mi>o</mi><mi>d</mi><mi>e</mi><mo>&gt;</mo><mo stretchy="false">{</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mo stretchy="false">}</mo><mo stretchy="false">{</mo><mi>S</mi><mo stretchy="false">}</mo><mo>&lt;</mo><mi>R</mi><mi>d</mi><mo>&gt;</mo><mo separator="true">,</mo><mo>&lt;</mo><mi>R</mi><mi>n</mi><mo>&gt;</mo><mo separator="true">,</mo><mo>&lt;</mo><mi>s</mi><mi>h</mi><mi>i</mi><mi>f</mi><mi>t</mi><mi>e</mi><mi>r</mi><mi mathvariant="normal">_</mi><mi>o</mi><mi>p</mi><mi>e</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>d</mi><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">&lt;opcode&gt;\{cond\}\{S\}&lt;Rd&gt;,&lt;Rn&gt;,&lt;shifter\_operand&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">o</span><span class="mord mathdefault">p</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">d</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">n</span><span class="mord mathdefault">d</span><span class="mclose">}</span><span class="mopen">{</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">d</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span></span><span class="base"><span class="strut" style="height:0.7335400000000001em;vertical-align:-0.19444em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span></span><span class="base"><span class="strut" style="height:0.7335400000000001em;vertical-align:-0.19444em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.00444em;vertical-align:-0.31em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">h</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">t</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">o</span><span class="mord mathdefault">p</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord mathdefault">d</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span></span></span></span><br />
+<img src="https://img-blog.csdnimg.cn/20210509155554187.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>opcode：指令助记符，如ADD、SUB、MOV等；</li>
+<li>cond：条件码助记符，如EQ(0000)、NE(0001)、AL(1110)等；</li>
+<li>S：如果指令有S后缀，则该指令的操作会影响CPSR的值；</li>
+<li>Rd：目标寄存器；</li>
+<li>Rn：包含第一个源操作数的寄存器；</li>
+<li>shifter_operand：表示第二个源操作数，可以为寄存器或立即数。</li>
+</ul>
+<p><code>所谓寻址方式就是处理器根据指令中给出的地址信息来寻找物理地址的方式。</code></p>
+<h1 id="立即寻址"><a class="markdownIt-Anchor" href="#立即寻址"></a> 立即寻址</h1>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>&lt;</mo><mi>o</mi><mi>p</mi><mi>c</mi><mi>o</mi><mi>d</mi><mi>e</mi><mo>&gt;</mo><mo stretchy="false">{</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mo stretchy="false">}</mo><mo stretchy="false">{</mo><mi>S</mi><mo stretchy="false">}</mo><mo>&lt;</mo><mi>R</mi><mi>d</mi><mo>&gt;</mo><mo separator="true">,</mo><mo>&lt;</mo><mi>R</mi><mi>n</mi><mo>&gt;</mo><mo separator="true">,</mo><mi mathvariant="normal">#</mi><mo>&lt;</mo><mi>i</mi><mi>m</mi><mi>m</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">&lt;opcode&gt;\{cond\}\{S\}&lt;Rd&gt;, &lt;Rn&gt;, \#&lt;immediate&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">o</span><span class="mord mathdefault">p</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">d</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">n</span><span class="mord mathdefault">d</span><span class="mclose">}</span><span class="mopen">{</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">d</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span></span><span class="base"><span class="strut" style="height:0.7335400000000001em;vertical-align:-0.19444em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">#</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">m</span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord mathdefault">d</span><span class="mord mathdefault">i</span><span class="mord mathdefault">a</span><span class="mord mathdefault">t</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span></span></span></span></p>
+<ul>
+<li>立即寻址也叫立即数寻址，这是一种特殊的寻址方式，<code>操作数本身就在指令中给出，只要取出指令也就取到了操作数。</code></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs c">ADD R0，R0，＃<span class="hljs-number">1</span>          	；R0←R0＋<span class="hljs-number">1</span><br>ADD R0，R0，＃<span class="hljs-number">0x3f</span>       	；R0←R0＋<span class="hljs-number">0x3f</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>在以上两条指令中，第二个源操作数即为立即数，<code>要求以“＃”为前缀</code>，对于以十六进制表示的立即数，还要求在“＃”后加上“0x”或“&amp;” ，另外％表示二进制数。</li>
+</ul>
+<h2 id="合法的立即数"><a class="markdownIt-Anchor" href="#合法的立即数"></a> 合法的立即数</h2>
+<ul>
+<li>所有的ARM指令都是32 bits固定长度，没有任何一条ARM 指令可包括一个32 bit的立即数。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210509161330444.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>immediate：立即数</li>
+<li>immed_8：8 位的常数</li>
+<li>rotate_imm：4 位的循环右移值<br />
+<img src="https://img-blog.csdnimg.cn/20210509161612257.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>每个立即数都是<code>由一个 8 位的常循环右移偶数位得到</code>
+<ul>
+<li>4 bit 移位值 (0-15)乘于2，得到一个范围在0-30，步长为2的移位值。</li>
+<li><code>最后8位一定要移动偶数位</code></li>
+<li>合法的立即数：<code>二进制有效位间隔不超过8位，且后面的0为偶数个</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>&lt;</mo><mi>i</mi><mi>m</mi><mi>m</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo>&gt;</mo><mo>=</mo><mi>i</mi><mi>m</mi><mi>m</mi><mi>e</mi><mi>d</mi><mi mathvariant="normal">_</mi><mn>8</mn><mi mathvariant="normal">循</mi><mi mathvariant="normal">环</mi><mi mathvariant="normal">右</mi><mi mathvariant="normal">移</mi><mi mathvariant="normal">（</mi><mn>2</mn><mi mathvariant="normal">∗</mi><mi>r</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>t</mi><mi>e</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>m</mi><mi>m</mi><mi mathvariant="normal">）</mi></mrow><annotation encoding="application/x-tex">&lt;immediate&gt;=immed\_8 循环右移（2∗rotate\_imm）</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">m</span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord mathdefault">d</span><span class="mord mathdefault">i</span><span class="mord mathdefault">a</span><span class="mord mathdefault">t</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.00444em;vertical-align:-0.31em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">m</span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord mathdefault">d</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord">8</span><span class="mord cjk_fallback">循</span><span class="mord cjk_fallback">环</span><span class="mord cjk_fallback">右</span><span class="mord cjk_fallback">移</span><span class="mord cjk_fallback">（</span><span class="mord">2</span><span class="mord">∗</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord mathdefault">t</span><span class="mord mathdefault">e</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">i</span><span class="mord mathdefault">m</span><span class="mord mathdefault">m</span><span class="mord cjk_fallback">）</span></span></span></span></p>
+</blockquote>
+<ul>
+<li>ROR 循环右移：即将操作数循环按指定的数量向右循环移位，左边用右边移出的位来填充<br />
+<img src="https://img-blog.csdnimg.cn/20210509161707791.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>下列命令中，汇编器把立即数转换为移位操作</li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-type">MOV</span> r0,#<span class="hljs-number">4096</span>	;uses <span class="hljs-number">0x40</span> <span class="hljs-type">ROR</span> <span class="hljs-number">26</span><br><span class="hljs-type">ADD</span> r1,r2,#<span class="hljs-number">0xFF0000</span>     ;; uses <span class="hljs-number">0xFF</span> <span class="hljs-type">ROR</span> <span class="hljs-number">16</span><br>;也可使用 <span class="hljs-type">MVN</span>来进行位反转:<br><span class="hljs-type">MOV</span> r0, #<span class="hljs-number">0xFFFFFFFF</span>  ;; assembles to <span class="hljs-type">MVN</span> r0,#<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<h1 id="寄存器寻址"><a class="markdownIt-Anchor" href="#寄存器寻址"></a> 寄存器寻址</h1>
+<ul>
+<li>寄存器寻址就是<code>利用寄存器中的数值作为操作数</code>，这种寻址方式是各类微处理器经常采用的一种方式，也是一种执行效率较高的寻址方式</li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-type">ADD</span> <span class="hljs-type">R0</span>，<span class="hljs-type">R1</span>，<span class="hljs-type">R2</span>   ；<span class="hljs-type">R0</span>←<span class="hljs-type">R1</span>＋<span class="hljs-type">R2</span><br></code></pre></td></tr></table></figure>
+<h1 id="寄存器间接寻址"><a class="markdownIt-Anchor" href="#寄存器间接寻址"></a> 寄存器间接寻址</h1>
+<ul>
+<li>寄存器间接寻址就是<code>以寄存器中的值作为操作数的地址</code>，而操作数本身存放在存储器中。</li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-type">LDR</span>  <span class="hljs-type">R0</span>，[<span class="hljs-type">R1</span>]                 ；<span class="hljs-type">R0</span>←[<span class="hljs-type">R1</span>]<br><span class="hljs-type">STR</span>  <span class="hljs-type">R0</span>，[<span class="hljs-type">R1</span>]                 ；[<span class="hljs-type">R1</span>]←<span class="hljs-type">R0</span><br></code></pre></td></tr></table></figure>
+<h1 id="基址变址寻址"><a class="markdownIt-Anchor" href="#基址变址寻址"></a> 基址变址寻址</h1>
+<ul>
+<li>基址变址寻址就是将<code>寄存器（该寄存器一般称作基址寄存器）的内容与指令中给出的地址偏移量相加</code>，从而得到一个操作数的有效地址。</li>
+<li>变址寻址方式常用于访问某基地址附近的地址单元。</li>
+<li>地址偏移量通常有以下三种表示方式
+<ul>
+<li>常量</li>
+<li>寄存器</li>
+<li>比例</li>
+</ul>
+</li>
+</ul>
+<h2 id="偏移寻址offset-addressing"><a class="markdownIt-Anchor" href="#偏移寻址offset-addressing"></a> 偏移寻址（offset addressing）</h2>
+<p><img src="https://img-blog.csdnimg.cn/20210509163218271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>使用一个绝对值不大于4095的数值，可使用带符号数，即在-4095~+4095之间；	如：<code>LDR R2, [Rn, #-0x8]</code></li>
+<li>使用寄存器偏移的方法计算偏移量；如：<code>LDR R2, [Rn, -R3]</code></li>
+<li>使用对寄存器移位的方法计算偏移量；如：<code>LDR R2, [Rn, R3,LSL #2]</code></li>
+<li>使用语句标号。如：<code>LDR R2, START ;R2&lt;-[START]</code>
+<ul>
+<li>在这种寻址方式中，<code>程序计算器PC是隐含的基址寄存器</code>，偏移量是语句标号所在的地址和PC（当前正在执行的指令）之间的差值。</li>
+</ul>
+</li>
+</ul>
+<h2 id="事先事后-更新寻址"><a class="markdownIt-Anchor" href="#事先事后-更新寻址"></a> 事先/事后 更新寻址</h2>
+<ul>
+<li>Pre-indexed: <code>STR r0,[r1,#12]!</code><br />
+<img src="https://img-blog.csdnimg.cn/20210509163704206.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="https://img-blog.csdnimg.cn/20210509163736175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>Post-indexed: <code>STR r0,[r1],#12</code><br />
+<img src="https://img-blog.csdnimg.cn/20210509163800772.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="https://img-blog.csdnimg.cn/20210509163805228.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_1,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></li>
+</ul>
+<h1 id="多寄存器寻址"><a class="markdownIt-Anchor" href="#多寄存器寻址"></a> 多寄存器寻址</h1>
+<ul>
+<li>采用多寄存器寻址方式，一条指令可以完成多个寄存器值的传送。<code>这种寻址方式可以用一条指令完成传送最多16个通用寄存器的值。</code></li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-type">LDMIA</span> <span class="hljs-type">R13</span>，&#123;<span class="hljs-type">R1</span>，<span class="hljs-type">R2</span>，<span class="hljs-type">R3</span>，<span class="hljs-type">R4</span>&#125; <br>；或写成：<span class="hljs-type">LDMIA</span> <span class="hljs-type">R13</span>，&#123;<span class="hljs-type">R1</span>-<span class="hljs-type">R4</span>&#125; <br>；<span class="hljs-type">R1</span>←[<span class="hljs-type">R13</span>] <br>；<span class="hljs-type">R2</span>←[<span class="hljs-type">R13</span>＋<span class="hljs-number">4</span>]			<br>；<span class="hljs-type">R3</span>←[<span class="hljs-type">R13</span>＋<span class="hljs-number">8</span>]	<br>；<span class="hljs-type">R4</span>←[<span class="hljs-type">R13</span>＋<span class="hljs-number">12</span>]<br></code></pre></td></tr></table></figure>
+<ul>
+<li>该指令的后缀IA表示在每次执行完加载/存储操作后，<code>Rn按字长度增加</code>，因此，指令可将连续存储单元的值传送到R1～R4。
+<ul>
+<li>IA (increment after) 	事后递增方式</li>
+<li>IB (increment before) 	事先递增方式</li>
+<li>DA (decrement after) 	事后递减方式</li>
+<li>DB (decrement before) 	事先递减方式</li>
+</ul>
+</li>
+<li>指令中寄存器和内存单元的对应关系：<code>编号低的寄存器对应于内存中低地址单元，编号高的寄存器对应于内存中高地址单元。</code></li>
+<li><code>当使用IA方式存后需要使用DB方式取（一一对应）</code></li>
+</ul>
+<h1 id="堆栈寻址"><a class="markdownIt-Anchor" href="#堆栈寻址"></a> 堆栈寻址</h1>
+<ul>
+<li>堆栈是一种数据结构，按先进后出（First In Last Out，FILO）的方式工作，使用一个称作堆栈指针的专用寄存器指示当前的操作位置，<code>堆栈指针总是指向栈顶。</code></li>
+<li>当堆栈指针指向最后压入堆栈的数据时，称为<code>满堆栈（Full Stack）</code>，而当堆栈指针指向下一个将要放入数据的空位置时，称为<code>空堆栈（Empty Stack）。</code></li>
+<li>同时，根据堆栈的生成方式，又可以分为<code>递增堆栈（Ascending Stack）</code>和<code>递减堆栈（Decending Stack）</code>，<code>当堆栈由低地址向高地址生成时，称为递增堆栈，当堆栈由高地址向低地址生成时，称为递减堆栈</code>。</li>
+<li>这样就有四种类型的堆栈工作方式，ARM微处理器支持这四种类型的堆栈工作方式，即：
+<ul>
+<li>满递增堆栈 (FA)：堆栈指针指向最后压入的数据，且由低地址向高地址生成。</li>
+<li>满递减堆栈(FD) ：堆栈指针指向最后压入的数据，且由高地址向低地址生成。</li>
+<li>空递增堆栈(EA) ：堆栈指针指向下一个将要放入数据的空位置，且由低地址向高地址生成。</li>
+<li>空递减堆栈(ED) ：堆栈指针指向下一个将要放入数据的空位置，且由高地址向低地址生成。</li>
+</ul>
+</li>
+</ul>
+<h1 id="相对寻址"><a class="markdownIt-Anchor" href="#相对寻址"></a> 相对寻址</h1>
+<ul>
+<li>与基址变址寻址方式相类似，相对寻址是基址寻址的一种变通。</li>
+<li><code>相对寻址以程序计数器PC的当前值为基地址，指令中的地址标号作为偏移量</code>，将两者相加之后得到操作数的有效地址。</li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-type">BL</span>  <span class="hljs-type">NEXT</span>      ；跳转到子程序<span class="hljs-type">NEXT</span>处执行<br>              ；跳转地址：<span class="hljs-type">PC</span>+<span class="hljs-type">NEXT</span><br>		……                         <br><span class="hljs-type">NEXT</span><br>		……                             <br>		<span class="hljs-type">MOV</span>  <span class="hljs-type">PC</span>，<span class="hljs-type">LR</span>        ；从子程序返回<br></code></pre></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B/">ARM微处理器编程</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/arm/">arm</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%AF%BB%E5%9D%80/">寻址</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">操作系统｜线程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B%EF%BD%9C%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F-%E7%AE%97%E6%9C%AF%E6%8C%87%E4%BB%A4/">
+                        <span class="hidden-mobile">ARM微处理器编程｜指令系统-算术指令</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

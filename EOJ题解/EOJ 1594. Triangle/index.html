@@ -1,0 +1,610 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="一道艰难的解三角形实训题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EOJ 1594. Triangle">
+<meta property="og:url" content="http://example.com/EOJ%E9%A2%98%E8%A7%A3/EOJ%201594.%20Triangle/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="一道艰难的解三角形实训题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200423194206738.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020042320123839.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-04-23T13:02:29.000Z">
+<meta property="article:modified_time" content="2022-03-12T07:11:14.749Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="EOJ">
+<meta property="article:tag" content="实训">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200423194206738.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+  
+  
+  <title>EOJ 1594. Triangle - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="EOJ 1594. Triangle">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-04-23 21:02" pubdate>
+        2020年4月23日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      52 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">EOJ 1594. Triangle</h1>
+            
+            <div class="markdown-body">
+              <!--more-->
+<blockquote>
+<p>一道艰难的实训题</p>
+</blockquote>
+<p><strong>单点时限:</strong> 2.0 sec</p>
+<p><strong>内存限制:</strong> 256 MB</p>
+<p>A triangle is a basic shape of planar geometry. It consists of three straight lines and three angles in between. Sides are usually labeled a,b,c, with their opposite angles labeled α,β,γ respectively.</p>
+<p>A look into a book about geometry shows that the following formulas exists:<br />
+<img src="https://img-blog.csdnimg.cn/20200423194206738.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /><br />
+The values of a,b,c,α,β,γ forms a set of six parameters that fully define a triangle. If a large enough set of parameters are given, the missing ones can be calculated using the formulas above.</p>
+<p>You are to write a program that calculates the missing parameters for a given subset of the six parameters of a triangle. For some sets of parameters, it is not possible to calculate the triangle because either too few is known about the triangle or the parameters would lead to an invalid triangle. The sides of a valid triangle are greater than 0 and the angles are greater than 0 and less than π. Your program should detect this case and output: <mark>Invalid input.</mark> The same phrase should be output if more than the minimal set needed to compute the triangle is given but the parameters conflict with each other, e.g. all three angles are given but their sum is greater than π.</p>
+<p>Other sets of parameters can lead to more than one but still a finite number of valid solutions for the triangle. In such a case, your program should output: “More than one solution.”</p>
+<p>In all other cases, your program should compute the missing parameters and output all six parameters.</p>
+<p><strong>输入格式</strong><br />
+The first line of the input file contains a number indicating the number of parameter sets to follow. Each following line consists of six numbers, separated by a single blank character. The numbers are the values for the parameters a,α,b,β,c,γ respectively. A value of −1 indicates that the corresponding parameter is undefined and has to be calculated. All floating-point numbers include at least eight significant digits.</p>
+<p><strong>输出格式</strong><br />
+Your program should output a line for each set of parameters found in the input file. If a unique solution for a valid triangle can be found for the given parameters, your program should output the six parameters a,α,b,β,c,γ separated by a blank character. Otherwise the line should contain the phrase <mark>More than one solution</mark>. or <mark>Invalid input</mark>. as explained above.</p>
+<p>The numbers in the output file should include at least six significant digits. Your calculations should be precise enough to get the six most significant digits correct (i.e. a relative error of 0.000001 is allowed).</p>
+<p><strong>样例</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">4<br>47.9337906847 0.6543010109 78.44555175791.4813893731 66.5243757656 1.0059022695<br>62.72048064 2.26853639 -1.00000000 0.56794657 -1.00000000 -1.00000000<br>15.69326944 0.24714213 -1.00000000 1.80433105 66.04067877 -1.00000000<br>72.83685175 1.04409241 -1.00000000 -1.00000000 -1.00000000 -1.00000000</td>
+</tr>
+<tr>
+<td style="text-align:left">output</td>
+</tr>
+<tr>
+<td style="text-align:left">47.933791 0.654301 78.445552 1.481389 66.524376 1.005902<br>62.720481 2.268536 44.026687 0.567947 24.587225 0.305110<br>Invalid input.<br>Invalid input.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解题思路</strong><br />
+比较棘手的一道题，题意就是通过给出的条件解出<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span>所代表的元素，初中解三角形的功底要扎实，对各种情况分类讨论。</p>
+<ol>
+<li>无效输入的情况：<br />
+①  题目所给的数据少于三个，无法得到一个解（计算前判断）<br />
+② 要素无法构成三角形(judge函数，计算后判断)：<br />
+1. 仍有未知项（即-1）<br />
+2. 三个角之和不等于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span></span><br />
+3. 两边之和小于第三边<br />
+4. 不满足正弦定理</li>
+<li>求解三角形：<br />
+<img src="https://img-blog.csdnimg.cn/2020042320123839.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>判断解的个数：<br />
+已知两边和其中一边的对角不能唯一确定三角形，可能出现两解，一解或无解的情况。在本题中使用正弦定理来判断。<br />
+若已知 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi mathvariant="normal">、</mi><mi>b</mi><mi mathvariant="normal">、</mi><mi>α</mi></mrow><annotation encoding="application/x-tex">a、b、\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">a</span><span class="mord cjk_fallback">、</span><span class="mord mathdefault">b</span><span class="mord cjk_fallback">、</span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span>，由正弦定理可以得到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>i</mi><mi>n</mi><mi>β</mi><mo>=</mo><mfrac><mrow><mi>b</mi><mi>s</mi><mi>i</mi><mi>n</mi><mi>α</mi></mrow><mi>a</mi></mfrac></mrow><annotation encoding="application/x-tex">sin\beta=\frac{bsin\alpha}{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.2251079999999999em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8801079999999999em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">b</span><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight">i</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight" style="margin-right:0.0037em;">α</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>，若<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>i</mi><mi>n</mi><mi>β</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">sin\beta&gt;1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，无解；若<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>i</mi><mi>n</mi><mi>β</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">sin\beta=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，一解；若<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>i</mi><mi>n</mi><mi>β</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">sin\beta&lt;1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>两解。在代码中则通过比较 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 与 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi><mi>s</mi><mi>i</mi><mi>n</mi><mi>α</mi></mrow><annotation encoding="application/x-tex">bsin\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span><span class="mord mathdefault">s</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span> 的大小来判断。</li>
+</ol>
+<p><strong>代码思路</strong><br />
+写代码的时候没有怎么打注释，所以解释一下。<br />
+由于题目有精度要求，所以宏定义一个小数mask。<br />
+在输入时指定<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span></span></span></span>来分别储存已知的角和边的个数。<br />
+首先定义三个函数</p>
+<ol>
+<li>已知三边时调用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>g</mi><mi>e</mi><mi>t</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">geta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span></span></span></span>函数求角</li>
+<li>已知两边及其夹角时调用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>g</mi><mi>e</mi><mi>t</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">gete</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord mathdefault">e</span></span></span></span>函数求对边</li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">c=2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 时调用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi><mn>2</mn><mi>c</mi></mrow><annotation encoding="application/x-tex">c2c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathdefault">c</span><span class="mord">2</span><span class="mord mathdefault">c</span></span></span></span> 函数求第三个角</li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>e</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">e=3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span> 时调用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>e</mi><mn>2</mn><mi>c</mi></mrow><annotation encoding="application/x-tex">e2c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathdefault">e</span><span class="mord">2</span><span class="mord mathdefault">c</span></span></span></span> 求所有的角</li>
+</ol>
+<p>之后进入主函数</p>
+<ol>
+<li>读入数据并记录已知元素个数；</li>
+<li>判断元素数量是否满足最低限度；</li>
+<li>仅根据已知边或角的数量来处理：已知两角求第三个角或已知三边求所有角；</li>
+<li>边角情况混合处理：<br />
+（1）已知一边及其对角<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><mi>a</mi><mo separator="true">,</mo><mi>α</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(a,\alpha)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mclose">)</span></span></span></span>，此时可以解出来的情况有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo separator="true">,</mo><mi>β</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(-1,\beta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mclose">)</span></span></span></span>或<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><mi>b</mi><mo separator="true">,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(b,-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">b</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">−</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>；<br />
+①<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo separator="true">,</mo><mi>β</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(-1,\beta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mclose">)</span></span></span></span>，用正弦定理求出<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span>;<br />
+②<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><mi>b</mi><mo separator="true">,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(b,-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">b</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">−</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>，此时需要根据 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>i</mi><mi>n</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">sin\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span> 来判断解的情况；<br />
+（2）已知两边和未知边的对角，直接调用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>g</mi><mi>e</mi><mi>t</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">gete</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord mathdefault">e</span></span></span></span> 函数解出第三边；</li>
+<li>至此我们好像已经遍历了所有情况，只需要循环至所有元素都被解出来；</li>
+<li>调用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>j</mi><mi>u</mi><mi>d</mi><mi>g</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">judge</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">u</span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">e</span></span></span></span> 函数判断元素是否可以组成三角形，判断是否有多解；</li>
+<li>输出。</li>
+</ol>
+<p><strong>ac代码</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></div></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span> </span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std; <br><span class="hljs-comment">/* run this program using the console pauser or add your own getch, system(&quot;pause&quot;) or input loop */</span><br><span class="hljs-type">const</span> <span class="hljs-type">long</span> <span class="hljs-type">double</span> pi=<span class="hljs-number">4</span>*<span class="hljs-built_in">atan</span>(<span class="hljs-number">1</span>);<br><span class="hljs-type">const</span> <span class="hljs-type">long</span> <span class="hljs-type">double</span> mask=<span class="hljs-number">1e-6</span>;<br><span class="hljs-type">long</span> <span class="hljs-type">double</span> a[<span class="hljs-number">6</span>];<br><br><span class="hljs-function"><span class="hljs-type">long</span> <span class="hljs-type">double</span> <span class="hljs-title">geta</span><span class="hljs-params">(<span class="hljs-type">long</span> <span class="hljs-type">double</span> a,<span class="hljs-type">long</span> <span class="hljs-type">double</span> b,<span class="hljs-type">long</span> <span class="hljs-type">double</span> c)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-built_in">acos</span>((a*a+b*b-c*c)/(<span class="hljs-number">2</span>*a*b));<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">long</span> <span class="hljs-type">double</span> <span class="hljs-title">gete</span><span class="hljs-params">(<span class="hljs-type">long</span> <span class="hljs-type">double</span> x,<span class="hljs-type">long</span> <span class="hljs-type">double</span> y,<span class="hljs-type">long</span> <span class="hljs-type">double</span> c)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-built_in">sqrt</span>(x*x+y*y<span class="hljs-number">-2</span>*x*y*<span class="hljs-built_in">cos</span>(c));<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">c2c</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">long</span> <span class="hljs-type">double</span> t=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;<span class="hljs-number">6</span>;i+=<span class="hljs-number">2</span>)<br>	&#123;<br>		<span class="hljs-keyword">if</span>(a[i]&lt;<span class="hljs-number">0</span>)<br>			<span class="hljs-keyword">continue</span>;<br>		t+=a[i];<br>	&#125;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;<span class="hljs-number">6</span>;i+=<span class="hljs-number">2</span>)<br>		<span class="hljs-keyword">if</span>(a[i]&lt;<span class="hljs-number">0</span>)<br>			a[i]=pi-t;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">e2c</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;<span class="hljs-number">6</span>;i+=<span class="hljs-number">2</span>)<br>		<span class="hljs-keyword">if</span>(a[i]&lt;<span class="hljs-number">0</span>)<br>			a[i]=<span class="hljs-built_in">geta</span>(a[(i+<span class="hljs-number">1</span>)%<span class="hljs-number">6</span>],a[(i+<span class="hljs-number">3</span>)%<span class="hljs-number">6</span>],a[i<span class="hljs-number">-1</span>]);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">judge</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">6</span>;i++)<br>		<span class="hljs-keyword">if</span>(a[i]&lt;<span class="hljs-number">0</span>)<br>			<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-built_in">fabs</span>(a[<span class="hljs-number">1</span>]+a[<span class="hljs-number">3</span>]+a[<span class="hljs-number">5</span>]-pi)&gt;mask)<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	<span class="hljs-keyword">if</span>(a[<span class="hljs-number">0</span>]+a[<span class="hljs-number">2</span>]&lt;=a[<span class="hljs-number">4</span>]||a[<span class="hljs-number">2</span>]+a[<span class="hljs-number">4</span>]&lt;=a[<span class="hljs-number">0</span>]||a[<span class="hljs-number">0</span>]+a[<span class="hljs-number">4</span>]&lt;=a[<span class="hljs-number">2</span>])<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">4</span>; i += <span class="hljs-number">2</span>) <br>		<span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(a[i]*<span class="hljs-built_in">sin</span>(a[i+<span class="hljs-number">3</span>])-<span class="hljs-built_in">sin</span>(a[i+<span class="hljs-number">1</span>])*a[i+<span class="hljs-number">2</span>])&gt;mask)<br>			<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>** argv)</span> </span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">int</span> T;<br>	cin &gt;&gt; T;<br>	<span class="hljs-keyword">while</span>(T--)<br>	&#123;<br>		<span class="hljs-type">int</span> n=<span class="hljs-number">0</span>,c=<span class="hljs-number">0</span>,e=<span class="hljs-number">0</span>;<br>		<span class="hljs-type">bool</span> flag=<span class="hljs-literal">false</span>;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">6</span>;i++)<br>		&#123;<br>			cin &gt;&gt; a[i];<br>			<span class="hljs-keyword">if</span>(a[i]&gt;<span class="hljs-number">0</span>)<br>			&#123;<br>				n++;<br>				<span class="hljs-keyword">if</span>(i&amp;<span class="hljs-number">1</span>) c++;<br>				<span class="hljs-keyword">else</span> e++;<br>			&#125;<br>		&#125;<br>		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">3</span>)<br>		&#123;<br>			cout &lt;&lt; <span class="hljs-string">&quot;Invalid input.&quot;</span> &lt;&lt; endl;<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br>		<span class="hljs-keyword">while</span>(n&lt;<span class="hljs-number">6</span>)<br>		&#123;<br>			<span class="hljs-type">int</span> s=n;<br>			<span class="hljs-keyword">if</span>(c==<span class="hljs-number">2</span>)<br>			&#123;<br>				<span class="hljs-built_in">c2c</span>();<br>				n++;<br>				c=<span class="hljs-number">3</span>;<br>			&#125;<br>			<span class="hljs-keyword">if</span>(e==<span class="hljs-number">3</span>)<br>			&#123;<br>				<span class="hljs-built_in">e2c</span>();<br>				n+=<span class="hljs-number">3</span>-c;<br>				c=<span class="hljs-number">3</span>;<br>			&#125;<br>			<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">6</span>;i+=<span class="hljs-number">2</span>)<br>			&#123;<br>				<span class="hljs-keyword">if</span>(a[i]&gt;<span class="hljs-number">0</span>&amp;&amp;a[i+<span class="hljs-number">1</span>]&gt;<span class="hljs-number">0</span>)<br>				&#123;<br>					<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>;j&lt;<span class="hljs-number">6</span>;j+=<span class="hljs-number">2</span>)<br>					&#123;<br>						<span class="hljs-keyword">if</span>((a[j]&gt;<span class="hljs-number">0</span>&amp;&amp;a[j+<span class="hljs-number">1</span>]&gt;<span class="hljs-number">0</span>)||(a[j]&lt;<span class="hljs-number">0</span>&amp;&amp;a[j+<span class="hljs-number">1</span>]&lt;<span class="hljs-number">0</span>))<br>							<span class="hljs-keyword">continue</span>;<br>						<span class="hljs-keyword">if</span>(a[j]&lt;<span class="hljs-number">0</span>)<br>						&#123;<br>							a[j]=a[i]/<span class="hljs-built_in">sin</span>(a[i+<span class="hljs-number">1</span>])*<span class="hljs-built_in">sin</span>(a[j+<span class="hljs-number">1</span>]);<br>							n++;<br>							e++;<br>						&#125;<br>						<span class="hljs-keyword">else</span><br>						&#123;<br>							<span class="hljs-keyword">if</span>(a[i+<span class="hljs-number">1</span>]&lt;pi/<span class="hljs-number">2</span>&amp;&amp;a[i]&lt;a[j]&amp;&amp;a[i]&gt;a[j]*<span class="hljs-built_in">sin</span>(a[i+<span class="hljs-number">1</span>]))<br>								flag=<span class="hljs-literal">true</span>;<br>							<span class="hljs-type">double</span> temp=<span class="hljs-built_in">sin</span>(a[i+<span class="hljs-number">1</span>])*a[j]/a[i];<br>							<span class="hljs-keyword">if</span>(temp&gt;<span class="hljs-number">1</span>||temp&lt;<span class="hljs-number">0</span>)<br>								<span class="hljs-keyword">continue</span>;<br>							a[j+<span class="hljs-number">1</span>]=<span class="hljs-built_in">asin</span>(<span class="hljs-built_in">sin</span>(a[i+<span class="hljs-number">1</span>])*a[j]/a[i]);<br>							n++;<br>							c++;<br>						&#125;<br>					&#125;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span>(e==<span class="hljs-number">2</span>)<br>			&#123;<br>				<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">6</span>;i+=<span class="hljs-number">2</span>)<br>				&#123;<br>					<span class="hljs-keyword">if</span>(a[i]&lt;<span class="hljs-number">0</span>&amp;&amp;a[i+<span class="hljs-number">1</span>]&gt;<span class="hljs-number">0</span>)<br>					&#123;<br>						a[i]=<span class="hljs-built_in">gete</span>(a[(i+<span class="hljs-number">2</span>)%<span class="hljs-number">6</span>],a[(i+<span class="hljs-number">4</span>)%<span class="hljs-number">6</span>],a[i + <span class="hljs-number">1</span>]);<br>						n++;<br>						e++;<br>					&#125;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span>(s==n)<br>				<span class="hljs-keyword">break</span>;<br>		&#125;<br>		<span class="hljs-keyword">if</span>(<span class="hljs-built_in">judge</span>())<br>		&#123;<br>			<span class="hljs-keyword">if</span>(flag)<br>				cout &lt;&lt; <span class="hljs-string">&quot;More than one solution.&quot;</span> &lt;&lt; endl;<br>			<span class="hljs-keyword">else</span><br>			&#123;<br>				<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">5</span>;i++)<br>					cout &lt;&lt; fixed &lt;&lt; <span class="hljs-built_in">setprecision</span>(<span class="hljs-number">6</span>) &lt;&lt; a[i] &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;<br>				cout &lt;&lt; fixed &lt;&lt; <span class="hljs-built_in">setprecision</span>(<span class="hljs-number">6</span>) &lt;&lt; a[<span class="hljs-number">5</span>] &lt;&lt; endl;<br>			&#125;<br>		&#125;<br>		<span class="hljs-keyword">else</span><br>			cout &lt;&lt; <span class="hljs-string">&quot;Invalid input.&quot;</span> &lt;&lt; endl;<br> 	&#125;<br>	<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>补充</strong><br />
+有位带哥提醒我 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span></span> 可以用M_PI表示，更方便些</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/EOJ%E9%A2%98%E8%A7%A3/">EOJ题解</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/EOJ/">EOJ</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%AE%9E%E8%AE%AD/">实训</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/EOJ%E9%A2%98%E8%A7%A3/EOJ%202015.%20%E8%87%AA%E4%BF%AE%E5%AE%A4/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">EOJ 2015. 自修室</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/EOJ%E9%A2%98%E8%A7%A3/EOJ%20205.%20%E6%95%B0%E5%88%97%E9%A1%B9/">
+                        <span class="hidden-mobile">EOJ 205. 数列项</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

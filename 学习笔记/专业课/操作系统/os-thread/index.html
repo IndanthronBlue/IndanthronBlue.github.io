@@ -1,0 +1,718 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="操作系统关于线程部分的学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统｜线程">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="操作系统关于线程部分的学习笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_1.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_2.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_3.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_4.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_5.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_6.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_7.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_9.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_10.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_8.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_11.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_12.png">
+<meta property="article:published_time" content="2021-11-14T17:00:07.000Z">
+<meta property="article:modified_time" content="2022-03-11T16:48:16.776Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="线程">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-thread/Thread_1.png">
+  
+  
+  <title>操作系统｜线程 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="操作系统｜线程">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-11-15 01:00" pubdate>
+        2021年11月15日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      15 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">操作系统｜线程</h1>
+            
+            <div class="markdown-body">
+              <h1 id="进程管理"><a class="markdownIt-Anchor" href="#进程管理"></a> 进程管理</h1>
+<h2 id="进程概念"><a class="markdownIt-Anchor" href="#进程概念"></a> 进程概念</h2>
+<h3 id="进程"><a class="markdownIt-Anchor" href="#进程"></a> 进程</h3>
+<ul>
+<li>程序是被动实体，进程是<code>活动实体</code>：当可执行文件加载到内存时，该程序成为进程，<code>一个程序可以对应多个进程</code></li>
+<li>进程 = 程序 + 执行状态</li>
+</ul>
+<!--more-->
+<p><img src="Thread_1.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h3 id="进程特征"><a class="markdownIt-Anchor" href="#进程特征"></a> 进程特征</h3>
+<ul>
+<li>结构特征：进程实体由程序段、数据段和PCB构成</li>
+<li>动态性：进程是程序的一次执行过程</li>
+<li>并发性
+<ul>
+<li>多个进程同时存在于内存中，在一段时间内同时运行</li>
+<li>本质是程序的<code>交替运行</code></li>
+</ul>
+</li>
+<li>独立性：进程是独立运行、独立分配资源的基本单位</li>
+<li>异步性：进程按<code>独立的、不可预知</code>的速度向前推进</li>
+<li>交互性：进程之间需要交互</li>
+</ul>
+<hr />
+<h3 id="进程状态"><a class="markdownIt-Anchor" href="#进程状态"></a> 进程状态</h3>
+<ul>
+<li><code>牛头图</code></li>
+</ul>
+<p><img src="Thread_2.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h3 id="进程控制块-process-control-block-pcb"><a class="markdownIt-Anchor" href="#进程控制块-process-control-block-pcb"></a> 进程控制块 (Process Control Block, PCB)</h3>
+<ul>
+<li>操作系统中的每个进程用进程控制块来表示</li>
+</ul>
+<p><img src="Thread_3.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="Thread_4.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h3 id="进程调度"><a class="markdownIt-Anchor" href="#进程调度"></a> 进程调度</h3>
+<ul>
+<li>目标是无论何时都有进程运行，最大化CPU利用率</li>
+<li>进程调度器选择一个可用进程到CPU上执行</li>
+</ul>
+<hr />
+<h4 id="调度队列"><a class="markdownIt-Anchor" href="#调度队列"></a> 调度队列</h4>
+<ul>
+<li>进程在进入系统时，会加到<b>作业队列</b>中：包括系统内所有进程</li>
+<li><b>就绪队列</b>：驻留在内存中的、就绪的、等待运行的进程
+<ul>
+<li>通常用链表实现</li>
+</ul>
+</li>
+<li><b>设备队列</b>：等待特定I/O设备的进程列表</li>
+</ul>
+<p><img src="Thread_5.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li><code>队列图</code>：圆圈表示资源，箭头表示流向，矩形框表示队列</li>
+</ul>
+<p><img src="Thread_6.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h4 id="调度程序"><a class="markdownIt-Anchor" href="#调度程序"></a> 调度程序</h4>
+<ul>
+<li><b>长期调度程序</b>：从大容量存储设备（通常为磁盘）的缓冲池中选择进程，加载到内存以便执行。</li>
+<li><b>短期调度程序（CPU调度程序）</b>：从准备执行的进程中选择进程，并分配CPU。</li>
+<li>这两种调度程序的主要区别是执行频率。</li>
+<li>大多数进程可分为：<code>I/O密集型进程</code>和<code>CPU密集型进程</code>
+<ul>
+<li>I/O密集型进程：执行I/O比执行计算需要花费更多时间</li>
+<li>CPU密集型进程：很少产生I/O请求，花更多时间执行计算。</li>
+</ul>
+</li>
+<li><b>中期调度程序</b>：将进程从内存（或CPU竞争）中移出，从而降低多道程序程度</li>
+</ul>
+<p><img src="Thread_7.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h3 id="进程控制"><a class="markdownIt-Anchor" href="#进程控制"></a> 进程控制</h3>
+<ul>
+<li>在操作系统中，一般把进程控制用的程序段称为原语（原子操作），原语的特点是<code>执行期间不允许中断</code>，它是一个不可分割的基本单位</li>
+</ul>
+<hr />
+<h4 id="进程的创建"><a class="markdownIt-Anchor" href="#进程的创建"></a> 进程的创建</h4>
+<ul>
+<li>
+<p>允许一个进程创建另一个进程</p>
+<ul>
+<li>创建者称为<code>父进程</code>，被创建的进程称为<code>子进程</code>。</li>
+<li>大多数操作系统对进程的识别采用唯一的<code>进程识别符(pid)</code>，每个进程都有一个唯一的pid</li>
+</ul>
+<p><img src="Thread_9.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>子进程可以从操作系统直接获得资源，也可以从父进程获取资源</li>
+<li>撤销父进程时，需要撤销其子进程</li>
+</ul>
+</li>
+<li>
+<p>在操作系统中，<code>终端用户登录系统、作业调度、系统提供服务、用户程序的应用请求</code>等都会引起进程的创建。</p>
+</li>
+<li>
+<p>创建一个新进程的过程如下：</p>
+<ol>
+<li>为新进程分配一个pid，并申请一个空白PCB</li>
+<li>为进程分配资源，为新进程的程序和数据以及用户栈分配空间</li>
+<li>初始化 PCB 主要包括初始化标志信息、初始化处理机状态信息和初始化处理机控制信息，以及设置进程的优先级等。</li>
+<li>若进程就绪队列能够接纳新进程，则将新进程插入就绪队列，等待被调度运行</li>
+</ol>
+</li>
+<li>
+<p>创建新进程时，有两种执行可能</p>
+<ul>
+<li>父进程与子进程并发执行</li>
+<li>父进程等待，直到某个或全部子进程执行完</li>
+</ul>
+</li>
+<li>
+<p>新进程的地址空间也有两种可能</p>
+<ul>
+<li>子进程是父进程的复制品</li>
+<li>子进程加载另一个新程序</li>
+</ul>
+</li>
+</ul>
+<hr />
+<ul>
+<li>
+<p>以UNIX为例</p>
+<ul>
+<li>通过系统调用<code>fork()</code>，可以创建新进程</li>
+<li>新进程的地址空间复制原来进程的地址空间
+<ul>
+<li>父进程和子进程可以轻松通信</li>
+</ul>
+</li>
+<li><code>对于子进程，fork()的返回值为0，父进程的返回值为子进程的pid</code></li>
+<li>系统调用<code>exec()</code>加载二进制文件到内存中并开始执行</li>
+<li>系统调用<code>wait()</code>把进程移出就绪队列，直到子进程终止。</li>
+<li>调用<code>exec()</code>用新进程覆盖了进程的地址空间，所以不会返回控制</li>
+</ul>
+<p><img src="Thread_10.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>以Windows为例</p>
+<ul>
+<li>进程创建采用Windows API函数<code>CreateProcess()</code></li>
+<li>它类似于fork()，但是它在创建进程时要求将一个指定程序加载到子进程的地址空间</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="进程的终止"><a class="markdownIt-Anchor" href="#进程的终止"></a> 进程的终止</h4>
+<ul>
+<li>通过系统调用<code>exit()</code>请求操作系统删除自身，进程终止</li>
+<li>进程可以返回状态值到父进程。所有进程资源都由操作系统释放</li>
+<li>引起进程终止的事件主要有
+<ol>
+<li>正常结束，表示进程的任务己完成并准备退出运行。</li>
+<li>异常结束，表示进程在运行时，发生了某种异常事件，使程序无法继续运行，如存储区越界、保护错、非法指令、特权指令错、运行超时、算术运算铺、 I/O 故障等。</li>
+<li>外界干预，指进程应外界的请求而终止运行，如操作员或操作系统干预、父进程请求和父进程终止。</li>
+</ol>
+</li>
+<li><b>僵尸进程</b>：进程已经终止，但是其父进程尚未调用wait()。</li>
+<li><b>孤儿进程</b>：其父进程尚未调用wait()就终止。</li>
+</ul>
+<hr />
+<h4 id="进程切换"><a class="markdownIt-Anchor" href="#进程切换"></a> 进程切换</h4>
+<ul>
+<li>进程的上下文采用进程PCB表示</li>
+<li>通常，通过执行<code>状态保存</code>，保存CPU当前状态；之后，<code>状态恢复</code>重新开始运行</li>
+</ul>
+<p><img src="Thread_8.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h3 id="进程间通信"><a class="markdownIt-Anchor" href="#进程间通信"></a> 进程间通信</h3>
+<ul>
+<li>协作进程需要有一种进程间通信(InterProcess Communication,IPC)机制</li>
+</ul>
+<p><img src="Thread_11.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="Thread_12.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BA%BF%E7%A8%8B/">线程</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/computer-network/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">计算机网络｜期末复习</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%BC%96%E7%A8%8B%EF%BD%9C%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F-%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F/">
+                        <span class="hidden-mobile">ARM微处理器编程｜指令系统-寻址方式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
