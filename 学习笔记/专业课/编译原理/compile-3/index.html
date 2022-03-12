@@ -1,0 +1,910 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="子集构造法的基本思想是让构造得到的DFA的每个状态对应于 NFA 的一个状态集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译原理｜词法分析-2">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="子集构造法的基本思想是让构造得到的DFA的每个状态对应于 NFA 的一个状态集合">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/1.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/2.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/3.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/5.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/6.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/7.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/8.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/9.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/10.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/11.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/12.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/13.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/14.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/15.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/16.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/NFA.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/3-1DFA.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/3-2NFA.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/3-2DFA.png">
+<meta property="article:published_time" content="2022-03-12T10:35:00.000Z">
+<meta property="article:modified_time" content="2022-03-12T10:39:33.097Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="编译原理">
+<meta property="article:tag" content="子集构造法">
+<meta property="article:tag" content="有限自动机">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/1.png">
+  
+  
+  <title>编译原理｜词法分析-2 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="编译原理｜词法分析-2">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-12 18:35" pubdate>
+        2022年3月12日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      31 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">编译原理｜词法分析-2</h1>
+            
+            <div class="markdown-body">
+              <h1 id="lexical-analysis-词法分析-2"><a class="markdownIt-Anchor" href="#lexical-analysis-词法分析-2"></a> Lexical Analysis 词法分析-2</h1>
+<h2 id="词法单元的识别"><a class="markdownIt-Anchor" href="#词法单元的识别"></a> 词法单元的识别</h2>
+<p><img src="1.png" srcset="/img/loading.gif" lazyload alt="常见词法单元模式(patterns)" /></p>
+<p><img src="2.png" srcset="/img/loading.gif" lazyload alt="空白符" /></p>
+<p><img src="3.png" srcset="/img/loading.gif" lazyload alt="词法单元、它们的模式以及属性值" /></p>
+<ul>
+<li>上表总结了词法分析器的目标。对于各个词素或词素的集合，该表显示了应该将哪个词法单元名返回给语法分析器，以及应该返回什么属性值</li>
+</ul>
+<hr />
+<h3 id="状态转换图transition-diagram"><a class="markdownIt-Anchor" href="#状态转换图transition-diagram"></a> 状态转换图（transition diagram）</h3>
+<ul>
+<li>作为构造词法分析器的一个中间步骤，我们首先将 <strong>模式</strong> 转换成具有特定风格的流图，称为 <strong>状态转换图</strong>
+<ul>
+<li>在读取字符时，使用相关的 <strong>TDs</strong> 尝试将词素与模式匹配</li>
+</ul>
+</li>
+<li>每个状态转移图都有：
+<ul>
+<li><strong>States（状态）</strong> : 由圆圈代表
+<ul>
+<li>词法分析器在扫描输入串的过程中寻找和某个模式匹配的词素，而转换图中的每个状态代表一个可能在这个过程中出现的情况</li>
+</ul>
+</li>
+<li><strong>Actions（动作）</strong> : 从图的一个状态指向另一个状态的箭头</li>
+<li><strong>Start State（开始状态）</strong> : 该状态由一条没有出发结点的、标号为“start”的边指明</li>
+<li><strong>Final State（接受状态或最终状态）</strong> : 用双层的圈来表示一个接受状态<br />
+<img src="5.png" srcset="/img/loading.gif" lazyload alt="逻辑运算符的状态转移图" /></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="保留字和标识符的识别"><a class="markdownIt-Anchor" href="#保留字和标识符的识别"></a> 保留字和标识符的识别</h3>
+<p><img src="6.png" srcset="/img/loading.gif" lazyload alt="保留字和标识符的识别" /></p>
+<ul>
+<li>初始化时就将各个保留字填入符号表中。符号表条目的某个字段会指明这些串并不是普通的标识符，并指出它们所代表的词法单元。</li>
+<li>当找到一个标识符时，如果该标识符尚未出现在符号表中，就会调用 <strong>installID</strong> 将此标识符放入符号表中，并返回一个指针，指向这个刚找到的词素所对应的符号表条目</li>
+</ul>
+<p><img src="7.png" srcset="/img/loading.gif" lazyload alt="关键字符号表" /></p>
+<ul>
+<li>函数 <strong>getToken</strong> 查看对应于刚找到的词素的符号表条目，并根据符号表中的信息返回该词素所代表的词法单元名</li>
+</ul>
+<hr />
+<h2 id="有穷自动机finite-automata"><a class="markdownIt-Anchor" href="#有穷自动机finite-automata"></a> 有穷自动机(finite automata)</h2>
+<ul>
+<li>
+<p>有穷自动机在本质上是与状态转换图类似的图，但有如下几点不同：</p>
+<ul>
+<li>有穷自动机是<strong>识别器（recognizer）</strong>，它们只能对每个可能的输入串简单地回答“是”或“否”。</li>
+<li>有穷自动机分为两类：
+<ul>
+<li>**不确定的有穷自动机（Nondeterministic Finite Automata，NFA）**对其边上的标号没有任何限制。一个符号标记离开同一状态的多条边，并且空串∈也可以作为标号</li>
+<li>对于每个状态及自动机输入字母表中的每个符号，**确定的有穷自动机（Deterministic Finite Automata，DFA）**有且只有<code>一条离开该状态</code>、以该符号为标号的边</li>
+</ul>
+</li>
+<li>确定性和非确定性有限自动机都能识别正则集。
+<ul>
+<li>DFA 识别速度更快，但需要占用更多的空间</li>
+<li>NFA 的识别速度可能稍慢（需要回溯），但是占用空间更小</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>首先要为词法单元定义正则表达式，再将其转换为 DFA 以获取词法单元的词法分析器</p>
+</li>
+</ul>
+<hr />
+<h3 id="nfa"><a class="markdownIt-Anchor" href="#nfa"></a> NFA</h3>
+<ul>
+<li>
+<p>一个不确定的有穷自动机（NFA）是一个数学模型，它由以下几个部分组成：</p>
+<ul>
+<li>一个有穷的状态集合 S</li>
+<li>一个输入符号集合 Σ，即输入字母表（input alphabet）</li>
+<li>一个转换函数（transition function），它为每个状态和 <code>Σ∪&#123;∈&#125;</code> 中的每个符号都给出了相应的**后继状态（next state）**的集合</li>
+<li>S 中的一个状态 s0 被指定为开始状态，或者说初始状态</li>
+<li>S 的一个子集 F 被指定为接受状态（或者说终止状态的）集合</li>
+</ul>
+</li>
+<li>
+<p>在 NFA 中允许<strong>空转移(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ε</span></span></span></span>- transitions)</strong>，可以在不使用任何符号的情况下从一个状态移动到另一个状态。</p>
+</li>
+<li>
+<p>一个 NFA **接受（accept）**输入字符串 x，当且仅当对应的转换图中存在一条从开始状态到某个接受状态的路径，使得<code>该路径中各条边上的标号组成符号串 x</code></p>
+<ul>
+<li>注意，路径中的∈标号将被忽略</li>
+<li>由一个 NFA 定义（或接受）的语言是从开始状态到某个接受状态的所有路径上的标号串的集合</li>
+</ul>
+</li>
+</ul>
+<p><img src="8.png" srcset="/img/loading.gif" lazyload alt="(a|b)*abb" /></p>
+<hr />
+<h3 id="转换表"><a class="markdownIt-Anchor" href="#转换表"></a> 转换表</h3>
+<ul>
+<li>为了计算机存储、理解方便，可以将一个NFA表示为一张<strong>转换表（transition table）</strong>
+<ul>
+<li>表的各行对应于状态</li>
+<li>各列对应于输入符号和 ∈</li>
+<li>对应于一个给定状态和给定输入的条目是将NFA的转换函数应用于这些参数后得到的值</li>
+<li>如果转换函数没有给出对应于某个 状态-输入 对的信息，我们就把 Ø 放入相应的表项中</li>
+<li>注意：需要标明 <strong>开始/结束</strong> 状态</li>
+</ul>
+</li>
+</ul>
+<p><img src="9.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h3 id="dfa"><a class="markdownIt-Anchor" href="#dfa"></a> DFA</h3>
+<ul>
+<li>**确定的有穷自动机（DFA）**是不确定有穷自动机的一个特例，其中：
+<ul>
+<li>没有输入 ∈ 之上的转换动作</li>
+<li>对每个状态 s 和每个输入符号 a，<code>有且只有一条</code>标号为 a 的边离开 s</li>
+</ul>
+</li>
+<li>NFA 抽象地表示了用来识别某个语言中的串的算法，而相应的 DFA 则是一个简单具体的识别串的算法。</li>
+</ul>
+<hr />
+<h2 id="从正则表达式到自动机"><a class="markdownIt-Anchor" href="#从正则表达式到自动机"></a> 从正则表达式到自动机</h2>
+<h3 id="从-nfa-到-dfa-的转换"><a class="markdownIt-Anchor" href="#从-nfa-到-dfa-的转换"></a> 从 NFA 到 DFA 的转换</h3>
+<ul>
+<li>
+<p>子集构造法的基本思想是让构造得到的DFA的每个状态对应于 NFA 的一个状态集合</p>
+<ul>
+<li>消除空转移</li>
+<li>在单个输入字符上从一个状态进行多次转换</li>
+</ul>
+</li>
+<li>
+<p>子集构造法算法：</p>
+<ul>
+<li>输入：一个 NFA, N</li>
+<li>输出：一个 DFA, D</li>
+<li>方法：为D构造一个转换表 Dtran，D 的每个状态是一<br />
+个 NFA 状态集合。构造的 Dtran 使得 D “并行地”模拟 N 在遇到一个给定输入串时可能执行的所有动作</li>
+</ul>
+</li>
+</ul>
+<p><img src="10.png" srcset="/img/loading.gif" lazyload alt="NFA状态集上的操作" /></p>
+<p><img src="11.png" srcset="/img/loading.gif" lazyload alt="子集构造法" /></p>
+<ul>
+<li>D 的开始状态是 ∈-closure（s0）</li>
+<li>D 的接受状态是所有至少包含了 N 的一个接受状态的状态集合</li>
+<li>只需要说明如何对NFA的任何状态集合 T 计算 ∈-closure（T） ，就可以完整地描述子集构造法</li>
+</ul>
+<hr />
+<blockquote>
+<p>子集构造法示例</p>
+</blockquote>
+<ul>
+<li>下图为接受语言 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><mi>a</mi><mi mathvariant="normal">∣</mi><mi>b</mi><mo stretchy="false">)</mo><mo>∗</mo><mi>a</mi><mi>b</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">(a|b)*abb</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">a</span><span class="mord">∣</span><span class="mord mathdefault">b</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">b</span><span class="mord mathdefault">b</span></span></span></span> 的 NFA</li>
+</ul>
+<p><img src="12.png" srcset="/img/loading.gif" lazyload alt="N" /></p>
+<ul>
+<li>等价 NFA 的<strong>开始状态</strong> <strong>S0</strong> 是∈-closure（0），即 S0={0，1，2，4，7}
+<ul>
+<li>能够从状态 0 出发，只经过标号为∈的路径到达的所有状态</li>
+</ul>
+</li>
+<li>NFA的输入字母表是 {a，b}，因此我们<strong>标记 S0</strong>，计算：
+<ul>
+<li>Dtran［S0，a］= ∈-closure(move(S0,a)) = ∈-closure({3,8}) = {1,2,3,4,6,7,8} = <strong>S1</strong></li>
+<li>Dtran［S0，b］= ∈-closure(move(S0,b)) = ∈-closure({5}) = {1,2,4,5,6,7} = <strong>S2</strong></li>
+</ul>
+</li>
+<li>之后对未加标记的 S1 和 S2 继续这个处理过程，最终就能使得 DFA 的所有状态都被加上标记</li>
+</ul>
+<p><img src="13.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="14.png" srcset="/img/loading.gif" lazyload alt="完整处理过程" /></p>
+<p><img src="15.png" srcset="/img/loading.gif" lazyload alt="DFA 转换表 Dtran" /></p>
+<p><img src="16.png" srcset="/img/loading.gif" lazyload alt="最终得到的NFA" /></p>
+<hr />
+<h1 id="练习"><a class="markdownIt-Anchor" href="#练习"></a> 练习</h1>
+<h2 id="3-1"><a class="markdownIt-Anchor" href="#3-1"></a> 3-1</h2>
+<p><img src="NFA.png" srcset="/img/loading.gif" lazyload alt="a(a|b) *b" /></p>
+<hr />
+<ul>
+<li>
+<p>开始状态 S0 = ∈-closure({0}) = {0}</p>
+</li>
+<li>
+<p>标记 S0：</p>
+<ul>
+<li>Dtran［S0，a］= ∈-closure(move(S0,a)) = ∈-closure({1}) = {1,2,3,5,8} = S1</li>
+<li>Dtran［S0，b］= ∈-closure(move(S0,b)) = ∈-closure(∈) = {∈}</li>
+</ul>
+</li>
+<li>
+<p>标记 S1：</p>
+<ul>
+<li>Dtran［S1，a］= ∈-closure(move(S1,a)) = ∈-closure({4}) = {2,3,4,5,7,8} = S2</li>
+<li>Dtran［S1，b］= ∈-closure(move(S1,b)) = ∈-closure({6,9}) = {2,3,5,6,7,8,9} = S3</li>
+</ul>
+</li>
+<li>
+<p>标记 S2：</p>
+<ul>
+<li>Dtran［S2，a］= ∈-closure(move(S2,a)) = ∈-closure({4}) = S2</li>
+<li>Dtran［S2，b］= ∈-closure(move(S2,b)) = ∈-closure({6,9}) = S3</li>
+</ul>
+</li>
+<li>
+<p>标记 S3</p>
+<ul>
+<li>Dtran［S3，a］= ∈-closure(move(S3,a)) = ∈-closure({4}) = S2</li>
+<li>Dtran［S3，b］= ∈-closure(move(S3,b)) = ∈-closure({6,9}) = S3</li>
+</ul>
+</li>
+<li>
+<p>因此转移表为</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">输入符号</th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">状态</td>
+<td style="text-align:center">a</td>
+<td style="text-align:center">b</td>
+</tr>
+<tr>
+<td style="text-align:center">S0</td>
+<td style="text-align:center">S1</td>
+<td style="text-align:center">-</td>
+</tr>
+<tr>
+<td style="text-align:center">S1</td>
+<td style="text-align:center">S2</td>
+<td style="text-align:center">S3</td>
+</tr>
+<tr>
+<td style="text-align:center">S2</td>
+<td style="text-align:center">S2</td>
+<td style="text-align:center">S3</td>
+</tr>
+<tr>
+<td style="text-align:center">S3</td>
+<td style="text-align:center">S2</td>
+<td style="text-align:center">S3</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>起始状态为 S0，接收状态为 S3</p>
+</blockquote>
+<ul>
+<li>转换后的 DFA 为：</li>
+</ul>
+<p><img src="3-1DFA.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<blockquote>
+<p>可以将 S1 精简掉，精简后和 PPT 上答案一致</p>
+</blockquote>
+<hr />
+<h2 id="3-2"><a class="markdownIt-Anchor" href="#3-2"></a> 3-2</h2>
+<p><img src="3-2NFA.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<ul>
+<li>
+<p>开始状态 S0 = ∈-closure({0}) = {0}</p>
+</li>
+<li>
+<p>标记 S0：</p>
+<ul>
+<li>Dtran［S0，a］= ∈-closure(move(S0,a)) = ∈-closure(∈) = {∈}</li>
+<li>Dtran［S0，b］= ∈-closure(move(S0,b)) = ∈-closure({1}) = {1,2,4} = S1</li>
+</ul>
+</li>
+<li>
+<p>标记 S1：</p>
+<ul>
+<li>Dtran［S1，a］= ∈-closure(move(S1,a)) = ∈-closure({3}) = {3,6,7,8,9,11,14} = S2</li>
+<li>Dtran［S1，b］= ∈-closure(move(S1,b)) = ∈-closure({5}) = {5,6,7,8,9,11,14} = S3</li>
+</ul>
+</li>
+<li>
+<p>标记 S2：</p>
+<ul>
+<li>Dtran［S2，a］= ∈-closure(move(S2,a)) = ∈-closure({10,15}) = {8,9,10,11,13,14,15} = S4</li>
+<li>Dtran［S2，b］= ∈-closure(move(S2,b)) = ∈-closure({12}) = {8,9,11,12,13,14} = S5</li>
+</ul>
+</li>
+<li>
+<p>标记 S3</p>
+<ul>
+<li>Dtran［S3，a］= ∈-closure(move(S3,a)) = ∈-closure({10,15}) = S4</li>
+<li>Dtran［S3，b］= ∈-closure(move(S3,b)) = ∈-closure({12}) = {5,6,7,8,9,11,14} = S5</li>
+</ul>
+</li>
+<li>
+<p>标记 S4：</p>
+<ul>
+<li>Dtran［S4，a］= ∈-closure(move(S4,a)) = ∈-closure({10,15}) = S4</li>
+<li>Dtran［S4，b］= ∈-closure(move(S4,a)) = ∈-closure({12}) = S5</li>
+</ul>
+</li>
+<li>
+<p>标记 S5：</p>
+<ul>
+<li>Dtran［S5，a］= ∈-closure(move(S5,a)) = ∈-closure({10,15}) = S4</li>
+<li>Dtran［S5，b］= ∈-closure(move(S5,a)) = ∈-closure({12}) = S5</li>
+</ul>
+</li>
+<li>
+<p>因此转移表为</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">输入符号</th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">状态</td>
+<td style="text-align:center">a</td>
+<td style="text-align:center">b</td>
+</tr>
+<tr>
+<td style="text-align:center">S0</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">S1</td>
+</tr>
+<tr>
+<td style="text-align:center">S1</td>
+<td style="text-align:center">S2</td>
+<td style="text-align:center">S3</td>
+</tr>
+<tr>
+<td style="text-align:center">S2</td>
+<td style="text-align:center">S4</td>
+<td style="text-align:center">S5</td>
+</tr>
+<tr>
+<td style="text-align:center">S3</td>
+<td style="text-align:center">S4</td>
+<td style="text-align:center">S5</td>
+</tr>
+<tr>
+<td style="text-align:center">S4</td>
+<td style="text-align:center">S4</td>
+<td style="text-align:center">S5</td>
+</tr>
+<tr>
+<td style="text-align:center">S5</td>
+<td style="text-align:center">S4</td>
+<td style="text-align:center">S5</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>起始状态为 S0，接收状态为 S4</p>
+</blockquote>
+<ul>
+<li>转换后的 DFA 为：</li>
+</ul>
+<p><img src="3-2DFA.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%AD%90%E9%9B%86%E6%9E%84%E9%80%A0%E6%B3%95/">子集构造法</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BA/">有限自动机</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/">
+                        <span class="hidden-mobile">编译原理｜词法分析-1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
