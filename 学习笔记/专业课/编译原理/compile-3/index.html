@@ -43,7 +43,7 @@
 <meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/3-2NFA.png">
 <meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/3-2DFA.png">
 <meta property="article:published_time" content="2022-03-12T10:35:00.000Z">
-<meta property="article:modified_time" content="2022-03-12T10:39:33.097Z">
+<meta property="article:modified_time" content="2022-03-12T10:41:41.517Z">
 <meta property="article:author" content="阴丹士林蓝">
 <meta property="article:tag" content="编译原理">
 <meta property="article:tag" content="子集构造法">
@@ -323,8 +323,8 @@
 <li>有穷自动机是<strong>识别器（recognizer）</strong>，它们只能对每个可能的输入串简单地回答“是”或“否”。</li>
 <li>有穷自动机分为两类：
 <ul>
-<li>**不确定的有穷自动机（Nondeterministic Finite Automata，NFA）**对其边上的标号没有任何限制。一个符号标记离开同一状态的多条边，并且空串∈也可以作为标号</li>
-<li>对于每个状态及自动机输入字母表中的每个符号，**确定的有穷自动机（Deterministic Finite Automata，DFA）**有且只有<code>一条离开该状态</code>、以该符号为标号的边</li>
+<li><strong>不确定的有穷自动机（Nondeterministic Finite Automata，NFA）</strong> 对其边上的标号没有任何限制。一个符号标记离开同一状态的多条边，并且空串∈也可以作为标号</li>
+<li>对于每个状态及自动机输入字母表中的每个符号，<strong>确定的有穷自动机（Deterministic Finite Automata，DFA）</strong> 有且只有<code>一条离开该状态</code>、以该符号为标号的边</li>
 </ul>
 </li>
 <li>确定性和非确定性有限自动机都能识别正则集。
@@ -347,16 +347,16 @@
 <ul>
 <li>一个有穷的状态集合 S</li>
 <li>一个输入符号集合 Σ，即输入字母表（input alphabet）</li>
-<li>一个转换函数（transition function），它为每个状态和 <code>Σ∪&#123;∈&#125;</code> 中的每个符号都给出了相应的**后继状态（next state）**的集合</li>
+<li>一个转换函数（transition function），它为每个状态和 <code>Σ∪&#123;∈&#125;</code> 中的每个符号都给出了相应的<strong>后继状态（next state）</strong> 的集合</li>
 <li>S 中的一个状态 s0 被指定为开始状态，或者说初始状态</li>
 <li>S 的一个子集 F 被指定为接受状态（或者说终止状态的）集合</li>
 </ul>
 </li>
 <li>
-<p>在 NFA 中允许<strong>空转移(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ε</span></span></span></span>- transitions)</strong>，可以在不使用任何符号的情况下从一个状态移动到另一个状态。</p>
+<p>在 NFA 中允许<strong>空转移(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ε</span></span></span></span>- transitions)</strong> ，可以在不使用任何符号的情况下从一个状态移动到另一个状态。</p>
 </li>
 <li>
-<p>一个 NFA **接受（accept）**输入字符串 x，当且仅当对应的转换图中存在一条从开始状态到某个接受状态的路径，使得<code>该路径中各条边上的标号组成符号串 x</code></p>
+<p>一个 NFA <strong>接受（accept）</strong> 输入字符串 x，当且仅当对应的转换图中存在一条从开始状态到某个接受状态的路径，使得<code>该路径中各条边上的标号组成符号串 x</code></p>
 <ul>
 <li>注意，路径中的∈标号将被忽略</li>
 <li>由一个 NFA 定义（或接受）的语言是从开始状态到某个接受状态的所有路径上的标号串的集合</li>
@@ -381,7 +381,7 @@
 <hr />
 <h3 id="dfa"><a class="markdownIt-Anchor" href="#dfa"></a> DFA</h3>
 <ul>
-<li>**确定的有穷自动机（DFA）**是不确定有穷自动机的一个特例，其中：
+<li><strong>确定的有穷自动机（DFA）</strong> 是不确定有穷自动机的一个特例，其中：
 <ul>
 <li>没有输入 ∈ 之上的转换动作</li>
 <li>对每个状态 s 和每个输入符号 a，<code>有且只有一条</code>标号为 a 的边离开 s</li>
