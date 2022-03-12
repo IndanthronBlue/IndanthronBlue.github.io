@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>智能软件测试｜Criteria-Based Test Design</title>
+    <link href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/softtest-2/"/>
+    <url>/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/softtest-2/</url>
+    
+    <content type="html"><![CDATA[<h1 id="基于标准的测试设计"><a class="markdownIt-Anchor" href="#基于标准的测试设计"></a> 基于标准的测试设计</h1><blockquote><p>Criteria-Based Test Design</p></blockquote><h2 id="新旧测试观念"><a class="markdownIt-Anchor" href="#新旧测试观念"></a> 新旧测试观念</h2><ul><li><p>旧的观点把重点放在每个 <strong>软件开发</strong> 阶段的测试上，因为它与其他阶段非常不同</p><ul><li>模块，集成，系统</li></ul></li><li><p>新的测试观念侧重于 <strong>结构(structures)</strong> 和 <strong>标准(criteria)</strong></p><ul><li>输入空间、图形、逻辑表达式、语法<br /><img src="1.png" alt="基于结构的标准" /></li><li>每个阶段的测试设计基本相同<ul><li>创建 <strong>模型</strong> 是不同的</li><li><strong>选择值</strong> 和 <strong>自动化测试</strong> 是不同的</li></ul></li></ul></li><li><p>基于结构的标准的结构来源：这些结构可以从大量软件工件中<code>提取</code></p><ul><li><strong>图(Garphs)</strong> 可以从UML用例、有限状态机和源代码中提取</li><li><strong>逻辑表达式(Logical expressions)</strong> 可以从程序源代码中的决策、转换保护、用例中的条件等中提取…</li><li>基于结构的测试标准和 <code>“基于模型的测试”</code> 不同，后者从描述被测系统某些方面的模型派生测试<ul><li><code>模型</code>通常描述<code>行为</code>的一部分</li><li><code>源代码</code>不作为考量的部分</li></ul></li></ul></li></ul><p><img src="2.png" alt="" /></p><hr /><h2 id="测试覆盖标准test-coverage-criteria"><a class="markdownIt-Anchor" href="#测试覆盖标准test-coverage-criteria"></a> 测试覆盖标准（Test Coverage Criteria）</h2><blockquote><p>测试人员的工作很简单：定义软件的模型，然后找到覆盖它的方法</p></blockquote><ul><li><strong>测试需求(Test Requirements)</strong> ：测试需求是软件工件的一个特定元素，测试用例必须满足或覆盖这个特定元素（提炼通用部分）</li><li><strong>覆盖标准(Coverage Criterion)</strong> ：一个覆盖标准是一条规则，或者是将测试需求施加在一个测试集上的一组规则<ul><li>覆盖标准以一种全面并且精确的方式描述了测试需求</li></ul></li><li><strong>覆盖(Coverage)</strong> ：给定一个覆盖标准 C 和相关的测试需求集合 TR，要使一个测试集合 T 满足 C，当且仅当对于测试需求集合 TR 中的每一条测试需求 tr，在 T 中至少存在一个测试 t 可以满足 tr</li><li><strong>覆盖程度(Coverage Level)</strong> ：给定一个测试需求集合 TR 和一个测试集合 T，覆盖程度就是 T 满足的测试需求数占 TR 总数的比例</li><li><strong>不可行(Infeasible)的测试要求</strong> ：无法满足的测试要求<ul><li>不存在满足测试要求的测试用例值</li><li>例如：死代码(Dead code)</li><li>对于大多数覆盖标准来说，检测不可行测试需求形式上是<code>不可判定的</code></li><li>因此 <strong>100%的覆盖率在实际中是不存在的</strong></li></ul></li></ul><hr /><ul><li>使用测试标准的两种方法<ul><li><code>直接生成</code>满足标准的测试值<ul><li>通常由研究界承担</li><li>使用标准的最明显方式</li><li>没有自动化工具很难</li></ul></li><li><code>外部</code>地生成测试用例值（例如手动或使用伪随机工具），然后根据覆盖标准来<code>度量</code>测试<ul><li>通常受到工业界的青睐</li><li>有时存在误差</li></ul></li></ul></li></ul><hr /><ul><li>生成器和识别器<ul><li><strong>生成器(Generator)</strong> ：一个程序可以自动生成满足标准的值</li><li><strong>识别器(Recognizer)</strong> ：一个判定给定测试用例值集合是否满足标准的程序</li><li>对于大多数标准来说，这两个问题都是<code>不可证明</code>的</li><li>与生成满足标准的测试相比，识别测试用例是否满足标准的可能性要高得多</li></ul></li></ul><hr /><ul><li><strong>标准包含(Criteria Subsumption)</strong> ：覆盖标准 C1 包含 C2，当且仅当满足 C1 的每一个测试集合都满足 C2</li></ul><blockquote><p>对于<code>每一组</code>测试用例都必须为真</p></blockquote><ul><li><p>例如：如果一个测试集覆盖了程序中的<code>每个分支</code>（满足分支标准），那么该测试集就保证也覆盖了<code>每个语句</code></p></li><li><p>不可行与包含</p><ul><li>当且仅当所有的测试需求都是可行的，有时标准 C1 包含另一个标准 C2</li><li>如果 C1 的某些测试需求是不可行的，C1 将不包含 C2</li></ul></li></ul><hr /><h2 id="好的覆盖标准的特征"><a class="markdownIt-Anchor" href="#好的覆盖标准的特征"></a> 好的覆盖标准的特征</h2><ol><li><p>自动计算测试需求应该相当容易</p></li><li><p>生成测试值应该是有效的</p></li><li><p>由此产生的测试应尽可能多地揭示故障</p></li></ol><blockquote><p>包含只是故障揭示能力的<code>粗略近似值</code></p></blockquote><hr /><h2 id="基于准则的测试设计的优势"><a class="markdownIt-Anchor" href="#基于准则的测试设计的优势"></a> 基于准则的测试设计的优势</h2><ul><li><p>标准最大限度地提高了“<code>成本效益</code>”</p><ul><li><code>更少</code>的测试更有效地发现故障</li></ul></li><li><p>具有<code>最小重叠</code>的综合测试集</p></li><li><p>从软件工件到测试的<code>可追溯性</code></p><ul><li>来源、需求、设计模型…</li><li>回答每个测试的“为什么”</li><li>对回归测试的内置支持</li></ul></li><li><p>测试的“<code>停止规则</code>”可以提前知道需要进行多少次测试</p><ul><li>有利于自动操作</li><li>可以通过强大的工具得到很好的支持</li></ul></li></ul><hr /><h1 id="概述总结"><a class="markdownIt-Anchor" href="#概述总结"></a> 概述总结</h1><ul><li>我们为什么要进行测试：以<code>降低使用软件的风险</code><ul><li>目标：尽早消除故障（提高质量、降低成本、保持客户满意度）</li><li>Faults, failures, the RIPR model</li><li>测试过程成熟度级别 —— 4级是一种提高软件质量的心理训练</li></ul></li><li>测试活动<ul><li>V模型、多V模型</li><li>模型驱动的测试设计：四种类型的<code>测试活动</code>——测试设计、自动化、执行和评估</li></ul></li><li>术语<ul><li>Validation, Verification; Testing, debugging;</li><li>Testability, observability and controllability, test automation frameworks</li><li>Criteria-based test design: <code>Four structures</code> – test <code>requirements</code> and <code>criteria</code></li></ul></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习笔记</category>
+      
+      <category>专业课</category>
+      
+      <category>智能软件测试</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>软件测试</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>编译原理｜词法分析-2</title>
     <link href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/"/>
     <url>/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/</url>
