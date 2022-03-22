@@ -26,6 +26,8 @@
       
       <tag>软件测试</tag>
       
+      <tag>图覆盖</tag>
+      
     </tags>
     
   </entry>
@@ -33,11 +35,11 @@
   
   
   <entry>
-    <title>编译原理｜词法分析-3</title>
+    <title>词法分析｜从 RE 到 DFA</title>
     <link href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-4/"/>
     <url>/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-4/</url>
     
-    <content type="html"><![CDATA[<h1 id="lexical-analysis-词法分析-3"><a class="markdownIt-Anchor" href="#lexical-analysis-词法分析-3"></a> Lexical Analysis 词法分析-3</h1><h2 id="从正则表达式构造nfa"><a class="markdownIt-Anchor" href="#从正则表达式构造nfa"></a> 从正则表达式构造NFA</h2><ul><li><p><strong>Thompson 算法</strong> ：</p><ul><li>将任何正则表达式转变为接受相同语言的 NFA</li><li>这个算法是语法制导的，也就是说它沿着正则表达式的语法分析树<code>自底向上</code>递归地进行处理</li><li><code>对于每个子表达式，该算法构造一个只有一个接受状态的NFA</code></li></ul></li><li><p>算法具体内容：</p><ul><li>方法：<ul><li>首先对 r 进行语法分析，分解出组成它的子表达式</li><li>构造一个 NFA 的规则分为基本规则和归纳规则两组<ul><li>基本规则处理<code>不包含运算符</code>的子表达式</li><li>归纳规则根据一个给定表达式的直接子表达式的 NFA 构造出这个表达式的 NFA</li></ul></li></ul></li><li>基本规则<ul><li>对于表达式∈，构造下面的 NFA<br /><img src="1.png" alt="" /></li><li>对于字母表 Σ 中的子表达式 a，构造下面的 NFA<br /><img src="2.png" alt="" /></li><li>i 和 f 都是新状态，分别是这个 NFA 的开始状态和接受状态</li></ul></li><li>归纳规则<ul><li>两个正则表达式的 <strong>并</strong> 的 NFA<br /><img src="3.png" alt="" /></li><li>两个正则表达式的 <strong>连接</strong> 的 NFA<br /><img src="4.png" alt="" /></li><li>一个正则表达式的 <strong>闭包</strong> 的 NFA<br /><img src="5.png" alt="" /></li></ul></li></ul></li><li><p>Thompson 构造法的性质</p><ul><li>N(r) 的状态数最多为<code>r 中出现的运算符和运算分量的总数的 2 倍</code><ul><li>得出这个上界的原因是算法的每一个构造步骤最多只引入两个新状态</li></ul></li><li>N(r) <code>有且只有</code>一个开始状态和一个接受状态</li><li>N(r) 中除接受状态之外的每个状态要么有一条其标号为 Σ 中符号的出边，要么有两条标号为 ∈ 的出边</li></ul></li><li><p>构造示例：<br /><img src="6.png" alt="(a|b)*a" /></p></li><li><p>处理算法的效率<br /><img src="7.png" alt="" /></p></li></ul><hr /><h2 id="根据正则表达式构建dfa"><a class="markdownIt-Anchor" href="#根据正则表达式构建dfa"></a> 根据正则表达式构建DFA</h2><ul><li><p>在一个正则表达式 r 的右端连接一个独特的右端结束标记符 <code>#</code>，使得 r 的接受状态增加一个在 # 上的转换</p><ul><li>换句话说，通过使用扩展的（augment）正则表达式（r）#，我们可以在构造过程中不考虑接受状态的问题<ul><li>当构造过程结束后，<code>任何在 # 上有离开转换的状态必然是一个接受状态</code></li></ul></li></ul></li><li><p>抽象语法树的<code>叶子结点</code>可以标号为∈，也可以用字母表中的符号作为标号</p><ul><li>对于每一个标号<code>不为∈</code>的叶子结点，我们赋予一个独有的整数。我们将这个整数称为叶子结点的位置（position），同时也表示和它对应的符号的位置</li><li>请注意，一个符号可以有多个位置，抽象语法树中的这些位置对应于构造出的NFA中的重要状态<br /><img src="8.png" alt="（a|b）*abb#的抽象语法树" /></li></ul></li></ul><hr /><h3 id="根据抽象语法树计算得到的函数"><a class="markdownIt-Anchor" href="#根据抽象语法树计算得到的函数"></a> 根据抽象语法树计算得到的函数</h3><ul><li>要从一个正则表达式直接构造出DFA，我们要首先构造它的<code>抽象语法树</code>，然后计算如下四个函数：nullable、firstpos、lastpos和followpos<ul><li><strong>nullable(n)</strong> : 对于一个抽象语法树结点 n 为真当且仅当此结点代表的子表达式的语言中包含空串∈<ul><li>也就是说，这个子表达式可以“生成空串”或者本身就是空串，即使它也可能表示一些其他的串</li></ul></li><li><strong>firstpos(n)</strong> : 定义了以结点 n 为根的子树中的位置集合，这些位置对应于以 n 为根的子表达式的语言中某个串的<code>第一个符号</code></li><li><strong>lastpos(n)</strong> : 定义了以结点 n 为根的子树中的位置集合，这些位置对应于以 n 为根的子表达式的语言中某个串的<code>最后一个符号</code></li><li><strong>followpos(i)</strong> : 在增广正则表达式生成的字符串中，可以跟随位置i的位置集。</li></ul></li></ul><hr /><h3 id="计算nullable-firstpos及lastpos"><a class="markdownIt-Anchor" href="#计算nullable-firstpos及lastpos"></a> 计算nullable、firstpos及lastpos</h3><ul><li>可以使用一个对树的高度直接进行递归的过程来计算 nullable 、firstpos 和 lastpos</li><li>计算方法：<br /><img src="9.png" alt="计算nullable、firstpos及lastpos" /></li><li>示例，其中，firstpos(n) 显示在结点 n 的左边，lastpos(n) 显示在结点右边<br /><img src="10.png" alt="(a|b)*abb#的语法分析树的结点的firstpos和lastpos" /><ul><li>每个叶子结点的firstpos和lastpos只包含它自身</li><li>or 结点的firstpos和lastpos分别是它的所有子结点的firstpos和lastpos的并集</li><li>针对star结点的规则是，它的firstpos及lastpos分别是它的唯一子结点的firstpos和lastpos</li></ul></li></ul><hr /><h3 id="计算followpos"><a class="markdownIt-Anchor" href="#计算followpos"></a> 计算followpos</h3><ul><li><p>只有两种情况会使得一个正则表达式的某个位置会跟在另一个位置之后：</p><ul><li>如果 n 是一个 cat（连接） 结点，且其左右子结点分别为 c1、 c2，那么对于 lastpos（c1） 中的每个位置 i， firstpos（c2） 中的所有位置都在 followpos（i）中</li><li>如果 n 是 star 结点，并且 i 是 lastpos（n） 中的一个位置，那么 firstpos（n）中的所有位置都在 followpos（i）中</li><li>如果为每个节点计算了 firstpos 和 lastpos，则可以通过对语法树进行一次深度优先遍历来计算每个位置的后续位置。<br /><img src="11.png" alt="以(a|b)*a#为例" /></li></ul></li><li><p>经过以下的处理，一个图可以变成 NFA</p><ul><li>将根结点的 firstpos 中的所有位置设为开始状态</li><li>在每条从 i 到 j 的有向边上添加位置 i 上的符号作为标号</li><li>把和结尾 # 相关的位置当作唯一的接受状态</li></ul></li></ul><hr /><h3 id="根据正则表达式构建-dfa"><a class="markdownIt-Anchor" href="#根据正则表达式构建-dfa"></a> 根据正则表达式构建 DFA</h3><ul><li><p>方法：</p><ul><li>根据扩展的正则表达式 (r)# 构造出一棵抽象语法树 T</li><li>计算得到 T 的函数 nullable、firstpos、lastpos 和 followpos</li><li>使用下图所示的过程，构造出 D 的状态集 Dstates 和 D 的转换函数 Dtran<br /><img src="12.png" alt="从一个正则表达式直接构造一个DFA" /></li></ul></li><li><p>示例：<br /><img src="13.png" alt="以(a|b)*a#为例" /></p></li></ul>]]></content>
+    <content type="html"><![CDATA[<h1 id="lexical-analysis-词法分析-3"><a class="markdownIt-Anchor" href="#lexical-analysis-词法分析-3"></a> Lexical Analysis 词法分析-3</h1><h2 id="从正则表达式构造nfa"><a class="markdownIt-Anchor" href="#从正则表达式构造nfa"></a> 从正则表达式构造NFA</h2><ul><li><p><strong>Thompson 算法</strong> ：</p><ul><li>将任何正则表达式转变为接受相同语言的 NFA</li><li>这个算法是语法制导的，也就是说它沿着正则表达式的语法分析树<code>自底向上</code>递归地进行处理</li><li><code>对于每个子表达式，该算法构造一个只有一个接受状态的NFA</code></li></ul></li><li><p>算法具体内容：</p><ul><li>方法：<ul><li>首先对 r 进行语法分析，分解出组成它的子表达式</li><li>构造一个 NFA 的规则分为基本规则和归纳规则两组<ul><li>基本规则处理<code>不包含运算符</code>的子表达式</li><li>归纳规则根据一个给定表达式的直接子表达式的 NFA 构造出这个表达式的 NFA</li></ul></li></ul></li><li>基本规则<ul><li>对于表达式∈，构造下面的 NFA<br /><img src="1.png" alt="" /></li><li>对于字母表 Σ 中的子表达式 a，构造下面的 NFA<br /><img src="2.png" alt="" /></li><li>i 和 f 都是新状态，分别是这个 NFA 的开始状态和接受状态</li></ul></li><li>归纳规则<ul><li>两个正则表达式的 <strong>并</strong> 的 NFA<br /><img src="3.png" alt="" /></li><li>两个正则表达式的 <strong>连接</strong> 的 NFA<br /><img src="4.png" alt="" /></li><li>一个正则表达式的 <strong>闭包</strong> 的 NFA<br /><img src="5.png" alt="" /></li></ul></li></ul></li><li><p>Thompson 构造法的性质</p><ul><li>N(r) 的状态数最多为<code>r 中出现的运算符和运算分量的总数的 2 倍</code><ul><li>得出这个上界的原因是算法的每一个构造步骤最多只引入两个新状态</li></ul></li><li>N(r) <code>有且只有</code>一个开始状态和一个接受状态</li><li>N(r) 中除接受状态之外的每个状态要么有一条其标号为 Σ 中符号的出边，要么有两条标号为 ∈ 的出边</li></ul></li><li><p>构造示例：<br /><img src="6.png" alt="(a|b)*a" /></p></li><li><p>处理算法的效率<br /><img src="7.png" alt="" /></p></li></ul><hr /><h2 id="根据正则表达式构建dfa"><a class="markdownIt-Anchor" href="#根据正则表达式构建dfa"></a> 根据正则表达式构建DFA</h2><ul><li><p>在一个正则表达式 r 的右端连接一个独特的右端结束标记符 <code>#</code>，使得 r 的接受状态增加一个在 # 上的转换</p><ul><li>换句话说，通过使用扩展的（augment）正则表达式（r）#，我们可以在构造过程中不考虑接受状态的问题<ul><li>当构造过程结束后，<code>任何在 # 上有离开转换的状态必然是一个接受状态</code></li></ul></li></ul></li><li><p>抽象语法树的<code>叶子结点</code>可以标号为∈，也可以用字母表中的符号作为标号</p><ul><li>对于每一个标号<code>不为∈</code>的叶子结点，我们赋予一个独有的整数。我们将这个整数称为叶子结点的位置（position），同时也表示和它对应的符号的位置</li><li>请注意，一个符号可以有多个位置，抽象语法树中的这些位置对应于构造出的NFA中的重要状态<br /><img src="8.png" alt="（a|b）*abb#的抽象语法树" /></li></ul></li></ul><hr /><h3 id="根据抽象语法树计算得到的函数"><a class="markdownIt-Anchor" href="#根据抽象语法树计算得到的函数"></a> 根据抽象语法树计算得到的函数</h3><ul><li>要从一个正则表达式直接构造出DFA，我们要首先构造它的<code>抽象语法树</code>，然后计算如下四个函数：nullable、firstpos、lastpos和followpos<ul><li><strong>nullable(n)</strong> : 对于一个抽象语法树结点 n 为真当且仅当此结点代表的子表达式的语言中包含空串∈<ul><li>也就是说，这个子表达式可以“生成空串”或者本身就是空串，即使它也可能表示一些其他的串</li></ul></li><li><strong>firstpos(n)</strong> : 定义了以结点 n 为根的子树中的位置集合，这些位置对应于以 n 为根的子表达式的语言中某个串的<code>第一个符号</code></li><li><strong>lastpos(n)</strong> : 定义了以结点 n 为根的子树中的位置集合，这些位置对应于以 n 为根的子表达式的语言中某个串的<code>最后一个符号</code></li><li><strong>followpos(i)</strong> : 在增广正则表达式生成的字符串中，可以跟随位置i的位置集。</li></ul></li></ul><hr /><h3 id="计算nullable-firstpos及lastpos"><a class="markdownIt-Anchor" href="#计算nullable-firstpos及lastpos"></a> 计算nullable、firstpos及lastpos</h3><ul><li>可以使用一个对树的高度直接进行递归的过程来计算 nullable 、firstpos 和 lastpos</li><li>计算方法：<br /><img src="9.png" alt="计算nullable、firstpos及lastpos" /></li><li>示例，其中，firstpos(n) 显示在结点 n 的左边，lastpos(n) 显示在结点右边<br /><img src="10.png" alt="(a|b)*abb#的语法分析树的结点的firstpos和lastpos" /><ul><li>每个叶子结点的firstpos和lastpos只包含它自身</li><li>or 结点的firstpos和lastpos分别是它的所有子结点的firstpos和lastpos的并集</li><li>针对star结点的规则是，它的firstpos及lastpos分别是它的唯一子结点的firstpos和lastpos</li></ul></li></ul><hr /><h3 id="计算followpos"><a class="markdownIt-Anchor" href="#计算followpos"></a> 计算followpos</h3><ul><li><p>只有两种情况会使得一个正则表达式的某个位置会跟在另一个位置之后：</p><ul><li>如果 n 是一个 cat（连接） 结点，且其左右子结点分别为 c1、 c2，那么对于 lastpos（c1） 中的每个位置 i， firstpos（c2） 中的所有位置都在 followpos（i）中</li><li>如果 n 是 star 结点，并且 i 是 lastpos（n） 中的一个位置，那么 firstpos（n）中的所有位置都在 followpos（i）中</li><li>如果为每个节点计算了 firstpos 和 lastpos，则可以通过对语法树进行一次深度优先遍历来计算每个位置的后续位置。<br /><img src="11.png" alt="以(a|b)*a#为例" /></li></ul></li><li><p>经过以下的处理，一个图可以变成 NFA</p><ul><li>将根结点的 firstpos 中的所有位置设为开始状态</li><li>在每条从 i 到 j 的有向边上添加位置 i 上的符号作为标号</li><li>把和结尾 # 相关的位置当作唯一的接受状态</li></ul></li></ul><hr /><h3 id="根据正则表达式构建-dfa"><a class="markdownIt-Anchor" href="#根据正则表达式构建-dfa"></a> 根据正则表达式构建 DFA</h3><ul><li><p>方法：</p><ul><li>根据扩展的正则表达式 (r)# 构造出一棵抽象语法树 T</li><li>计算得到 T 的函数 nullable、firstpos、lastpos 和 followpos</li><li>使用下图所示的过程，构造出 D 的状态集 Dstates 和 D 的转换函数 Dtran<br /><img src="12.png" alt="从一个正则表达式直接构造一个DFA" /></li></ul></li><li><p>示例：<br /><img src="13.png" alt="以(a|b)*a#为例" /></p></li></ul><hr /><h2 id="最小化一个dfa的状态数"><a class="markdownIt-Anchor" href="#最小化一个dfa的状态数"></a> 最小化一个DFA的状态数</h2><blockquote><p>Minimizing</p></blockquote><ul><li><p>如果只需改变状态名字就可以将一个自动机转换成为另一个自动机，那么这两个自动机是<code>同构</code>的</p><ul><li>任何正则语言都有一个唯一的（不计同构）状态数目最少的DFA</li></ul></li><li><p>如果分别从状态 s 和 t 出发，沿着标号为 x 的路径到达的<code>两个状态中只有一个是接受状态</code>，那么串 x 区分状态 s 和 t</p><ul><li>如果存在某个能够区分状态 s 和状态 t 的串，那么它们就是<code>可区分的(distinguishable)</code></li><li>空串 ∈ 可以区分任何一个接受状态和非接受状态</li></ul></li><li><p>DFA 状态最小化算法的工作原理：</p><ul><li>将一个DFA的状态集合分划成多个组，每个组中的各个状态之间相互不可区分。</li><li>然后，将每个组中的状态合并成状态最少 DFA 的一个状态</li></ul></li><li><p>DFA 状态最小化算法基本步骤</p><ul><li>最初，该分划包含两个组：接受状态组和非接受状态组</li><li>从当前分划中取一个状态组，比如 A = {s1，s2，…，sk}，并选定某个输入符号 a，检查 a 是否可以用于区分 A 中的某些状态。</li><li>检查 s1，s2，…，sk 在 a 上的转换，如果这些转换到达的状态落入当前分划的<code>两个或多个组</code>中，就将 A 分割成为多个组，使得 si 和 sj 在同一组中当且仅当它们在 a 上的转换都到达同一个组的状态</li><li>重复这个分割过程，直到无法根据某个输入符号对任意个组进行分割为止。</li></ul></li></ul><p><img src="14.png" alt="" /><br /><img src="15.png" alt="最小化示例" /></p>]]></content>
     
     
     <categories>
@@ -56,6 +58,8 @@
       <tag>编译原理</tag>
       
       <tag>汤普森构造法</tag>
+      
+      <tag>词法分析</tag>
       
     </tags>
     
@@ -93,7 +97,7 @@
   
   
   <entry>
-    <title>编译原理｜词法分析-2</title>
+    <title>词法分析｜从 NFA 到 DFA</title>
     <link href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/"/>
     <url>/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-3/</url>
     
@@ -119,6 +123,8 @@
       
       <tag>有限自动机</tag>
       
+      <tag>词法分析</tag>
+      
     </tags>
     
   </entry>
@@ -126,7 +132,7 @@
   
   
   <entry>
-    <title>编译原理｜词法分析-1</title>
+    <title>词法分析｜词法单元与正则表达式</title>
     <link href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/"/>
     <url>/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/compile-2/</url>
     
@@ -149,6 +155,8 @@
       <tag>编译原理</tag>
       
       <tag>正则表达式</tag>
+      
+      <tag>词法分析</tag>
       
     </tags>
     
