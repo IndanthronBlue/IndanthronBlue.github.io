@@ -1,0 +1,796 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="虽然很难，但很有趣">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库实验｜SQL Programming">
+<meta property="og:url" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="虽然很难，但很有趣">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/1.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/2.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/3.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/4.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/5.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/6.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/7.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/8.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/9.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/10.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/11.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/12.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/13.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/14.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/15.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/16.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/17.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/18.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/19.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/20.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/21.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/22.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/23.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/24.png">
+<meta property="og:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/25.png">
+<meta property="article:published_time" content="2022-03-22T09:40:48.000Z">
+<meta property="article:modified_time" content="2022-03-24T09:43:01.158Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="sql">
+<meta property="article:tag" content="实验报告">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/dblab2/1.png">
+  
+  
+  <title>数据库实验｜SQL Programming - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="数据库实验｜SQL Programming">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-22 17:40" pubdate>
+        2022年3月22日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      11k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      95 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">数据库实验｜SQL Programming</h1>
+            
+            <div class="markdown-body">
+              <h1 id="一-目的"><a class="markdownIt-Anchor" href="#一-目的"></a> 一、目的</h1>
+<ol>
+<li>熟悉DBMS环境</li>
+<li>掌握SQL的数据定义和数据操纵的功能</li>
+<li>掌握数据库中的完整性约束的基本概念和使用方法</li>
+</ol>
+<hr />
+<h1 id="二-内容与设计思想"><a class="markdownIt-Anchor" href="#二-内容与设计思想"></a> 二、内容与设计思想</h1>
+<ol>
+<li>基于实验一插入的 University 数据，完成SQL基础查询</li>
+<li>基于实验文件给出的数据，完成 SQL 进阶查询</li>
+</ol>
+<hr />
+<h1 id="三-使用环境"><a class="markdownIt-Anchor" href="#三-使用环境"></a> 三、使用环境</h1>
+<ul>
+<li>Windows 10</li>
+<li>Navicat Premium 15</li>
+</ul>
+<hr />
+<h1 id="四-实验过程"><a class="markdownIt-Anchor" href="#四-实验过程"></a> 四、实验过程</h1>
+<h2 id="project-1"><a class="markdownIt-Anchor" href="#project-1"></a> Project 1</h2>
+<ul>
+<li>在<a target="_blank" rel="noopener" href="https://www.db-book.com/university-lab-dir/sample_tables-dir/index.html">教材官方网站</a>获取完整的 University 数据库<br />
+<img src="1.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>完成查询要求</li>
+</ul>
+<ol>
+<li>List all information stored in the table course</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs mysql">SELECT * <br>FROM course;<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li>List the dept_name and buildings of all departments;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT dept_name, building FROM department;<br></code></pre></td></tr></table></figure>
+<ol start="3">
+<li>List the instructor’s name appears in the table instructor;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT ALL name <br>FROM instructor;<br></code></pre></td></tr></table></figure>
+<ol start="4">
+<li>List the instructor‘s name whose salary is more than 90000 and dept_nameis ’Comp. Sci.’ ;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT name<br>FROM instructor<br>WHERE salary &gt; 90000 AND dept_name = &#x27;Comp. Sci.&#x27;;<br></code></pre></td></tr></table></figure>
+<ol start="5">
+<li>List the instructor’s all information after we gave a 10% raise to each instructor;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT ID, name, dept_name, salary * 1.1<br>FROM instructor;<br></code></pre></td></tr></table></figure>
+<ol start="6">
+<li>Show the different dept_name in the table instructor;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT DISTINCT dept_name <br>FROM instructor;<br></code></pre></td></tr></table></figure>
+<ol start="7">
+<li>List the course’s title ,dept_name,and credits which prerep_id is ‘130’;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT title,dept_name,credits<br>FROM course,prereq<br>WHERE course.course_id=prereq.course_id AND prereq.prereq_id=&#x27;130&#x27;;<br></code></pre></td></tr></table></figure>
+<ol start="8">
+<li>Find the titles of courses in the ‘Comp. Sci.’ department the have 3 credits;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT title<br>FROM course<br>WHERE dept_name=&#x27;Comp. Sci.&#x27; AND credits=3;<br></code></pre></td></tr></table></figure>
+<ol start="9">
+<li>List the course_id which prereq_id is ‘130’;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT course_id<br>FROM prereq<br>WHERE prereq_id=&#x27;130&#x27;;<br></code></pre></td></tr></table></figure>
+<ol start="10">
+<li>Find all courses that were taught at least three times from 2008 to 2010;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT title<br>FROM section,course<br>WHERE year BETWEEN 2008 AND 2010 AND section.course_id=course.course_id<br>GROUP BY section.course_id<br>HAVING COUNT(section.course_id)&gt;=3;<br></code></pre></td></tr></table></figure>
+<ol start="11">
+<li>Find the instructor names and the course name they taught for all instructors in Biology department who have taught some courses；</li>
+</ol>
+<blockquote>
+<p>查找生物系所有教过至少一门课程的教员的教员姓名和所教的课程名；</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT name,title<br>FROM teaches NATURAL JOIN instructor JOIN course USING(course_id)<br>WHERE name IN<br>(<br>SELECT name<br>FROM teaches NATURAL JOIN instructor<br>WHERE instructor.dept_name=&#x27;Biology&#x27; <br>GROUP BY name<br>HAVING COUNT(name)&gt;1<br>);<br></code></pre></td></tr></table></figure>
+<ol start="12">
+<li>List all courses taught in Fall 2009;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT *<br>FROM course NATURAL JOIN teaches<br>WHERE semester=&#x27;FALL&#x27; AND year=2009;<br></code></pre></td></tr></table></figure>
+<ol start="13">
+<li>Find the set of all courses taught either in Fall 2010 or in Spring 2009,or both.</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">(SELECT course_id, title<br>FROM section NATURAL JOIN course<br>WHERE semester=&#x27;FALL&#x27; AND year=2010)<br>UNION<br>(SELECT course_id, title<br>FROM section NATURAL JOIN course<br>WHERE semester=&#x27;Spring&#x27; AND year=2009);<br></code></pre></td></tr></table></figure>
+<ol start="14">
+<li>Find all courses taught in the Fall 2009 but not in the Spring 2008;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT *<br>FROM section<br>WHERE year=2009 AND semester=&#x27;Fall&#x27;<br>AND course_id NOT IN(<br>	SELECT course_id<br>	FROM section<br>	WHERE year=2010 AND semester=&#x27;Spring&#x27;<br>);<br></code></pre></td></tr></table></figure>
+<ol start="15">
+<li>Find the average salary of instructors in the ‘Comp. Sci.’ department;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT AVG(salary)<br>FROM instructor<br>WHERE dept_name=&#x27;Comp. Sci.&#x27;;<br></code></pre></td></tr></table></figure>
+<ol start="16">
+<li>Find the total number of instructors who teach a course in the Spring 2010 semester;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT COUNT(DISTINCT ID)<br>FROM teaches<br>WHERE year=2010 AND semester=&#x27;Spring&#x27;;<br></code></pre></td></tr></table></figure>
+<ol start="17">
+<li>Find the number of tuples in the course relation;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT COUNT(*)<br>FROM course;<br></code></pre></td></tr></table></figure>
+<ol start="18">
+<li>Find the average salary in each department;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT dept_name,AVG(salary)<br>FROM instructor<br>GROUP BY dept_name;<br></code></pre></td></tr></table></figure>
+<ol start="19">
+<li>Find the average salary of instructors in those departments where the average salary is more than 80000;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT dept_name,AVG(salary)<br>FROM instructor<br>GROUP BY dept_name<br>HAVING AVG(salary) &gt; 80000;<br></code></pre></td></tr></table></figure>
+<ol start="20">
+<li>Find the names of all instructors whose salary is greater than at least one  instructor in the ‘Comp. Sci. ‘ department.</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT name<br>FROM instructor<br>WHERE salary &gt; SOME (<br>	SELECT salary<br>	FROM instructor<br>	WHERE dept_name=&#x27;Comp. Sci.&#x27;);<br></code></pre></td></tr></table></figure>
+<hr />
+<h2 id="project-2"><a class="markdownIt-Anchor" href="#project-2"></a> Project 2</h2>
+<ol>
+<li>查询每一个战队的人员数量，并根据人员数降序排序，若人员数相同，按照队名字典序排序</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT team, COUNT(player_name) as num_players<br>FROM player<br>GROUP BY team<br>ORDER BY num_players DESC, team ASC;<br></code></pre></td></tr></table></figure>
+<p><img src="2.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="2">
+<li>列举出每个战队的成员，成员间用逗号分隔。根据队名字典序排序</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT team, GROUP_CONCAT(player_name) as members<br>FROM player<br>GROUP BY team<br>ORDER BY team ASC;<br></code></pre></td></tr></table></figure>
+<p><img src="3.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="3">
+<li>统计选手Alex使用的所有角色次数，并降序排列</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT record_role,COUNT(record_role) AS times<br>FROM record<br>WHERE record_player = &#x27;Alex&#x27;<br>GROUP BY record_role<br>ORDER BY times DESC;<br></code></pre></td></tr></table></figure>
+<p><img src="4.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="4">
+<li>查看最喜欢使用角色为雕刻家的前五位选手及其使用次数</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT record_player,record_role AS role,COUNT(record_player) AS times <br>FROM record <br>WHERE record_role = &#x27;雕刻家&#x27; <br>GROUP BY record_player<br>ORDER BY times DESC, record_player ASC<br>LIMIT 5;<br></code></pre></td></tr></table></figure>
+<p><img src="5.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="5">
+<li>统计所有监管者的上场次数，并降序排列</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT record_role, COUNT(record_role) AS times<br>FROM record <br>WHERE identifier = 4 <br>GROUP BY record_role<br>ORDER BY times DESC;<br></code></pre></td></tr></table></figure>
+<p><img src="6.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="6">
+<li>根据局均恐惧震慑数据(heals_or_terror_shocks，保留2位小数)对监管者排序，要求上场次数大于5</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT ROUND(AVG(heals_or_terror_shocks),2) AS avg, <br>	   COUNT(record_player) AS total, <br>       record_player<br>FROM record <br>WHERE identifier = 4 <br>GROUP BY record_player<br>HAVING total &gt; 5<br>ORDER BY avg DESC;<br></code></pre></td></tr></table></figure>
+<p><img src="7.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="7">
+<li>查看FPX.ZQ的求生者阵容(4人为一个阵容)以及出场次数，阵容以逗号分隔</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT temp.lineup_temp AS lineup,COUNT(temp.lineup_temp) AS times <br>FROM <br>(<br>	SELECT DISTINCT <br>		GROUP_CONCAT(r.record_player ORDER BY r.record_player ASC) AS lineup_temp, <br>		r.record_half_id<br>	FROM record AS r, player AS p<br>	WHERE <br>	r.record_player = p.player_name <br>	AND p.team = &#x27;FPX.ZQ&#x27; <br>	AND r.identifier &lt;&gt; 4<br>	GROUP BY r.record_half_id<br>) AS temp<br>GROUP BY temp.lineup_temp;<br></code></pre></td></tr></table></figure>
+<p><img src="8.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="8">
+<li>根据监管者的胜率降序排序，以百分比的形式显示</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT CONCAT(ROUND(win/total*100,0),&#x27;%&#x27;) AS ratio, record_player<br>FROM<br>(<br>	SELECT record_player, COUNT(record_player) AS total<br>	FROM record <br>	WHERE identifier = 4 <br>	GROUP BY record_player<br>) AS r1 NATURAL JOIN<br>(<br>	SELECT record_player, COUNT(record_player) AS win<br>	FROM record <br>	WHERE identifier = 4 AND escape_or_eliminate &gt; 2 <br>	GROUP BY record_player<br>) AS r2<br>ORDER BY ratio+0 DESC;<br></code></pre></td></tr></table></figure>
+<p><img src="9.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<blockquote>
+<p><strong>注意</strong>，此处结果与 PPT 展示不同，原因是 CONCAT 的返回值是一个 string 类型的字符串，在做比较的时候按照字典序排列，100% 就被排在了最后。本人一开始得到的结果和 PPT 展示的结果类似，即 45% 在首项，但是这样不符合题目<code>降序</code>的要求，因此在做排序的时候添加了 <code>+0</code> 给字符串进行类型转化，转化后得到正确答案</p>
+</blockquote>
+<ol start="9">
+<li>查询未在本次比赛上场的求生者</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT b.role_name<br>FROM record AS a RIGHT JOIN role AS b<br>ON a.record_role = b.role_name<br>WHERE a.record_role IS NULL AND b.survivor = 1<br></code></pre></td></tr></table></figure>
+<p><img src="10.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="10">
+<li>查询平均牵制时间(contained_hunter_or_knockdowns，取整数)的第二名</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT record_player, ROUND(AVG(contained_hunter_or_knockdowns),0) AS time<br>FROM record <br>GROUP BY record_player<br>ORDER BY time DESC<br>LIMIT 1,1<br></code></pre></td></tr></table></figure>
+<p><img src="11.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="11">
+<li>查询FPX.ZQ战队未赢过的队</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT total.team<br>FROM<br>(<br>	SELECT DISTINCT team<br>	FROM player<br>)AS total<br>LEFT JOIN <br>(<br>SELECT DISTINCT *<br>FROM<br>(<br>	SELECT<br>	CASE WHEN (m.away = &#x27;FPX.ZQ&#x27; AND m.winner = &#x27;FPX.ZQ&#x27;) THEN m.home<br>			 WHEN	(m.home = &#x27;FPX.ZQ&#x27; AND m.winner = &#x27;FPX.ZQ&#x27;) THEN m.away<br>			 ELSE NULL<br>	END AS winner<br>	FROM `match` AS m<br>)AS temp<br>WHERE temp.winner IS NOT NULL<br>) AS won<br>ON total.team = won.winner<br>WHERE won.winner IS NULL<br></code></pre></td></tr></table></figure>
+<p><img src="12.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="12">
+<li>查询Wolves主场客场都战胜的队</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT win_home.winner<br>FROM<br>(<br>	SELECT home AS winner<br>	FROM `match`<br>	WHERE away = &#x27;Wolves&#x27; AND winner = &#x27;Wolves&#x27;<br>)AS win_home <br>INNER JOIN<br>(<br>	SELECT away AS winner<br>	FROM `match`<br>	WHERE home = &#x27;Wolves&#x27; AND winner = &#x27;Wolves&#x27;<br>)AS win_away<br> ON win_home.winner = win_away.winner<br></code></pre></td></tr></table></figure>
+<p><img src="13.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="13">
+<li>统计在第一轮(sequence=0)中求生者被禁用次数，并根据次数降序排列</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT <br>	ban.bp_role_name AS role, <br>	COUNT(ban.bp_role_name) AS ban_times<br>FROM <br>	half JOIN ban_pick AS ban <br>		ON half.half_id = ban.bp_half_id <br>	JOIN round <br>		ON half.half_round_id = round.round_id<br>WHERE ban.bp_role_name IN (<br>	SELECT role_name<br>	FROM role<br>	WHERE survivor = 1<br>) AND round.sequence = 0<br>GROUP BY ban.bp_role_name <br>ORDER BY ban_times DESC<br></code></pre></td></tr></table></figure>
+<p><img src="14.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="14">
+<li>查询主场为Gr，客场为DOU5第二轮(sequence=1)上半场(first=1)的比赛情况。（一共5行，包括4求生1监管）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT re.record_player, re.record_role, r.map, re.escape_or_eliminate<br>FROM <br>`match` AS m JOIN round AS r <br>ON m.match_id = r.round_match_id<br>JOIN half AS h<br>ON r.round_id = h.half_round_id<br>JOIN record AS re<br>ON h.half_id = re.record_half_id<br>WHERE <br>m.away = &#x27;DOU5&#x27; <br>AND m.home = &#x27;Gr&#x27; <br>AND r.sequence = 1<br>AND h.`first` = 1<br></code></pre></td></tr></table></figure>
+<p><img src="15.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="15">
+<li>查询Wolves求生者的每轮逃脱情况（求和escape_or_eliminate），显示主场、客场、比赛时间和轮次，按照时间和轮次升序排序。（截图只保留前10行，Round数据库中从0开始计数，显示时从1开始计数，用字符串拼接）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT  <br>	SUM(r.escape_or_eliminate) AS escape_num, m.home, <br>	m.away, <br>	m.date, <br>	CONCAT(&#x27;Round&#x27;,ro.sequence+1) AS round<br>FROM <br>	player AS p JOIN record AS r<br>	ON p.player_name = r.record_player<br>	JOIN half AS h<br>	ON r.record_half_id = h.half_id<br>	JOIN round AS ro<br>	ON h.half_round_id = ro.round_id<br>	JOIN `match` AS m<br>	ON ro.round_match_id = m.match_id<br>WHERE p.team = &#x27;Wolves&#x27; AND r.survivor = 1<br>GROUP BY(ro.round_id)<br>ORDER BY m.date, round<br></code></pre></td></tr></table></figure>
+<p><img src="16.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="16">
+<li>查询DOU5监管者的每轮淘汰人数(escape_or_eliminate)情况，显示主场、客场、比赛时间和轮次，按照时间和轮次升序排序，截图只保留前10行。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT  <br>	SUM(r.escape_or_eliminate) AS escape_num, m.home, <br>	m.away, <br>	m.date, <br>	CONCAT(&#x27;Round&#x27;,ro.sequence+1) AS round<br>FROM <br>	player AS p JOIN record AS r<br>	ON p.player_name = r.record_player<br>	JOIN half AS h<br>	ON r.record_half_id = h.half_id<br>	JOIN round AS ro<br>	ON h.half_round_id = ro.round_id<br>	JOIN `match` AS m<br>	ON ro.round_match_id = m.match_id<br>WHERE p.team = &#x27;DOU5&#x27; AND r.survivor = 0<br>GROUP BY(ro.round_id)<br>ORDER BY m.date, round<br></code></pre></td></tr></table></figure>
+<p><img src="17.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="17">
+<li>查询监管者选手yan的得分情况。按照时间和轮次升序排序，截图只保留前10行</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT  <br>	IF(r.escape_or_eliminate = 4,5,r.escape_or_eliminate) AS score,<br>  m.home, <br>  m.away, <br>  m.date, <br>  CONCAT(&#x27;Round&#x27;,ro.sequence+1) AS round<br>FROM <br>	player AS p JOIN record AS r<br>	ON p.player_name = r.record_player<br>	JOIN half AS h<br>	ON r.record_half_id = h.half_id<br>	JOIN round AS ro<br>	ON h.half_round_id = ro.round_id<br>	JOIN `match` AS m<br>	ON ro.round_match_id = m.match_id<br>WHERE p.player_name = &#x27;yan&#x27; AND r.survivor = 0<br>GROUP BY ro.round_id, date<br></code></pre></td></tr></table></figure>
+<p><img src="18.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="18">
+<li>查询所有未和监管者gy交手的求生者及其战队，根据战队名字典序排序</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT A.player_name, A.team<br>FROM player AS A LEFT JOIN<br>(<br>	SELECT record_player<br>	FROM record<br>	WHERE record_half_id IN (<br>		SELECT  <br>			r.record_half_id<br>		FROM <br>			player AS p JOIN record AS r<br>			ON p.player_name = r.record_player<br>		WHERE p.player_name = &#x27;gy&#x27; AND r.survivor = 0<br>) AND survivor = 1<br>)AS B<br>ON A.player_name = B.record_player<br>WHERE B.record_player IS NULL<br>ORDER BY A.team ASC, A.player_name ASC<br></code></pre></td></tr></table></figure>
+<p><img src="19.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="19">
+<li>查询Wolves战队不同选图的胜率情况</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT t1.win_time/t2.total_time AS ratio, t1.map<br>FROM<br>(<br>	SELECT r.map, COUNT(map) AS win_time<br>	FROM `match` AS m JOIN round AS r ON m.match_id = r.round_match_id<br>	WHERE (m.home = &#x27;Wolves&#x27; AND r.home_big_point = 1) OR (m.away = &#x27;Wolves&#x27; AND r.away_big_point = 1)<br>	GROUP BY map<br>) AS t1<br>JOIN<br>(<br>	SELECT r.map, COUNT(map) AS total_time<br>	FROM `match` AS m JOIN round AS r ON m.match_id = r.round_match_id<br>	WHERE m.away = &#x27;Wolves&#x27; OR m.home = &#x27;Wolves&#x27;<br>	GROUP BY map<br>) AS t2<br>ON t1.map = t2.map<br></code></pre></td></tr></table></figure>
+<p><img src="20.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="20">
+<li>根据胜利次数对战队降序排序。若胜场相同，按照获胜场的净胜数(不用减去负局丢掉的净胜数)降序排序</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT t_cnt.cnt, t_cnt.winner, t_net.net<br>FROM<br>(<br>	SELECT winner, SUM(net) AS net<br>	FROM<br>	(<br>		SELECT m.winner, <br>		CASE WHEN (SUM(r.away_big_point) &gt;= SUM(r.home_big_point)) THEN SUM(r.away_big_point)<br>			   ELSE SUM(r.home_big_point)<br>		END AS net<br>		FROM round AS r JOIN `match` AS m ON r.round_match_id = m.match_id<br>		GROUP BY r.round_match_id, m.winner<br>	)AS t1<br>	GROUP BY winner<br>) AS t_net<br>JOIN<br>(<br>	SELECT winner, COUNT(winner) AS cnt<br>	FROM<br>	(<br>		SELECT m.winner<br>		FROM `match` AS m JOIN round AS r ON m.match_id = r.round_match_id<br>		GROUP BY m.match_id, m.winner<br>	)AS t1<br>	GROUP BY winner<br>) AS t_cnt<br>ON t_cnt.winner = t_net.winner<br>ORDER BY t_cnt.cnt DESC, t_net.net DESC<br></code></pre></td></tr></table></figure>
+<p><img src="21.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="21">
+<li>统计所有求生者的四人逃脱、三人逃脱、二人逃脱、一人逃脱和无人逃脱局数</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 4-r.escape_or_eliminate AS escape, COUNT(r.escape_or_eliminate) AS cnt<br>FROM record as r<br>WHERE r.survivor = 0<br>GROUP BY r.escape_or_eliminate<br></code></pre></td></tr></table></figure>
+<p><img src="22.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="22">
+<li>计算每一个战队的总净胜得分(减去负局丢掉的净胜数)</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT t_win.net+t_lose.net AS net_rating, t_win.winner AS team<br>FROM<br>(<br>	SELECT winner, SUM(net) AS net<br>	FROM<br>	(<br>		SELECT m.winner, <br>		CASE WHEN (SUM(r.away_big_point) &gt;= SUM(r.home_big_point)) THEN SUM(r.away_big_point)<br>		  	 ELSE SUM(r.home_big_point)<br>		END AS net<br>		FROM round AS r JOIN `match` AS m ON r.round_match_id = m.match_id<br>		GROUP BY r.round_match_id, m.winner<br>	)AS t1<br>	GROUP BY winner<br>) AS t_win<br>JOIN<br>(<br>	SELECT loser, SUM(net) AS net<br>	FROM<br>	(<br>		SELECT <br>		CASE WHEN m.away = m.winner THEN m.home<br>		     ELSE m.away<br>		END AS loser, <br>		CASE WHEN (SUM(r.away_big_point) &lt;= SUM(r.home_big_point)) THEN SUM(r.away_big_point)<br>		     ELSE SUM(r.home_big_point)<br>		END AS net<br>		FROM round AS r JOIN `match` AS m ON r.round_match_id = m.match_id<br>		GROUP BY r.round_match_id<br>	)AS t1<br>	GROUP BY loser<br>) AS t_lose<br>ON t_win.winner = t_lose.loser<br>ORDER BY net_rating DESC<br></code></pre></td></tr></table></figure>
+<p><img src="23.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="23">
+<li>查询比赛胜者净胜分为2分且无平局记录的对战及获胜战队</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT m.home, m.away, m.winner, m.date<br>FROM round AS r JOIN `match` AS m ON r.round_match_id = m.match_id<br>GROUP BY r.round_match_id, m.winner<br>HAVING COUNT(r.round_id) = 2 <br><br>-- 净胜分为2分且无平局的情况：两轮全胜 <br></code></pre></td></tr></table></figure>
+<p><img src="24.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="24">
+<li>查询选手DongX在哪几场比赛中胜平率为100%</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT m.home, m.away, m.date<br>FROM player AS p <br>JOIN record AS r<br>ON p.player_name = r.record_player<br>JOIN half AS h<br>ON r.record_half_id = h.half_id<br>JOIN round AS ro<br>ON h.half_round_id = ro.round_id<br>JOIN `match` AS m<br>ON ro.round_match_id = m.match_id<br>WHERE r.record_player = &#x27;DongX&#x27; AND m.winner = p.team<br>GROUP BY m.match_id<br>HAVING MIN(r.escape_or_eliminate) &gt;=2<br></code></pre></td></tr></table></figure>
+<p><img src="25.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h1 id="五-总结"><a class="markdownIt-Anchor" href="#五-总结"></a> 五、总结</h1>
+<ul>
+<li>完成 PPT 要求的查询任务，并且包含 PPT 展示的部分正确结果</li>
+<li>整个实验过程耗时四个多小时，感觉难度很大，但是收获也很大，完全改变了之前做项目的时候在DAO层随便取数据再去业务层处理数据的陋习</li>
+<li>部分题目完成时只考虑了 JOIN 方法，导致代码量大并且查询效率不高</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">实验报告</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/">数据库系统及其应用</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+                    
+                      <a class="hover-with-bg" href="/tags/sql/">sql</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">实验报告</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E6%97%A5%E5%B8%B8/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9E%84%E9%80%A0%E8%8C%83%E5%BC%8F/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">利用二叉树构造范式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-1/">
+                        <span class="hidden-mobile">图覆盖｜结构化准则与数据流准则</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
