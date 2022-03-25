@@ -1,0 +1,1106 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="其实是计算机组成与实践的笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="体系结构｜流水线">
+<meta property="og:url" content="http://example.com/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/%E6%B5%81%E6%B0%B4%E7%BA%BF/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="其实是计算机组成与实践的笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621193858610.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621194056623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621194534615.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621194618358.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621194833154.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621201019781.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621201242784.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621201320123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621204301843.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621204325298.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621202202365.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621204801870.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621205111272.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621205155463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021062121010087.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621212433494.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621212631379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621213934322.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621214039756.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621214810893.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621215133177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621215601165.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621215723209.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210621220105655.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2022-03-25T15:18:31.000Z">
+<meta property="article:modified_time" content="2022-03-25T15:19:44.449Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="体系结构">
+<meta property="article:tag" content="MIPS">
+<meta property="article:tag" content="流水线">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210621193858610.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70">
+  
+  
+  <title>体系结构｜流水线 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="体系结构｜流水线">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-25 23:18" pubdate>
+        2022年3月25日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      38 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">体系结构｜流水线</h1>
+            
+            <div class="markdown-body">
+              <h1 id="流水线概述"><a class="markdownIt-Anchor" href="#流水线概述"></a> 流水线概述</h1>
+<h2 id="mips流水线"><a class="markdownIt-Anchor" href="#mips流水线"></a> MIPS流水线</h2>
+<ul>
+<li>五个阶段，每个阶段一个步骤
+<ul>
+<li>取指令(IF)<br />
+从指令存储器中取指令</li>
+<li>译码(ID)<br />
+译码并读寄存器堆</li>
+<li>执行(EX)<br />
+执行运算或计算地址</li>
+<li>访存(MEM)<br />
+访问存储器</li>
+<li>写回(WB)<br />
+将结果写回寄存器堆</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>最长的执行阶段决定时钟周期时间</p>
+</blockquote>
+<h1 id="流水线数据通路及其控制"><a class="markdownIt-Anchor" href="#流水线数据通路及其控制"></a> 流水线数据通路及其控制</h1>
+<h2 id="正确的流水线数据通路"><a class="markdownIt-Anchor" href="#正确的流水线数据通路"></a> 正确的流水线数据通路</h2>
+<blockquote>
+<p>指令的信息随着指令的执行在流水线寄存器中保存</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20210621193858610.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>指令信息存储于各级流水线寄存器，在写回时调⽤，避免出错</li>
+</ul>
+<h2 id="流水线控制"><a class="markdownIt-Anchor" href="#流水线控制"></a> 流水线控制</h2>
+<ul>
+<li>所有控制信号可以在译码阶段（ID）生成
+<ul>
+<li>控制信号沿着<strong>流水线状态寄存器</strong>传递</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210621194056623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h1 id="流水线冒险"><a class="markdownIt-Anchor" href="#流水线冒险"></a> 流水线冒险</h1>
+<ul>
+<li>流水线冒险：现流水线在下一个时钟周期不能执行下一条指令的情况</li>
+</ul>
+<h2 id="结构冒险structural-hazard"><a class="markdownIt-Anchor" href="#结构冒险structural-hazard"></a> 结构冒险(Structural Hazard)</h2>
+<ul>
+<li>缺乏硬件导致的冒险</li>
+<li>MIPS流水线中的存储器使用冲突
+<ul>
+<li>取指令需要访问寄存器</li>
+<li>数据传输指令lw和sw需要访问存储器</li>
+</ul>
+</li>
+<li>寄存器的访问冲突
+<ul>
+<li>在同一个时钟周期内需要写和读寄存器</li>
+</ul>
+</li>
+</ul>
+<h3 id="解决结构冒险"><a class="markdownIt-Anchor" href="#解决结构冒险"></a> 解决结构冒险</h3>
+<ul>
+<li>对指令和数据采用分开的L1缓存
+<ul>
+<li>Icache和Dcache</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210621194534615.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>时钟的前半部分进行写，后半部分进行读
+<ul>
+<li>上升沿触发寄存器读 下降沿触发寄存器写</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210621194618358.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h2 id="数据冒险data-hazard"><a class="markdownIt-Anchor" href="#数据冒险data-hazard"></a> 数据冒险(Data Hazard)</h2>
+<ul>
+<li>无法提供指令执行所需要的数据，即需要等待前面的某些指令执行完数据的读写</li>
+<li>寄存器导致的数据冒险
+<ul>
+<li>一条指令的操作数来自于前面的某条指令</li>
+</ul>
+</li>
+</ul>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs asm">add $s0,$t0,$t1<br>sub $t2,$s0,$t3 #第二条指令需要的s0寄存器需要等待前面的指令写回<br></code></pre></td></tr></table></figure>
+<ul>
+<li>取数-使用型数据冒险
+<ul>
+<li>在数据需要使用时，数据还没有从存储器读出</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">lw  $s0,20($t1)<br>sub $t2,$s0,$t3 #第二条指令需要的s0寄存器需要等待lw指令从存储器中取出数据<br></code></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20210621194833154.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h3 id="检测数据冒险"><a class="markdownIt-Anchor" href="#检测数据冒险"></a> 检测数据冒险</h3>
+<ul>
+<li>
+<p>设<code>[流水线阶段].Reg[Rs/Rd/Rt]</code>表示某流水线阶段需要的源/目的寄存器</p>
+</li>
+<li>
+<p>当满足下列条件时会出现数据冒险</p>
+<ul>
+<li><code>EX/MEM.RegRd=ID/EX.RegRs</code></li>
+<li><code>EX/MEM.RegRd=ID/EX.RegRt</code></li>
+<li><code>MEM/WB.RegRd=ID/EX.RegRs</code></li>
+<li><code>MEM/WB.RegRd=ID/EX.RegRt</code></li>
+</ul>
+</li>
+<li>
+<p>只有需要写回寄存器的指令才需要旁路</p>
+<ul>
+<li>即在MEM或WB阶段需要写入寄存器</li>
+</ul>
+</li>
+<li>
+<p>目的寄存器不能是$0</p>
+<ul>
+<li><code>EX/MEM.RegRd!=0</code></li>
+<li><code>MEM/WB.RegRd!=0</code></li>
+</ul>
+</li>
+<li>
+<p>例如</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">add $s0,$t0,$t1<br>sub $t2,$s0,$t3<br></code></pre></td></tr></table></figure>
+<ul>
+<li>第一条指令的<code>MEM.RegRd</code>=第二条指令的<code>ID.RegRs</code>所以会发生数据冒险</li>
+</ul>
+<h3 id="解决数据冒险"><a class="markdownIt-Anchor" href="#解决数据冒险"></a> 解决数据冒险</h3>
+<h4 id="旁路寄存器导致的数据冒险"><a class="markdownIt-Anchor" href="#旁路寄存器导致的数据冒险"></a> 旁路（寄存器导致的数据冒险）</h4>
+<blockquote>
+<p>前推：在EX级产生结果之后马上发送给下一条指令。</p>
+</blockquote>
+<ul>
+<li>旁路：建立额外的数据通路连接ALU的输出到输入</li>
+<li>不需要等待结果写回到寄存器</li>
+<li>例如  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">add $s0,$t0,$t1<br>sub $t2,$s0,$t3<br></code></pre></td></tr></table></figure>
+<img src="https://img-blog.csdnimg.cn/20210621201019781.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>可以建立一条额外的数据通路 直接将第一条的ALU输出结果连接到第二条的ALU输入就不用再等待上一条指令的访存和写回阶段</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210621201242784.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h5 id="旁路的数据通路"><a class="markdownIt-Anchor" href="#旁路的数据通路"></a> 旁路的数据通路</h5>
+<p><img src="https://img-blog.csdnimg.cn/20210621201320123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h5 id="旁路多选器的控制信号"><a class="markdownIt-Anchor" href="#旁路多选器的控制信号"></a> 旁路多选器的控制信号</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Mux control</th>
+<th style="text-align:left">Source</th>
+<th style="text-align:left">Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>ForwardA=00</code></td>
+<td style="text-align:left">ID/EX</td>
+<td style="text-align:left">第一个ALU来自寄存器堆</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ForwardA=10</code></td>
+<td style="text-align:left">EX/MEM</td>
+<td style="text-align:left">第一个ALU操作数由上一个ALU运算结果旁路获得</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ForwardA=01</code></td>
+<td style="text-align:left">MEM/WB</td>
+<td style="text-align:left">第一个ALU操作数从数据存储器或者往前数第二条指令的ALU结果中旁路获得</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ForwardB=00</code></td>
+<td style="text-align:left">ID/EX</td>
+<td style="text-align:left">第二个ALU操作数来自寄存器堆</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ForwardB=10</code></td>
+<td style="text-align:left">EX/MEM</td>
+<td style="text-align:left">第二个ALU操作数由上一个ALU运算结果旁路获得</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ForwardB=01</code></td>
+<td style="text-align:left">MEM/WB</td>
+<td style="text-align:left">第二个ALU操作数由数据存储器或者往前数第二条指令的ALU结果旁路获得</td>
+</tr>
+</tbody>
+</table>
+<h5 id="旁路条件"><a class="markdownIt-Anchor" href="#旁路条件"></a> 旁路条件</h5>
+<ul>
+<li>
+<p>EX冒险<br />
+<img src="https://img-blog.csdnimg.cn/20210621204301843.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>if(EX/MEM.RegWrite and (EX/MEM.RegRd!=0) and(EX/MEM.RegRd=ID/EX.RegRs)) <code>ForwardA=10</code></li>
+<li>if(EX/MEM.RegWrite and (EX/MEM.RegRd!=0) and (EX/MEM.RegRd=ID/EX.RegRt)) <code>ForwardB=10</code></li>
+</ul>
+</li>
+<li>
+<p>MEM冒险<br />
+<img src="https://img-blog.csdnimg.cn/20210621204325298.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>if(MEM/WB.RegWrite and (MEM/WB.RegRd!=0) and (MEM/WB.RegRd=ID/EX.RegRs)) <code>ForwardA=01</code></li>
+<li>if(MEM/WB.RegWrite and (MEM/WB.RegRd!=0) and (MEM/WB.RegRd=ID/EX.RegRt)) <code>ForwardB=01</code></li>
+</ul>
+</li>
+<li>
+<p>这种生成的旁路信号无法解决潜在数据冒险</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs asm">add $1,$1,$2<br>add $1,$1,$3<br>add $1,$1,$4<br>#在这种情况下对于二三条指令EX/MEM.RegRd=ID/EX.RegRs会发生MEM冒险<br>#对于第一三条指令有MEM/WB.RegRd=ID/EX.RegRs<br>#所以会同时发生EX级和MEM级的数据冒险<br>#而EX级的数据是更新的(即第二条指令的结果)<br>#所以只需要使用第二第三条指令之间的EX旁路<br></code></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20210621202202365.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>所以我们要修改旁路信号生成条件(生成MEM级旁路信号时判断是否有EX级信号)</li>
+</ul>
+<h4 id="阻塞取数-使用-冒险"><a class="markdownIt-Anchor" href="#阻塞取数-使用-冒险"></a> 阻塞（取数-使用 冒险）</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">lw  $s0,20($t1)<br>sub $t2,$s0,$t3<br></code></pre></td></tr></table></figure>
+<ul>
+<li>对于第二种数据冒险(取数-使用型)无法使用旁路来解决，因为数据只有在MEM阶段后才能获得</li>
+<li>可以<code>阻塞掉一个时钟周期，再通过旁路就能从MEM阶段将数据传输到下一个指令的EX阶段</code></li>
+<li>插入空指令nop阻塞掉一个时钟周期</li>
+</ul>
+<blockquote>
+<p>空指令（nop）：一种不进行任何操作或不改变任何状态的指令</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20210621204801870.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>第二种数据冒险要在译码(ID)阶段检测</li>
+<li>取数使用型冒险发生条件：if(ID/EX.MemRead and ((ID/EX.RegRd=IF/ID.RegRd) or (ID/EX.RegRd=IF/ID.RegRt)))</li>
+<li>如果有取数-使用型冒险，则阻塞流水线一个时钟周期</li>
+<li>实现nop指令
+<ul>
+<li>将ID/EX寄存器中的控制信号置为0
+<ul>
+<li>EX MEM WB阶段不进行操作</li>
+</ul>
+</li>
+<li>阻止PC和IF/ID寄存器更新
+<ul>
+<li>重复译码当前指令</li>
+<li>重复提取下一条指令</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>阻塞一个时钟周期可以让取数操作取得数据，接下来可以旁路到EX级</li>
+<li>冒险检测的数据通路：</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210621205111272.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>通过编译器优化来避免取数-使用型数据冒险
+<ul>
+<li>例如：</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">A=B+E;<br>C=B+F;<br></code></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20210621205155463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h2 id="控制冒险control-hazard"><a class="markdownIt-Anchor" href="#控制冒险control-hazard"></a> 控制冒险(Control Hazard)</h2>
+<ul>
+<li>分支冒险，指令执行不是顺序的，即下一条指令的地址依赖于正在执行的指令
+<ul>
+<li>无条件分支(j,jal,jr)</li>
+<li>条件分支(beq,bne)</li>
+<li>异常</li>
+</ul>
+</li>
+<li>解决方案
+<ul>
+<li>阻塞</li>
+<li>提前产生分支结果</li>
+<li>延迟分支决策</li>
+<li>分支预测</li>
+</ul>
+</li>
+</ul>
+<h3 id="解决控制冒险"><a class="markdownIt-Anchor" href="#解决控制冒险"></a> 解决控制冒险</h3>
+<h4 id="跳转"><a class="markdownIt-Anchor" href="#跳转"></a> 跳转</h4>
+<ul>
+<li>首先假定分支不会发生(正常PC+4)</li>
+<li>在跳转指令完成ID阶段得到跳转地址后清除流水线（此时下一条指令已经取值）</li>
+</ul>
+<blockquote>
+<p>清除（flush）：因发生了意外而丢弃流水线中的指令</p>
+</blockquote>
+<ul>
+<li>用<code>IF.Flush</code>将IF/ID流水线寄存器中的指令置为空指令</li>
+<li>跳转指令设置PC,将分支目标地址加入到流水线寄存器</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2021062121010087.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h4 id="提前计算分支结果"><a class="markdownIt-Anchor" href="#提前计算分支结果"></a> 提前计算分支结果</h4>
+<ul>
+<li>分支结果在MEM级获得，若等待分支结果（flush），影响性能</li>
+<li>计算分支地址
+<ul>
+<li>将生成分支结果的硬件从EX级移到ID级（加法器、符号扩展）</li>
+</ul>
+</li>
+<li>判断分支条件
+<ul>
+<li>在ID级决定是否将数据旁路到相等检测单元进行检测</li>
+<li>如果有分支按照无条件跳转处理</li>
+<li>提前算分支可能会发生数据冒险,这时候需要阻塞流水线
+<ul>
+<li>普通的寄存器冒险:阻塞一次</li>
+<li>取数-使用型:阻塞两次</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分支旁路
+<ul>
+<li>EX冒险
+<ul>
+<li>if(IDcontrol.Branch and(EX/MEM.RegRd!=0) and (EX/MEM.RegRd==IF/ID.RegRs) <code>ForwardC=10</code></li>
+</ul>
+</li>
+<li>if(IDcontrol.Branch and(EX/MEM.RegRd!=0) and (EX/MEM.RegRd==IF/ID.RegRt) <code>ForwardD=10</code></li>
+<li>MEM冒险
+<ul>
+<li>if(IDcontrol.Branch and(MEM/WB.RegRd!=0) and (MEM/WB.RegRd==IF/ID.RegRs) <code>ForwardC=01</code></li>
+<li>if(IDcontrol.Branch and(MEM/WB.RegRd!=0) and (MEM/WB.RegRd==IF/ID.RegRt) <code>ForwardD=01</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210621212433494.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h4 id="编译器优化延迟分支"><a class="markdownIt-Anchor" href="#编译器优化延迟分支"></a> 编译器优化：延迟分支</h4>
+<blockquote>
+<p>延迟分支：MIPS编译器将一条指令移到分支指令之后可以延迟分支目的指令的执行从而隐藏分支延迟</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20210621212631379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>方案A最佳，分支发生概率大时选择方案B，分支不发生概率大时选C</li>
+</ul>
+<h4 id="动态分支预测"><a class="markdownIt-Anchor" href="#动态分支预测"></a> 动态分支预测</h4>
+<ul>
+<li>
+<p>流水线级数增加，预测错误的代价增加</p>
+</li>
+<li>
+<p>静态分支预测是粗略的预测方法</p>
+</li>
+<li>
+<p>动态分支预测</p>
+<ul>
+<li>分支预测缓存或分支历史记录表</li>
+<li>分支指令的地址低位索引</li>
+<li>存储分支结果</li>
+</ul>
+</li>
+<li>
+<p>执行分支</p>
+<ul>
+<li>查表，如果预测的结果与上一次结果一样，按照预测结果取指令</li>
+<li>如果错误，清空流水线，重新执行，并取反预测结果</li>
+</ul>
+</li>
+<li>
+<p>1位预测器<br />
+<img src="https://img-blog.csdnimg.cn/20210621213934322.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>内层循环至少两次预测错误
+<ul>
+<li>最后一次预测出错</li>
+<li>第一次预测出错</li>
+</ul>
+</li>
+<li>每次错误都取反预测结果</li>
+</ul>
+</li>
+<li>
+<p>2位预测器<br />
+<img src="https://img-blog.csdnimg.cn/20210621214039756.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>错误两次再取反</li>
+</ul>
+</li>
+<li>
+<p>计算分支目标地址</p>
+<ul>
+<li>结合分支预测器，计算分支目标地址</li>
+<li>分支目标缓存
+<ul>
+<li>缓存分支目标地址</li>
+<li>取指令时，由PC中的地址索引
+<ul>
+<li>如果预测正确，且分支指令发生，则直接从缓存中提取目标地址</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="异常"><a class="markdownIt-Anchor" href="#异常"></a> 异常</h1>
+<blockquote>
+<p>异常指打断程序正常执行的突发事件，会改变指令执行顺序</p>
+</blockquote>
+<ul>
+<li>异常exceptions）
+<ul>
+<li>产生原因可能来自处理器内部或者外部</li>
+<li>例如，使用未定义的指令，算术溢出，系统调用</li>
+<li>与程序执行同步，必须停止随后的指令在流水线中运行</li>
+</ul>
+</li>
+<li>中断（Interrupt）
+<ul>
+<li>由处理器外部引起的事件</li>
+<li>例如I/O设备请求</li>
+<li>与程序执行不同步，可以等流水线中指令执行结束再处理</li>
+</ul>
+</li>
+<li>处理异常和中断会牺牲系统性能</li>
+</ul>
+<h2 id="流水线中的异常"><a class="markdownIt-Anchor" href="#流水线中的异常"></a> 流水线中的异常</h2>
+<p><img src="https://img-blog.csdnimg.cn/20210621214810893.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<table>
+<thead>
+<tr>
+<th>异常</th>
+<th>流水级</th>
+<th>是否同步</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>算数溢出</td>
+<td>EX</td>
+<td>是</td>
+</tr>
+<tr>
+<td>未定义指令</td>
+<td>ID</td>
+<td>是</td>
+</tr>
+<tr>
+<td>TLB或页缺失</td>
+<td>IF MEM</td>
+<td>是</td>
+</tr>
+<tr>
+<td>I/O请求</td>
+<td>全部</td>
+<td>否</td>
+</tr>
+<tr>
+<td>硬件故障</td>
+<td>全部</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>多种异常可能同步发生</li>
+</ul>
+<h2 id="流水线中的异常处理"><a class="markdownIt-Anchor" href="#流水线中的异常处理"></a> 流水线中的异常处理</h2>
+<ul>
+<li>另一种形式的控制冒险</li>
+<li>在EX级加法出现算术溢出
+<ul>
+<li>add $1, $2, $1</li>
+<li>停止运行add指令</li>
+<li>add之前的指令可以正常运行</li>
+<li>清空add及其之后的指令</li>
+<li>设置EPC（异常程序计数器）和cause（状态寄存器）的值</li>
+<li>将控制权交给处理程序</li>
+</ul>
+</li>
+<li>与处理分支预测错误相似</li>
+<li>数据通路与控制</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210621215133177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h1 id="指令级并行ilp"><a class="markdownIt-Anchor" href="#指令级并行ilp"></a> 指令级并行（ILP）</h1>
+<h2 id="依赖"><a class="markdownIt-Anchor" href="#依赖"></a> 依赖</h2>
+<ul>
+<li>结构冒险——资源冲突</li>
+<li>数据冒险——数据依赖</li>
+<li>控制冒险——过程依赖</li>
+<li>通过软硬件结合的方式来缓解依赖带来的影响</li>
+</ul>
+<h3 id="数据冒险"><a class="markdownIt-Anchor" href="#数据冒险"></a> 数据冒险</h3>
+<p><img src="https://img-blog.csdnimg.cn/20210621215601165.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>RAW<br />
+写后读(真相关)<br />
+当前指令使用的时前面指令更新的数据，必须保持执行顺序</li>
+<li>WAR<br />
+读后写(反相关)<br />
+当前指令需要更新数据，前面指令使用的时原来的数据，必须保持指令的执行顺序</li>
+<li>WAW<br />
+写后写(输出相关)<br />
+两条指令会相继更新数据，必须保持指令执行顺序</li>
+</ul>
+<h3 id="解决存储冲突"><a class="markdownIt-Anchor" href="#解决存储冲突"></a> 解决存储冲突</h3>
+<blockquote>
+<p>寄存器重命名（Register Renaming）<br />
+处理器重新命名指令中的寄存器标识符</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20210621215723209.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>硬件通过从空闲寄存器池中分配一个寄存器进行重命名</li>
+<li>数据使用之后将寄存器释放回空闲寄存器池</li>
+</ul>
+<h2 id="静态多发射"><a class="markdownIt-Anchor" href="#静态多发射"></a> 静态多发射</h2>
+<ul>
+<li>编译器封装多条指令处理冒险
+<ul>
+<li>将可以在同一时钟周期执行的指令封装成发射包</li>
+<li>由流水线的资源数量所决定</li>
+</ul>
+</li>
+<li>一条执行多个操作的长指令
+<ul>
+<li>指定多个并发操作</li>
+<li>超长指令字(VLIW)</li>
+</ul>
+</li>
+<li>编译器处理数据冒险和控制冒险
+<ul>
+<li>调度代码、封装发射包</li>
+<li>发射包内指令间不能存在依赖</li>
+<li>发射包间可以存在指令间依赖</li>
+<li>如果需要可以封装nop操作</li>
+</ul>
+</li>
+<li>相关技术
+<ul>
+<li>双发射中的冒险
+<ul>
+<li>EX级发射数据冒险</li>
+<li>取数使用型数据冒险</li>
+</ul>
+</li>
+<li>需要编译技术
+<ul>
+<li>指令调度</li>
+<li>循环展开</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="动态多发射"><a class="markdownIt-Anchor" href="#动态多发射"></a> 动态多发射</h2>
+<blockquote>
+<p>超标量（Superscalar）<br />
+硬件在运行时动态决定哪些指令同时发射和执行</p>
+</blockquote>
+<ul>
+<li>超标量处理器运行机制
+<ul>
+<li>取指令和发射：取指令、译码并发射到功能单元，等待执行</li>
+<li>指令执行：一旦所需要的功能单元、源操作数就绪，就可以执行指令</li>
+<li>提交：当可以写回数据时进行写回</li>
+</ul>
+</li>
+<li>按序&amp;乱序<br />
+<img src="https://img-blog.csdnimg.cn/20210621220105655.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NDAxMTU2,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="" /></li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">体系结构</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">体系结构</a>
+                    
+                      <a class="hover-with-bg" href="/tags/MIPS/">MIPS</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B5%81%E6%B0%B4%E7%BA%BF/">流水线</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E6%97%A5%E5%B8%B8/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9E%84%E9%80%A0%E8%8C%83%E5%BC%8F/">
+                        <span class="hidden-mobile">利用二叉树构造范式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
