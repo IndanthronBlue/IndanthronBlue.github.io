@@ -1,0 +1,959 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="考虑具有更复杂形式的SQL查询、视图定义、完整性约束、数据定义以及授权">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL｜中级SQL">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="考虑具有更复杂形式的SQL查询、视图定义、完整性约束、数据定义以及授权">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/1.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/2.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/3.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/4.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/5.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/6.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/7.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/8.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/9.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/10.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/11.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/13.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/14.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/15.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/16.png">
+<meta property="article:published_time" content="2022-03-26T15:23:04.000Z">
+<meta property="article:modified_time" content="2022-03-26T15:25:00.668Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-4/1.png">
+  
+  
+  <title>SQL｜中级SQL - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="SQL｜中级SQL">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-26 23:23" pubdate>
+        2022年3月26日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      38 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">SQL｜中级SQL</h1>
+            
+            <div class="markdown-body">
+              <h1 id="中级-sql"><a class="markdownIt-Anchor" href="#中级-sql"></a> 中级 SQL</h1>
+<h2 id="连接表达式"><a class="markdownIt-Anchor" href="#连接表达式"></a> 连接表达式</h2>
+<ul>
+<li>
+<p>通过 join <strong>谓词(predicate)</strong> ，可以实现在 join 的结果中得到被 natural join 排除在外的一些记录</p>
+</li>
+<li>
+<p>连接条件(join condition) – 定义两个关系中的哪些元组匹配，以及连接结果中存在哪些属性</p>
+</li>
+<li>
+<p>连接类型(join type) – 定义如何处理每个关系中与另一个关系中的任何元组不匹配的元组（基于连接条件）</p>
+</li>
+</ul>
+<p><img src="1.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h3 id="连接条件"><a class="markdownIt-Anchor" href="#连接条件"></a> 连接条件</h3>
+<ul>
+<li><strong>on</strong> 条件允许参与连接的关系设置通用的谓词（任意的条件）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs mysql">select * <br>from students join takes on student.ID = takes.ID  <br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="外连接-outer-join"><a class="markdownIt-Anchor" href="#外连接-outer-join"></a> 外连接 (Outer Join)</h3>
+<ul>
+<li>参与链接的关系可能会存在某些元祖“丢失”的情况</li>
+<li>外连接通过在结果中保留<code>包含空值元组</code>的方式保留在连接中丢失的元组</li>
+<li>三种形式的外连接
+<ul>
+<li>left outer join, 左外连接：只保留出现在 <strong>左外连接</strong> 运算之前的关系中的元组</li>
+<li>right outer join, 右外连接：只保留出现在 <strong>右外连接</strong> 运算之前的关系中的元组</li>
+<li>full outer join, 全外连接：保留出现在两个关系中的元组</li>
+</ul>
+</li>
+</ul>
+<p><img src="2.png" srcset="/img/loading.gif" lazyload alt="左外连接" /></p>
+<p><img src="3.png" srcset="/img/loading.gif" lazyload alt="右外连接" /></p>
+<p><img src="4.png" srcset="/img/loading.gif" lazyload alt="全外连接" /></p>
+<hr />
+<h3 id="内连接-inner-join"><a class="markdownIt-Anchor" href="#内连接-inner-join"></a> 内连接 (Inner Join)</h3>
+<ul>
+<li>SQL 中把常规链接称为内连接</li>
+<li>关键词 inner 是可选的，当 join 子句中没有使用 outer 前缀，默认为 inner join</li>
+<li>inner join的结果只保留匹配的元组，不保留未匹配的元组</li>
+</ul>
+<hr />
+<h2 id="视图view"><a class="markdownIt-Anchor" href="#视图view"></a> 视图(View)</h2>
+<ul>
+<li>任何这种不是逻辑模型，但作为虚拟关系对用户可见的关系，称为视图，不是实际存在的关系</li>
+</ul>
+<h3 id="视图定义"><a class="markdownIt-Anchor" href="#视图定义"></a> 视图定义</h3>
+<ul>
+<li>SQL 提供 View 的定义的语句，必须给视图一个名称，并且需要提供计算视图的查询</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create view 名字 as &lt; 查询表达式 &gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>一旦定义了view，view名字就可以作为虚拟关系名来引用</li>
+<li>视图关系在概念上包含查询结果中的元组，<code>但不进行预计算和存储</code></li>
+</ul>
+<hr />
+<h3 id="sql-查询中使用视图"><a class="markdownIt-Anchor" href="#sql-查询中使用视图"></a> SQL 查询中使用视图</h3>
+<p><img src="5.png" srcset="/img/loading.gif" lazyload alt="View的使用" /></p>
+<p><img src="6.png" srcset="/img/loading.gif" lazyload alt="基于视图定义视图" /></p>
+<ul>
+<li>一个视图可用于定义另一个视图的表达式中
+<ul>
+<li>如果在定义 v<sub>1</sub> 的表达式中使用 v<sub>2</sub>，则视图关系 v<sub>1</sub> 称为 <strong>直接依赖于</strong> 视图关系 v<sub>2</sub></li>
+<li>如果 v<sub>1</sub> 直接依赖于 v<sub>2</sub>，或者存在从 v<sub>1</sub> 到 v<sub>2</sub> 的依赖关系路径，则视图关系 v<sub>1</sub> 称为 <strong>依赖于</strong> 视图关系 v<sub>2</sub></li>
+<li>如果视图关系 v 依赖于自身，则称其为 <strong>递归</strong></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="物化视图"><a class="markdownIt-Anchor" href="#物化视图"></a> 物化视图</h3>
+<ul>
+<li>
+<p>如果用于定义视图的实际关系改变，视图也跟着改变，这样的视图称为 <strong>物化视图(materialized view)</strong></p>
+</li>
+<li>
+<p>物化视图的优势：</p>
+<ul>
+<li>频繁使用物化视图的应用，因为存储了视图关系，可以提高响应熟读
+<ul>
+<li>比如：一些基于聚合函数做统计计算查询的应用，可以定义有关聚合函数计算的物化视图，在物化视图上查询要快很多，避免读取规模大的实际关系表</li>
+<li>常用于查询业务量较大的应用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>保持物化视图一直在最新状态的过程称为 <strong>物化视图维护(materialized view maintenance)</strong></p>
+</li>
+</ul>
+<hr />
+<h3 id="视图更新"><a class="markdownIt-Anchor" href="#视图更新"></a> 视图更新</h3>
+<ul>
+<li>在实施修改操作时会导致原来实际的关系表中的数据产生不确实性问题
+<ul>
+<li>大多数 SQL 实现仅允许在简单视图上进行更新</li>
+</ul>
+</li>
+<li>当view满足一些条件时，可以对view进行增删改操作：
+<ul>
+<li>from子句只有一个关系</li>
+<li>select子句中只包含关系的属性，不含其它的任何表达式计算或distinct说明</li>
+<li>任何没有出现在select字句中的属性可以取null值</li>
+<li>查询中没有group和having子句</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>在对view进行增删改操作时要谨慎！</p>
+</blockquote>
+<p><img src="7.png" srcset="/img/loading.gif" lazyload alt="视图更新" /></p>
+<hr />
+<h2 id="完整性约束-integrity-constraints"><a class="markdownIt-Anchor" href="#完整性约束-integrity-constraints"></a> 完整性约束 (Integrity Constraints)</h2>
+<ul>
+<li>
+<p>完整性约束保证授权用户对数据库所做的修改不会破坏数据的一致性，因此，完整性约束防止的是对数据的意外破坏</p>
+</li>
+<li>
+<p>完整性约束从何而来？</p>
+<ul>
+<li>完整性约束基于数据库关系中描述的实际企业的语义</li>
+<li>我们可以检查数据库实例以查看是否违反了完整性约束，但是我们永远无法通过查看实例来推断完整性约束是否为真</li>
+<li>码和外码完整性约束是最常见的；此外还支持其他完整性约束</li>
+</ul>
+</li>
+<li>
+<p>完整性约束何时说明：定义数据库schema的时候说明</p>
+</li>
+<li>
+<p>完整性约束何时检验：修改数据库表的时候检验是否违反了完整性约束</p>
+</li>
+<li>
+<p>完整性约束的类型：</p>
+<ul>
+<li>key和foreign key是常用的的约束；</li>
+<li>基于值的约束与应用数据管理需求相关，例如房价不能为负数，GPA不能超过4等</li>
+<li>基于元组的约束：属性之间的约束</li>
+<li>断言：一般指数据库中所有的表需要满足的约束，检测代价很大。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="单个关系上的约束"><a class="markdownIt-Anchor" href="#单个关系上的约束"></a> 单个关系上的约束</h3>
+<ul>
+<li>create table 命令可以包括完整性约束语句
+<ul>
+<li>not null</li>
+<li>primary key</li>
+<li>unique</li>
+<li>check §, where P is a predicate</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="not-null-和-unique-约束"><a class="markdownIt-Anchor" href="#not-null-和-unique-约束"></a> Not Null 和 Unique 约束</h3>
+<ul>
+<li>not null
+<ul>
+<li>声明禁止在该属性上插入空值</li>
+<li><code>name varchar(20) not null</code></li>
+</ul>
+</li>
+<li>unique ( A<sub>1</sub>, A<sub>2</sub>, …, A<sub>m</sub>)
+<ul>
+<li>unique 声明指出，属性 A1、A2、…Am 形成候选码</li>
+<li>候选码属性可以为 null</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="check-子句"><a class="markdownIt-Anchor" href="#check-子句"></a> check 子句</h3>
+<ul>
+<li>用于关系声明时， check§ 子句指定一个谓词 P，关系中的每个元组都必须满足谓词 P</li>
+<li>check 子句允许以有力的方式对属性域加以限制（如枚举）</li>
+</ul>
+<p><img src="8.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h3 id="参照完整性"><a class="markdownIt-Anchor" href="#参照完整性"></a> 参照完整性</h3>
+<ul>
+<li><strong>参照完整性(referential integrity)</strong> : 保证在一个关系中给定属性集上的取值也在另一关系的指定属性集的取值中出现</li>
+<li>当违反参照完整性约束时，通常的处理是拒绝执行导致完整性破坏的操作（更新操作的事务被回滚）</li>
+<li>外码可以用作为 SQL 中 create table 语句一部分的 foreign key 子句来声明</li>
+</ul>
+<p><img src="9.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>参照完整性约束的级联操作： on delete cascade/ on update cascade
+<ul>
+<li>如果加入了on delete cascade 和 on update cascade 声明，那么删除或修改 department 表中的记录导致这个参照完整性约束被违反，<code>删除或修改不会被系统拒绝</code>，而是对course表进行<code>“级联”删除或修改</code></li>
+<li>级联动作也可以是set null, set default</li>
+<li>外码依赖链：在链的一端做的删除或修改操作会影响整个链</li>
+</ul>
+</li>
+</ul>
+<p><img src="10.png" srcset="/img/loading.gif" lazyload alt="级联操作" /></p>
+<hr />
+<h3 id="复杂-check-条件与断言"><a class="markdownIt-Anchor" href="#复杂-check-条件与断言"></a> 复杂 check 条件与断言</h3>
+<ul>
+<li>check 子句中的谓词可以是包含子查询的任意谓词
+<ul>
+<li>例如： <code>check (time_slot_id in (select time_slot_id from time_slot))</code>
+<ul>
+<li>这个 check 条件检测在 section 关系中每个元组的 time_slot_id 的确是在 time_slot 关系中某个时间段的标识</li>
+<li>因此这个条件不仅在 section 插入或修改元组时需要检测，而且在 time_slot 关系改变时也要检测</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<ul>
+<li>断言(Assertions)
+<ul>
+<li>一个断言就是一个谓词，表达我们希望数据库总能满足的一个条件</li>
+<li>域约束和参照完整性约束是断言的特殊形式</li>
+<li>SQL 的断言采用如下形式
+<ul>
+<li>create assertion <assertion-name> check (<div class="code-wrapper"><predicate>);</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="11.png" srcset="/img/loading.gif" lazyload alt="断言的例子" /></p>
+<hr />
+<h2 id="sql-的数据类型与模式"><a class="markdownIt-Anchor" href="#sql-的数据类型与模式"></a> SQL 的数据类型与模式</h2>
+<h3 id="sql-中的日期和时间类型"><a class="markdownIt-Anchor" href="#sql-中的日期和时间类型"></a> SQL 中的日期和时间类型</h3>
+<ul>
+<li>
+<p>date : 日历日期，包括年（四位）、月和日</p>
+</li>
+<li>
+<p>time : 一天中的时间，包括小时、分和秒</p>
+<ul>
+<li>可以用变量 time§ 来表示秒的小数点后的数字位数</li>
+<li>通过指定 time with timezone 可以把时区信息连同时间一起存储</li>
+</ul>
+</li>
+<li>
+<p>timestamp : 时间戳，date 和 time 的组合</p>
+<ul>
+<li>Example: timestamp  ‘2005-7-27 09:00:30.75’</li>
+</ul>
+</li>
+<li>
+<p>interval : 时间段</p>
+<ul>
+<li>从另一个日期/时间/时间戳值中减去一个日期/时间/时间戳值，得到一个间隔值</li>
+<li>间隔值可以添加到日期/时间/时间戳值</li>
+</ul>
+</li>
+<li>
+<p>SQL提供将字符串（字符串表达式）转换成类型date或time</p>
+<ul>
+<li><code>cast e as t</code>：将字符串 e 转换成类型 t（date，time，timestamp之一）
+<ul>
+<li>Example:   <code>cast &lt;string-valued-expression&gt; as date</code></li>
+<li>Example:   <code>cast &lt;string-valued-expression&gt; as time</code></li>
+</ul>
+</li>
+<li>SQL提供extract函数从date或time中提取单独的域
+<ul>
+<li><code>extract(field from d)</code></li>
+<li>Example:   <code>extract (year from r.starttime)</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="用户自定义数据类型"><a class="markdownIt-Anchor" href="#用户自定义数据类型"></a> 用户自定义数据类型</h3>
+<ul>
+<li>SQL 支持用户定义数据类型</li>
+</ul>
+<p><img src="13.png" srcset="/img/loading.gif" lazyload alt="自定义类型和属性域" /></p>
+<ul>
+<li>可以从现有数据类型创建新域
+<ul>
+<li>例如
+<ul>
+<li><code>create domain Dollars numeric(12, 2)</code></li>
+<li><code>create domain Pounds numeric(12,2)</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="大对象类型"><a class="markdownIt-Anchor" href="#大对象类型"></a> 大对象类型</h3>
+<ul>
+<li>
+<p>大型对象（照片、视频、CAD 文件等）存储为大型对象</p>
+<ul>
+<li>blob：二进制大型对象 – 对象是未解释的二进制数据的大型集合（其解释留给数据库系统外部的应用程序）</li>
+<li>clob：字符大对象 – 对象是字符数据的大型集合</li>
+<li>当查询返回大型对象时，将返回指针，而不是大型对象本身。</li>
+</ul>
+</li>
+<li>
+<p>对于包含大对象的记录，将整个大对象都放入内存，效率低且不现实。应用程序调用SQL查询结果时得到大对象的位置（定位器），然后利用应用程序从定位器找到大对象，采用流的方式获得这个大对象。</p>
+</li>
+</ul>
+<p><img src="14.png" srcset="/img/loading.gif" lazyload alt="大对象声明" /></p>
+<hr />
+<h2 id="授权authorization"><a class="markdownIt-Anchor" href="#授权authorization"></a> 授权(Authorization)</h2>
+<ul>
+<li>
+<p>对数据库各部分的授权形式：</p>
+<ul>
+<li>读取 - 允许读取，但不允许修改数据。</li>
+<li>插入 - 允许插入新数据，但不允许修改现有数据。</li>
+<li>更新 - 允许修改，但不允许删除数据。</li>
+<li>删除 - 允许删除数据。</li>
+</ul>
+</li>
+<li>
+<p>修改数据库<code>模式</code>的授权形式</p>
+<ul>
+<li>索引 - 允许创建和删除索引。</li>
+<li>资源 - 允许创建新关系。</li>
+<li>更改 - 允许在关系中添加或删除属性。</li>
+<li>删除 - 允许删除关系。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="sql-中的授权规范"><a class="markdownIt-Anchor" href="#sql-中的授权规范"></a> SQL 中的授权规范</h3>
+<ul>
+<li><strong>grant</strong> 语句用来授予权限，基本形式为</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><pre><code class="hljs mysql">grant &lt;privilege list&gt;<br>on &lt;relation name or view name&gt;<br>to &lt;user list&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">grant update (budget) on department to Amit, Satoshi<br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>用户列表(user list)是</p>
+<ul>
+<li>用户id</li>
+<li>公开的，所有有效用户授予权限</li>
+<li>一个角色</li>
+</ul>
+</li>
+<li>
+<p>授予视图特权并不意味着授予对基础关系的任何特权。</p>
+</li>
+<li>
+<p>privilege list</p>
+<ul>
+<li>select 允许对关系进行读取访问，或使用视图进行查询的能力</li>
+<li>insert 插入元组的能力</li>
+<li>update 使用 SQL 更新语句进行更新的能力</li>
+<li>delete 删除元组的能力</li>
+<li>all privileges 用作所有允许权限的缩写形式</li>
+</ul>
+</li>
+<li>
+<p>权限可以回收</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">revoke &lt;privilege list&gt; on &lt;relation name or view name&gt; from &lt;user list&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>如果 <code>&lt;revokee-list&gt;</code> 包含 public，则除显式授予权限的用户外，所有用户都将失去该权限。</li>
+<li>如果同一权限由不同的被授权者授予同一用户两次，则该用户可以在吊销后保留该权限。</li>
+<li>依赖于要撤消的权限的所有权限也会被撤消。</li>
+</ul>
+<hr />
+<h3 id="角色roles"><a class="markdownIt-Anchor" href="#角色roles"></a> 角色(Roles)</h3>
+<ul>
+<li>基于角色的访问控制广泛应用于应用中，分配权限时针对角色分配</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create role instructor;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>角色可以授予用户，也可以授予其他角色</li>
+</ul>
+<p><img src="15.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>因此，一个用户或一个角色的权限包括：
+<ul>
+<li>所有直接授予用户/角色的权限</li>
+<li>所有授予给用户/角色所拥有角色的权限</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="视图的授权"><a class="markdownIt-Anchor" href="#视图的授权"></a> 视图的授权</h3>
+<p><img src="16.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h3 id="其他授权操作"><a class="markdownIt-Anchor" href="#其他授权操作"></a> 其他授权操作</h3>
+<ul>
+<li>
+<p>模式的授权</p>
+<ul>
+<li>只有模式的拥有者才能够执行对模式的任何修改</li>
+<li>SQL 提供了一种 <strong>references</strong> 权限，允许用户在创建关系时声明外码</li>
+<li>例如 <code>grant references (dept_name) on department on Mariano</code>
+<ul>
+<li>允许用户 Mariano 创建一个关系，它能参照 department 关系的码 dept_name</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>权限的转移</p>
+<ul>
+<li>如果希望在授权时允许接收者把得到的权限再传递给其他用户，可以在相应的 grant 命令后面附加 <strong>with grant option</strong> 子句</li>
+</ul>
+</li>
+<li>
+<p>权限的收回</p>
+<ul>
+<li>revoke 语句可以申明 restrict 来防止级联收回</li>
+<li>可以用关键字 cascade 来替换 restrict 以表示需要级联收回，但它可以缺省</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/">数据库系统及其应用</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+                    
+                      <a class="hover-with-bg" href="/tags/sql/">sql</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-2/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据库｜关系模型</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/Nested-Subqueries/">
+                        <span class="hidden-mobile">SQL｜子查询与DML</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
