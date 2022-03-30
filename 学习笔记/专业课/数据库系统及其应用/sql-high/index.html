@@ -1,0 +1,715 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="SQL 的一些高级特性，函数、过程和触发器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL｜高级 SQL">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/sql-high/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="SQL 的一些高级特性，函数、过程和触发器">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-30T14:46:33.000Z">
+<meta property="article:modified_time" content="2022-03-30T14:48:09.110Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>SQL｜高级 SQL - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="SQL｜高级 SQL">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-30 22:46" pubdate>
+        2022年3月30日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      30 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">SQL｜高级 SQL</h1>
+            
+            <div class="markdown-body">
+              <h1 id="高级-sql"><a class="markdownIt-Anchor" href="#高级-sql"></a> 高级 SQL</h1>
+<h2 id="函数和过程"><a class="markdownIt-Anchor" href="#函数和过程"></a> 函数和过程</h2>
+<ul>
+<li>
+<p>SQL提供了类似高级语言的程序结构</p>
+<ul>
+<li>如分支结构（if语句）、循环结构（while，for语句等）可以完成复杂的“业务逻辑”，并存储在数据库中，然后在SQL中调用</li>
+</ul>
+</li>
+<li>
+<p><strong>存储过程(Stored Procedures)</strong></p>
+<ul>
+<li>可以将过程存储在数据库中</li>
+<li>然后使用调用 <code>(exec)</code> 语句执行它们</li>
+<li>允许外部应用程序在不知道内部细节的情况下对数据库进行操作</li>
+<li>当规则发生变化时，可以不需要修改其它代码。当参数变化时，不需要重复写代码。</li>
+</ul>
+</li>
+<li>
+<p>函数和过程</p>
+<ul>
+<li>函数和过程允许&quot;业务逻辑&quot;存储在数据库中并从 SQL 语句执行。</li>
+<li>这些可以通过SQL的过程组件或外部编程语言（如Java，C或C++）来定义。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="声明和调用-sql-函数和过程"><a class="markdownIt-Anchor" href="#声明和调用-sql-函数和过程"></a> 声明和调用 SQL 函数和过程</h3>
+<ul>
+<li>函数的定义：
+<ul>
+<li>函数要有函数名、自变量（参数）、返回值和函数体（函数实现的功能）</li>
+<li>示例</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><pre><code class="hljs mysql">create function dept_count (dept_name varchar(20))<br>  returns integer<br>    begin<br>        declare d_count integer;<br>        select count (* ) into d_count<br>        from instructor<br>        where instructor.dept_name = dept_name<br>        return d_count;<br>    end<br></code></pre></td></tr></table></figure>
+<ul>
+<li>函数定义之后就可以调用，以下示例给出了在SQL中的调用例子：where子句中调用了所定义的函数</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select dept_name, budget<br>from department<br>where dept_count (dept_name ) &gt; 12<br></code></pre></td></tr></table></figure>
+<hr />
+<ul>
+<li>SQL也支持返回关系作为结果的函数：table function
+<ul>
+<li>通常以表为值的函数可以被看作 <strong>带参数的视图(parameterized view)</strong></li>
+<li>它通过允许参数把视图的概念更加一般化</li>
+<li>注意，使用函数的参数时要加上函数名作为前缀</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create function instructors_of (dept_name char(20))<br>    returns table ( ID  varchar(5),<br>                    name varchar(20),<br>                    dept_name varchar(20),<br>                    salary  numeric(8,2))<br><br>return table<br>    (select ID, name, dept_name, salary<br>    from  instructor<br>    where instructor.dept_name = instructors_of.dept_name)<br></code></pre></td></tr></table></figure>
+<ul>
+<li>使用表函数：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select *<br>from table (instructors_of (‘Music’))<br></code></pre></td></tr></table></figure>
+<hr />
+<ul>
+<li>SQL支持过程，同样先定义后调用。</li>
+<li>定义过程需要有过程名、输入参数和输出参数，分别用 <code>in</code> 和 <code>out</code> 关键字标识</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create procedure dept_count_proc (in dept_name varchar(20), <br>                                  out d_count integer)<br>  begin<br>	  select count(*) into d_count<br>      from instructor<br>      where instructor.dept_name = dept_count_proc.dept_name<br>   end<br></code></pre></td></tr></table></figure>
+<ul>
+<li>过程定义之后，可以在SQL中或嵌入式SQL中用call这个命令调用过程执行</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">declare d_count integer;<br>call dept_count_proc( ‘Physics’, d_count);<br></code></pre></td></tr></table></figure>
+<ul>
+<li>SQL允许多个过程同名，只要参数个数不同
+<ul>
+<li>名称和参数个数用于唯一标识一个过程</li>
+<li>SQL也允许多个函数同名，只要函数个数不同就可以</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="支持过程和函数的语言构造"><a class="markdownIt-Anchor" href="#支持过程和函数的语言构造"></a> 支持过程和函数的语言构造</h3>
+<ul>
+<li>
+<p>SQL中的结构允许类似高级语言的程序结构，如循环、赋值、分支判断、异常捕获等</p>
+<ul>
+<li>SQL 标准中处理这些构造的部分称为 <strong>持久存储模块(Persistent Storage Module, PSM)</strong></li>
+</ul>
+</li>
+<li>
+<p>变量通过 <code>declare</code> 语句进行声明，可以是任何合法 SQL 类型。使用 <code>set</code> 语句进行赋值</p>
+</li>
+<li>
+<p>一个复合语句有 <code>begin ... end</code> 的样式</p>
+<ul>
+<li>在 begin 和 end 之间会包含复杂的 SQL 语句</li>
+<li>可以在复合语句中声明局部变量</li>
+</ul>
+</li>
+<li>
+<p>SQL: 1999 支持 while 语句和 repeat 语句</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mysql">declare n  integer default 0;<br>		while n &lt; 10 do<br>		    set n = n + 1<br>		end while<br><br>		repeat<br>           set n = n  – 1<br>		until n = 0<br>		end repeat<br></code></pre></td></tr></table></figure>
+<hr />
+<ul>
+<li>SQL支持迭代，允许查询的结果重复执行
+<ul>
+<li>程序每次获取查询结果的一行，并存入 for 循环变量</li>
+<li>语句中 leave 可用来退出循环，而 iterate 表示跳过剩余语句从循环的开始进入下一个元组</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mysql">declare n  integer default 0;<br>for r  as<br>    select budget <br>    from department<br>    where building=‘Watson’<br>do<br>    set n = n + r.budget<br>end for<br></code></pre></td></tr></table></figure>
+<hr />
+<ul>
+<li>SQL 程序语言还支持发信号通知 <strong>异常条件(exception condition)</strong> ，以及声明 <strong>句柄(handler)</strong> 来处理异常</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">declare out_of_classroom_seats  condition<br>declare exit handler for out_of_classroom_seats<br>    begin<br>    …<br>    end<br></code></pre></td></tr></table></figure>
+<ul>
+<li>在 <code>begin</code> 和 <code>end</code> 之间的语句可以执行 <strong>signal</strong> out_of_classroom_seats 来引发一个异常</li>
+<li>这个句柄说明，如果条件发生，将会采取行动终止 begin end 中的语句</li>
+<li>另一个可选的动作是 <strong>continue</strong>
+<ul>
+<li>它继续从引发异常的语句的下一条语句开始执行</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="触发器-trigger"><a class="markdownIt-Anchor" href="#触发器-trigger"></a> 触发器 Trigger</h2>
+<ul>
+<li><strong>触发器(Trigger)</strong> 是一条语句，当对数据库做修改时，它自动被系统执行
+<ul>
+<li>也称为 <strong>事件-条件-操作规则(event-condition-action rules, ECA)</strong></li>
+<li>触发器允许程序员指定何时进行检查以及在<code>哪些条件</code>下应执行一组操作</li>
+<li>触发器允许应用程序监视数据库事件（活动），并在发生指定事件时执行操作</li>
+<li>应用trigger时要做两项工作：
+<ul>
+<li>说明什么条件下执行触发器：引起触发器的事件（event）和触发器执行必须满足的条件（condition）</li>
+<li>触发器执行时触发的动作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="sql-中的触发器"><a class="markdownIt-Anchor" href="#sql-中的触发器"></a> SQL 中的触发器</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create trigger timeslot_check1 after insert on section<br>    referencing new row as nrow<br>    for each row<br>    when (nrow.time_slot_id  not in (<br>            select time_slot_id<br>            from time_slot))<br>    begin<br>        rollback<br>    end;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>这个例子介绍了 trigger 的定义：Trigger 定义包括 trigger 的名字、触发的事件和条件以及执行的动作</p>
+<ul>
+<li>这个 trigger 命名为 timeslot_check1</li>
+<li>事件是对数据库表 section 进行 insert 操作</li>
+<li>trigger执行的条件是当插入 section 表的的新数据的 time_slot_id 不在 time_slot 表中时，由 <code>when</code> 语句指定</li>
+<li>Trigger执行的操作是 rollback</li>
+<li>实现的功能是：当对 section 表进行 insert 操作时，如果增加的新的纪录的 time_slot_id 不在 time_slot 表中，那么这个这个 insert 操作无法成功执行，插入的数据要删掉，所有对数据库的操作 <code>rollback</code>（回滚），恢复插入之前的数值</li>
+<li>触发器代码中 <code>for each row</code> 语句可以显式地在每个被插入的行上进行迭代</li>
+</ul>
+</li>
+<li>
+<p>注意：</p>
+<ul>
+<li><code>referencing new row as nrow</code> 这条语句，建立一个临时变量存储新增的数据</li>
+<li>还有另一种方式 <code>referencing old row as orow</code> ，建立临时变量存储删掉或修改行的旧数据</li>
+<li>as 子句后是临时变量名，实际是一个临时表。</li>
+</ul>
+</li>
+<li>
+<p>定义 trigger 时的 event 和 action：</p>
+<ul>
+<li>
+<p>event 是对数据库的修改操作：insert、delete 和 update</p>
+<ul>
+<li>可以引用更新前后的属性值
+<ul>
+<li><code>referencing old row as</code>: for deletes and updates</li>
+<li><code>referencing new row as</code>: for inserts and updates</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>action 根据数据管理需要完成语句</p>
+</li>
+</ul>
+</li>
+<li>
+<p>trigger 可以在事件发生前也可以在事件发生后触发，可以作为避免非法更新、插入或删除的额外约束</p>
+</li>
+</ul>
+<hr />
+<ul>
+<li>trigger 有很多合适的应用场景，例如早期维护物化视图，但是新版本支持自动维护；早期的复制和维护数据，现在则有专门的内置数据库复制工具；</li>
+</ul>
+<blockquote>
+<p>写 trigger 时要特别小心，因为运行期间一个 trigger 错误会导致引发该 trigger 的 action 语句失败，而且一个 trigger 的动作可以引发另一个触发器，最坏情况下，会导致一个无限的触发链</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/">数据库系统及其应用</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+                    
+                      <a class="hover-with-bg" href="/tags/sql/">sql</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-2/">
+                        <span class="hidden-mobile">数据库｜关系模型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
