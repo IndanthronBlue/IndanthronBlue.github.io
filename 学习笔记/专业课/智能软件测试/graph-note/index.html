@@ -1,0 +1,875 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="设计元素、设计规范、用户实例的图覆盖">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图覆盖｜元素、规范、用户实例">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="设计元素、设计规范、用户实例的图覆盖">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/1.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/2.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/3.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/4.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/5.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/6.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/7.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/8.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/9.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/10.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/11.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/12.png">
+<meta property="article:published_time" content="2022-04-01T16:37:14.000Z">
+<meta property="article:modified_time" content="2022-04-01T16:39:21.088Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="软件测试">
+<meta property="article:tag" content="图覆盖">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/graph-note/1.png">
+  
+  
+  <title>图覆盖｜元素、规范、用户实例 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="图覆盖｜元素、规范、用户实例">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-04-02 00:37" pubdate>
+        2022年4月2日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.3k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      28 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">图覆盖｜元素、规范、用户实例</h1>
+            
+            <div class="markdown-body">
+              <h1 id="设计元素的图覆盖"><a class="markdownIt-Anchor" href="#设计元素的图覆盖"></a> 设计元素的图覆盖</h1>
+<h2 id="设计元素的结构化图覆盖"><a class="markdownIt-Anchor" href="#设计元素的结构化图覆盖"></a> 设计元素的结构化图覆盖</h2>
+<ul>
+<li>
+<p>通常需要基于软件组件的 <strong>耦合(coupling)</strong> 关系来创建图</p>
+<ul>
+<li>应用于设计元素的大部分测试准则要求必须访问程序组件之间的 <strong>连接</strong></li>
+</ul>
+</li>
+<li>
+<p>应用结构化设计覆盖最常用的图叫做 <strong>调用图(Call Graph)</strong></p>
+<ul>
+<li>结点代表 <code>方法或单元</code></li>
+<li>边代表 <code>方法的调用</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="1.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>
+<p>之前的图覆盖准则也可以应用于调用图</p>
+<ul>
+<li><strong>节点覆盖</strong> 要求每个方法至少被调用一次
+<ul>
+<li>所以也被称为方法覆盖</li>
+</ul>
+</li>
+<li><strong>边覆盖</strong> 要求每次调用都被至少执行一次
+<ul>
+<li>所以也被称为调用覆盖</li>
+</ul>
+</li>
+<li>在调用图中点覆盖和边覆盖的效果不好
+<ul>
+<li>内部方法之间可能不会彼此调用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>继承和多态</p>
+<ul>
+<li><strong>注意：</strong> 只是书本作者初步想法，尚未广泛应用</li>
+<li>继承等级关系图(inheritance hierarchy)<br />
+<img src="2.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>在面向对象的软件编程中，不能直接测试类，因为它们是抽象的不可执行的
+<ul>
+<li>继承等级关系图中的边不代表执行的流程，而是指代继承的依赖关系</li>
+<li>因此需要在原图基础上对其中的每个类进行实例化<br />
+<img src="3.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+</ul>
+</li>
+<li><strong>面向对象的调用覆盖(OO call Coverage)</strong>: 要求调用图中的每个类的对象必须覆盖
+<ul>
+<li>这个准则是聚合准则，因为它要求调用覆盖必须包括每个类的至少一个对象</li>
+<li>TR 包含类层次结构中为每个类实例化的对象的调用图中的每个可达节点</li>
+</ul>
+</li>
+<li><strong>全对象调用(OO Object Call)准则</strong> : 要求每个类的每个对象都必须被实例化
+<ul>
+<li>TR 包含类层次结构中为每个类实例化的<code>每个对象</code>的调用图中的每个可达节点</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="设计元素的数据流图覆盖"><a class="markdownIt-Anchor" href="#设计元素的数据流图覆盖"></a> 设计元素的数据流图覆盖</h2>
+<ul>
+<li>术语
+<ul>
+<li>调用者 Caller: 调用其他单元的单元</li>
+<li>被调用者 Callee: 被调用的单元</li>
+<li>调用点 Call site: 调用实现时所在的语句</li>
+<li>实参 Actual parameter: 调用者拥有的变量</li>
+<li>形参 Formal parameter: 赋值给被调用者的变量
+<ul>
+<li>两个单元的调用界面就是由实参到形参的映射</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="4.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>
+<p>在集成测试中，通常只关心程序单元<code>接口</code>能正常工作</p>
+<ul>
+<li>只需要关注在调用单元中和从被调用单元返回 <strong>之前</strong> 变量的 <strong>最后</strong> 定义，以及在调用单元中和从被调用单元返回 <strong>之后</strong> 变量的 <strong>首次</strong> 使用</li>
+</ul>
+</li>
+<li>
+<p><strong>最后定义 Last-def</strong></p>
+<ul>
+<li>用来定义一个变量 x 的一组节点的集合，对于这个变量来说，存在一条从这些节点经过调用点再到达另一单元中使用的无重复定义路径
+<ul>
+<li>可以从调用方到被调用方(参数或共享变量) ，或者从被调用方到调用方作为返回值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>首次使用 First-use</strong></p>
+<ul>
+<li>一个变量 y 的使用所在的一组节点的集合。对于 y 来说，存在一条从起始节点（如果使用是在被调用者）或调用点（如果使用是在调用者）到达这些节点的 <code>无重复定义且无重复使用的</code> 路径</li>
+</ul>
+</li>
+</ul>
+<p><img src="5.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="6.png" srcset="/img/loading.gif" lazyload alt="最后定义和首次使用的集合" /></p>
+<hr />
+<ul>
+<li><strong>耦合的定义使用路径(coupling du-path)</strong> : 从一个最后定义到一个首次使用的路径</li>
+<li><strong>全耦合定义(All-Coupling-Def)覆盖</strong> : 要求执行从每个最后定义到达至少一个首次使用的路径</li>
+<li><strong>全耦合使用(All-Coupling-Use)覆盖</strong> : 要求执行从每个最后定义到达每个首次使用的路径</li>
+<li><strong>全耦合定义使用(All-Coupling-du-Path)覆盖</strong> : 要求游历每一条从每个最后定义到每个首次使用的简单路径</li>
+</ul>
+<hr />
+<ul>
+<li>重要事项
+<ul>
+<li>只考虑在被调用者中使用或定义的变量</li>
+<li>必须关注类和全局变量<code>隐式的初始化</code></li>
+<li>不专门考虑 “可传递的定义使用对”
+<ul>
+<li>如果单元 A 调用单元 B, 单元 B 调用单元 C, A 中的最后定义不会到达 C 中的首次使用</li>
+</ul>
+</li>
+<li>只考虑<code>数组中的一个元素的引用</code>来代表对整个数组的引用</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h1 id="设计规范的图覆盖"><a class="markdownIt-Anchor" href="#设计规范的图覆盖"></a> 设计规范的图覆盖</h1>
+<ul>
+<li>设计规范(desigh specification) 描述了软件应该展示的方方面面</li>
+<li>设计规格可能反映也可能不反映实现情况
+<ul>
+<li>更准确地说 —— 实现可能并不完全反映规范</li>
+<li>设计规范通常被称为软件的模型</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="测试顺序约束"><a class="markdownIt-Anchor" href="#测试顺序约束"></a> 测试顺序约束</h2>
+<ul>
+<li>
+<p>基于类的调用图通常是不连通的，在很多情况下比如带有朝向数据类型(Abstract Data Type)的时候，一个类内部的方法间不会相互调用。然而，调用的<code>顺序</code>几乎总是受到规则的约束：</p>
+<ul>
+<li>许多抽象数据类型在使用前都必须初始化</li>
+<li>只有向一个栈中压入元素后，才可以从这个栈中弹出元素</li>
+</ul>
+</li>
+<li>
+<p><strong>顺序约束(sequencing constraint)</strong> 是将顺序限制施加于某些被调用的方法的规则</p>
+<ul>
+<li>它们可以被编码为先决条件或其他规范</li>
+<li>顺序约束有时显式表示出来，有时隐式显示出来，有时不以任何方式表示，有时顺序约束被写成前置条件，或是其他的规范</li>
+<li>顺序约束不能覆盖所有的行为，只能抽象出一些关键的方面</li>
+<li>使用顺序约束来生成测试需求
+<ul>
+<li>目标是找到<code>违反</code>顺序约束的路径</li>
+<li>如果程序正确，所有的测试要求将不可行</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="测试软件的行为状态"><a class="markdownIt-Anchor" href="#测试软件的行为状态"></a> 测试软件的行为状态</h2>
+<ul>
+<li>
+<p>基于规范使用图的另一种主要方法是通过应用某种形式的 <strong>有限状态机</strong> (finite state machine, FSM) 来为软件的行为状态建模</p>
+</li>
+<li>
+<p>有限状态机(FSM) 是一个描述在执行过程中如何修改软件变量的图</p>
+<ul>
+<li>用节点代表软件运行行为中的状态</li>
+<li>用边代表状态之间的迁移</li>
+<li>局限性: FSMs 对于具有很多状态的程序(例如 gui)并不总是实用的，状态数太多，容易引起状态空间爆炸</li>
+</ul>
+</li>
+<li>
+<p>动作可以表示对变量或变量条件的更改</p>
+<ul>
+<li>迁移动作、入口动作、出口动作</li>
+<li>前置条件(precondition) 也称作监控条件(guard), 定义了激活迁移变量所需要的特殊值</li>
+<li>触发事件(triggering event) 是导致迁移发生所需的变量值的改变</li>
+</ul>
+</li>
+</ul>
+<p><img src="7.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<ul>
+<li>
+<p>有限状态机中的覆盖要求</p>
+<ul>
+<li>节点覆盖：需要有点状态机中的每个状态被至少访问一次，也称作状态覆盖(state coverage)</li>
+<li>边覆盖：要求有限状态机中的每条迁移至少被访问一次，也称作迁移覆盖(transition coverage)</li>
+<li>边对覆盖：执行所有迁移对(transition-pair)</li>
+</ul>
+</li>
+<li>
+<p>在有限状态机中使用数据流覆盖有些麻烦</p>
+<ul>
+<li>在大部分有限状态机的定义中，节点不允许含有变量的定义或使用
+<ul>
+<li>即所有的动作都在迁移上</li>
+</ul>
+</li>
+<li>有限状态机中具有<code>相同节点的不同边</code>不需要一样的定义集合和使用集合</li>
+<li>根据触发器的语义，相关变量改变的影响会立即发生作用，随着迁移进入下一状态
+<ul>
+<li>触发变量的定义会<code>立即到达</code>使用</li>
+</ul>
+</li>
+<li>FSM 不总能对所有变量的赋值进行建模
+<ul>
+<li>可以清除标注出使用，但不容易找到定义</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<ul>
+<li>从程序中推导 FSMs 的策略
+<ul>
+<li>结合控制流图（不推荐）
+<ul>
+<li>构造出来的不是真正的 FSM，不能反映状态变化情况</li>
+<li>方法必须回到合适的调用点
+<ul>
+<li>意味着包含了内在的不确定性</li>
+</ul>
+</li>
+<li>代码实现在构图之前必须完成</li>
+</ul>
+</li>
+<li>使用软件结构（不推荐）
+<ul>
+<li>考虑软件操作的整体流程</li>
+<li>不是真正的状态</li>
+<li>这种推到非常主观，不同的测试者会画出不同的图</li>
+<li>需要对软件深入了解，需要提供详细的设计</li>
+</ul>
+</li>
+<li>基于<code>状态变量</code>建模（推荐）
+<ul>
+<li>状态变量通常很早就定义好了</li>
+<li>第一步是识别状态变量，然后选择哪些和 FSM 有实际的联系（例如全局变量和类变量）</li>
+<li>理论上，每个状态变量值的组合都定义了一个不同的状态，有状态爆炸的风险，需要简化模型</li>
+<li>在实践中，我们必须确定<code>全部处于同一状态的范围或值集</code></li>
+</ul>
+</li>
+<li>使用隐式或显示的规范</li>
+</ul>
+</li>
+</ul>
+<p><img src="8.png" srcset="/img/loading.gif" lazyload alt="多级自动状态机, Hierarchical FSMs" /></p>
+<ul>
+<li>一个 FSM 可以被包含在另一个 FSM 中</li>
+</ul>
+<p><img src="9.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>将图覆盖应用于 FSM 的权衡
+<ul>
+<li>优点：
+<ul>
+<li>可以在实现之前设计测试</li>
+<li>分析 FSMs 比分析源代码要容易得多</li>
+</ul>
+</li>
+<li>缺点：
+<ul>
+<li>有些实现决策在 FSM 中没有建模</li>
+<li>由于推导 FSMs 的主观性质，存在多种结果</li>
+<li>测试必须“映射”到程序的实际输入 —— 在 FSM 中出现的名称可能与程序中的名称不同</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h1 id="用例的图覆盖"><a class="markdownIt-Anchor" href="#用例的图覆盖"></a> 用例的图覆盖</h1>
+<ul>
+<li>UML 用例通常用于表达软件需求
+<ul>
+<li>它们帮助表达计算机应用程序的<code>工作流程</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="10.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="11.png" srcset="/img/loading.gif" lazyload alt="用例描述" /></p>
+<ul>
+<li>
+<p>活动图展示的是活动之间的流动</p>
+<ul>
+<li>活动可以给不同的事情建模，包括状态的改变、返回值和逻辑计算</li>
+<li>推荐使用活动来为用例建模</li>
+<li>活动图有两种节点：动作状态和顺序分支</li>
+</ul>
+</li>
+<li>
+<p>构建活动图：</p>
+<ul>
+<li>用例描述中的数字标注的步骤表达了角色所做的行为</li>
+<li>这些步骤对应于软件的输入或输出，是活动图中的行为<code>状态节点</code></li>
+<li>用例中的替换选项代表软件或角色所做的决定，是活动图中的<code>顺序分支节点</code></li>
+</ul>
+</li>
+<li>
+<p>对于从用例中构建的活动图：</p>
+<ul>
+<li>通常不包含很多循环，所含大部分循环有严格的上下限或确定的循环数</li>
+<li>多项子句的复杂谓词是很少见的，这意味着逻辑覆盖准则通常无用</li>
+<li>没有明显的数据定义使用对，<code>数据流覆盖准则不适用</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="12.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h2 id="用例场景"><a class="markdownIt-Anchor" href="#用例场景"></a> 用例场景</h2>
+<ul>
+<li>用例场景是一条用例的<code>实例</code>，或是贯穿用例的一条完整路径</li>
+<li>场景测试(Scenario Testing)
+<ul>
+<li>应该对用户有语义上的意义</li>
+<li>路径的数量通常是有限的</li>
+<li>使用 <code>指定路径覆盖</code> ，得到的集合 S 就是所有场景的集合
+<ul>
+<li>如果测试人员包括了所有的路径作为场景，那么指定路径覆盖就等同于完全路径覆盖</li>
+<li>选择场景由人的专业知识来定，因此<code>指定路径覆盖不一定包含边覆盖或节点覆盖</code></li>
+<li>在实际情况中，指定路径覆盖应该覆盖所有的边</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/">智能软件测试</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/">软件测试</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%9B%BE%E8%A6%86%E7%9B%96/">图覆盖</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/sql-high/">
+                        <span class="hidden-mobile">SQL｜高级 SQL</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
