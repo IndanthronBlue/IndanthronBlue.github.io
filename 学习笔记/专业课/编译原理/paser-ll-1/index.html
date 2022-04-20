@@ -1,0 +1,806 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="LL(1) 中的第一个 L 表示从左向右扫描输入，第二个 L 表示产生最左推导，1 表示每一步只需要向前看一个输入符号来决定语法分析动作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="语法分析｜自顶向下的语法分析">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="LL(1) 中的第一个 L 表示从左向右扫描输入，第二个 L 表示产生最左推导，1 表示每一步只需要向前看一个输入符号来决定语法分析动作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/1.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/2.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/3.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/4.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/5.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/6.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/7.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/8.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/9.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/10.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/11.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/12.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/13.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/14.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/15.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/16.png">
+<meta property="article:published_time" content="2022-04-20T02:50:36.000Z">
+<meta property="article:modified_time" content="2022-04-20T02:57:26.482Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="编译原理">
+<meta property="article:tag" content="语法分析">
+<meta property="article:tag" content="LL(1)">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/1.png">
+  
+  
+  <title>语法分析｜自顶向下的语法分析 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="语法分析｜自顶向下的语法分析">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-04-20 10:50" pubdate>
+        2022年4月20日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      31 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">语法分析｜自顶向下的语法分析</h1>
+            
+            <div class="markdown-body">
+              <h1 id="自顶向下的语法分析"><a class="markdownIt-Anchor" href="#自顶向下的语法分析"></a> 自顶向下的语法分析</h1>
+<ul>
+<li>
+<p>自顶向下语法分析可以被看作是为输入串构造语法分析树的问题</p>
+<ul>
+<li>它从语法分析树的<code>根节点</code>开始，按照先根次序创建这颗语法分析树的各个节点</li>
+<li>自顶向下语法分析也可以被看作是寻找输入串的<code>最左推导</code>的过程</li>
+</ul>
+</li>
+<li>
+<p>在一个自顶向下语法分析的每一步中，关键问题是对一个非终结符号应用哪个产生式</p>
+<ul>
+<li>一旦选择了某个 A 产生式，语法分析过程的其余部分负责将相应产生式体中的终结符号和输入相匹配</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="递归下降的语法分析"><a class="markdownIt-Anchor" href="#递归下降的语法分析"></a> 递归下降的语法分析</h2>
+<blockquote>
+<p>Recursive-Descent Parsing (uses Backtracking)</p>
+</blockquote>
+<ul>
+<li>一个递归下降语法分析程序由一组过程组成，每个非终结符号有一个对应的过程
+<ul>
+<li>程序的执行从开始符号对应的过程开始，如果这个过程的过程体<code>扫描了整个输入串</code>，它就停止执行并宣布语法分析成功完成</li>
+<li>通用的递归下降分析技术可能需要回溯。也就是说，它可能需要重复扫描输入</li>
+</ul>
+</li>
+</ul>
+<p><img src="1.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h2 id="first-和-follow"><a class="markdownIt-Anchor" href="#first-和-follow"></a> FIRST 和 FOLLOW</h2>
+<ul>
+<li>在自顶向下语法分析过程中，FIRST 和 FELLOW 使得我们可以根据下一个输入符号来选择应用哪个产生式
+<ul>
+<li>在恐慌模式的错误恢复中，由 FOLLOW 产生的词法单元集合可以作为同步词法单元</li>
+</ul>
+</li>
+</ul>
+<hr />
+<ul>
+<li><strong>FIRST(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span>)</strong> 被定义为可从 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span> 推导得到的串的首符号的集合
+<ul>
+<li>其中 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span> 是任意的文法符号串</li>
+<li>如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi><msup><mo>⇒</mo><mo>∗</mo></msup><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\alpha \Rightarrow^* \epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.688696em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel">⇒</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ϵ</span></span></span></span> 那么 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ϵ</span></span></span></span> 也在 FIRST(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span>) 中</li>
+</ul>
+</li>
+</ul>
+<p><img src="2.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>如何在预测分析中使用 FIRST
+<ul>
+<li>考虑两个 A 产生式: <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>α</mi><mi mathvariant="normal">∣</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">A \rightarrow \alpha | \beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span>, 其中 FIRST(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span>) 和 FIRST(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span>) 是不相交的集合</li>
+<li>只需要查看下一个输入符号 a，就可以在这两个 A 产生式中进行选择
+<ul>
+<li>因为 a 只能出现在 FIRST(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span>) 或 FIRST(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span>) 中，但不可能同时出现在两个集合中</li>
+<li>比如，如果 a 在 FIRST(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span>) 中，就选择 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">A \rightarrow \beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="计算任何串的first计算first示例另一种计算first的方法"><a class="markdownIt-Anchor" href="#计算任何串的first计算first示例另一种计算first的方法"></a> <img src="3.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="4.png" srcset="/img/loading.gif" lazyload alt="计算任何串的FIRST" /><br />
+<img src="5.png" srcset="/img/loading.gif" lazyload alt="计算FIRST示例" /><br />
+<img src="6.png" srcset="/img/loading.gif" lazyload alt="另一种计算FIRST的方法" /></h2>
+<ul>
+<li>
+<p>对于非终结符号 A, <strong>FOLLOW(A)</strong> 被定义为可能在某些句型中紧跟在 A 右边的终结符号的集合</p>
+<ul>
+<li>例如形如 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>S</mi><msup><mo>⇒</mo><mo>∗</mo></msup><mi>α</mi><mi>A</mi><mi>a</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">S \Rightarrow ^* \alpha A a \beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.688696em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel">⇒</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mord mathdefault">A</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span> 的推导，终结符号 a 就在 FOLLOW(A) 中，其中 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span> 是文法符号串
+<ul>
+<li>在这个推导的某个阶段，A 和 a 之间可能存在一些文法符号，如果这样，这些符号会推导得到 ∈ 并消失</li>
+</ul>
+</li>
+<li>另外，如果 A 是某些句型的最右符号，那么 $ 也在 FOLLOW(A) 中</li>
+</ul>
+</li>
+<li>
+<p>计算所有非终结符号 A 的 FOLLOW（A） 集合时，不断应用下面的规则，直到再没有新的终结符号可以被加入到任意 FOLLOW 集合中为止</p>
+<ul>
+<li>将 $ 放到 FOLLOW（S）中，其中 S 是<code>开始符号</code>，而 $ 是输入右端的结束标记</li>
+<li>如果存在一个产生式 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>α</mi><mi>B</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">A \rightarrow \alpha B \beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span>, 那么FIRST(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span>) 中除 ∈ 之外的所有符号都在 FOLLOW(B) 中</li>
+<li>如果存在一个产生式 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>α</mi><mi>B</mi></mrow><annotation encoding="application/x-tex">A \rightarrow \alpha B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span></span></span></span> 或存在产生式 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>α</mi><mi>B</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">A \rightarrow \alpha B \beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span> 且 FIRST(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span>) 包含 ∈, 那么 FOLLOW(A) 中的所有符号都在 FOLLOW(B) 中</li>
+</ul>
+</li>
+</ul>
+<p><img src="7.png" srcset="/img/loading.gif" lazyload alt="计算FOLLOW示例" /></p>
+<hr />
+<h2 id="ll1-文法"><a class="markdownIt-Anchor" href="#ll1-文法"></a> LL(1) 文法</h2>
+<ul>
+<li>
+<p>对于 LL(1) 文法，可以构造出 <strong>预测分析器</strong> 即不需要回溯的递归下降语法分析器</p>
+<ul>
+<li>LL(1) 中的第一个 L 表示从左向右扫描输入，第二个 L 表示产生最左推导，1 表示每一步只需要向前看一个输入符号来决定语法分析动作</li>
+</ul>
+</li>
+<li>
+<p>LL(1) 文法已经足够描述大部分程序设计语言构造，虽然在为源语言设计适当的文法时需要多加小心。</p>
+<ul>
+<li>比如，<code>左递归的文法和二义性的文法</code>都不可能是 LL(1) 的</li>
+</ul>
+</li>
+<li>
+<p>一个文法 G 是 LL(1) 的，当且仅当 G 的任意两个不同的产生式 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>α</mi><mi mathvariant="normal">∣</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">A \rightarrow \alpha | \beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span> 满足下面的条件：</p>
+<ul>
+<li>不存在终结符号 a 使得 α 和 β 都能够推导出以 a 开头的串</li>
+<li>α 和 β 中最多只有一个可以推导出空串</li>
+<li>如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi><msup><mo>⇒</mo><mo>∗</mo></msup><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\beta \Rightarrow ^* \epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel">⇒</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ϵ</span></span></span></span>, 那么 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span> 不能推导出任何以 FOLLOW(A) 中某个终结符号开头的串；</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>前两个条件等价于说 FIRST(α) 和 FIRST(β) 是不相交的集合。<br />
+第三个条件等价于说如果 ∈ 在 FIRST(β) 中，那么 FIRST(α) 和 FOLLOW(A) 是不相交的集合，并且当 ∈ 在 FIRST(α) 中时类似结论成立。</p>
+</blockquote>
+<ul>
+<li>之所以能够为 LL(1) 文法构造预测分析器，原因是只需要检查当前输入符号就可以为一个非终结符号选择正确的产生式</li>
+</ul>
+<hr />
+<ul>
+<li>算法： <strong>构造一个预测分析表</strong>
+<ul>
+<li>输入：文法 G</li>
+<li>输出：预测分析表 M[A, a]
+<ul>
+<li>这是一个二维数组，其中 A 是一个非终结符号，a 是一个终结符号或特殊符号 $</li>
+</ul>
+</li>
+<li>方法：对于文法 G 的每个产生式 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">A \rightarrow \alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span>, 进行如下处理
+<ul>
+<li>对于 FIRST(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span>) 中的每个终结符号 a，将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">A \rightarrow \alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span> 加入到 M[A, a] 中</li>
+<li>如果 ∈ 在 FIRST(α) 中，那么对于 FOLLOW(A) 中的每个终结符号 b，将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">A \rightarrow \alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span> 加入到 M[A, b] 中</li>
+<li>如果 ∈ 在 FIRST(α) 中，且 $ 在 FOLLOW(A) 中，也将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">A \rightarrow \alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span> 加入到 M[A, $] 中</li>
+<li>在完成上面的操作之后，如果 M[A, a] 中没有产生式，那么将 M[A, a] 设置为 error</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="8.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="9.png" srcset="/img/loading.gif" lazyload alt="计算预测分析表的示例" /></p>
+<hr />
+<ul>
+<li>对于存在 <strong>二义性</strong> 的文法：
+<ul>
+<li>考虑如下文法，该文法抽象地表示了悬空 else 的问题
+<ul>
+<li>S → iEtSS′ | a</li>
+<li>S′ → eS | ∈</li>
+<li>E → b</li>
+</ul>
+</li>
+<li>该文法的语法分析表如下<br />
+<img src="10.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>这个文法是二义性的，M{S′, e] 的条目同时包含了 S′ → eS 和 S′ → ∈</li>
+<li>当在输入中看到 e（代表else）时，解决选择使用哪个产生式的问题就会显露出此文法的二义性</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="非递归的预测分析"><a class="markdownIt-Anchor" href="#非递归的预测分析"></a> 非递归的预测分析</h2>
+<ul>
+<li>可以构造一个非递归的预测分析器
+<ul>
+<li>它显式地维护一个栈结构，而不是通过递归调用的方式隐式地维护栈</li>
+<li>这样的语法分析器可以模拟最左推导的过程</li>
+</ul>
+</li>
+</ul>
+<p><img src="11.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>
+<p>由分析表驱动的语法分析器有一个输入缓冲区，一个包含了文法符号序列的栈，一个分析表，以及一个输出流</p>
+<ul>
+<li>它的输入缓冲区中包含要进行语法分析的串，串后面跟有结束标记 $</li>
+<li>用符号 $ 来标记栈底。在开始时刻，栈中 $ 的上方是开始符号 S</li>
+</ul>
+</li>
+<li>
+<p>语法分析器由一个程序控制。该程序考虑栈顶符号 X 和当前输入符号 a</p>
+<ul>
+<li>如果 X 是一个非终结符号，该分析器查询分析表M中的条目 M[X, a] 来选择一个 X 产生式</li>
+<li>否则，它检查终结符号 X 和当前输入符号 a 是否匹配</li>
+</ul>
+</li>
+<li>
+<p><strong>表驱动的预测语法分析</strong></p>
+<ul>
+<li>输入：一个串 w，文法 G 的预测分析表 M</li>
+<li>输出：如果 w 在 L(G) 中，输出 w 的一个最左推导；否则给出一个错误指示</li>
+<li>方法：
+<ul>
+<li>最初，语法分析器的格局如下：输入缓冲区中是 w$，而 G 的开始符号 S 位于栈顶，它的下面是 $</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="12.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="13.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="14.png" srcset="/img/loading.gif" lazyload alt="预测分析时执行的步骤" /></p>
+<hr />
+<h2 id="预测分析中的错误恢复"><a class="markdownIt-Anchor" href="#预测分析中的错误恢复"></a> 预测分析中的错误恢复</h2>
+<ul>
+<li>
+<p>在讨论错误恢复时要考虑一个由分析表驱动的预测分析器的栈，因为这个栈明确地显示了语法分析器期望用哪些终结符号及非终结符号来匹配余下的输入。</p>
+</li>
+<li>
+<p>当栈顶的终结符号和下一个输入符号不匹配时，或者当非终结符号 A 处于栈顶，a 是下一个输入符号，且 M[A, a] 为 error, 即相应的语法分析表条目为空时，预测语法分析过程就可以检测到语法错误</p>
+</li>
+</ul>
+<hr />
+<h3 id="恐慌模式"><a class="markdownIt-Anchor" href="#恐慌模式"></a> 恐慌模式</h3>
+<ul>
+<li>
+<p>恐慌模式的错误恢复是基于以下思想</p>
+<ul>
+<li>语法分析器 <strong>忽略</strong> 输入中的一些符号，直到输入中出现由设计者选定的同步词法单元集合中的某个词法单元</li>
+<li>它的有效性依赖于同步集合的选取。选取这个集合的原则是应该使得语法分析器能够从实践中可能遇到的错误中快速恢复</li>
+</ul>
+</li>
+<li>
+<p>一些启发性规则：</p>
+<ul>
+<li>首先将 FOLLOW(A) 中的所有符号都放到非终结符号 A 的同步集合中。如果我们不断忽略一些词法单元，直到碰到了 FOLLOW(A) 中的某个元素，然后再将 A 从栈中弹出，那么很可能语法分析过程就能够继续进行
+<ul>
+<li>只使用 FOLLOW（A) 作为 A 的同步集合是不够的，可以把较高层构造的开始符号加入到较低层构造的同步集合中去</li>
+</ul>
+</li>
+<li>把 FIRST(A) 中的符号加入到非终结符号 A 的同步集合中，那么当 FIRST(A) 中的某个符号出现在输入中时，我们就有可能可以根据 A 继续进行语法分析</li>
+<li>如果栈顶的一个终结符号不能和输入匹配，一个简单的想法是将该终结符号弹出栈，并发出一个消息称已经插入了这个终结符号，同时继续进行语法分析</li>
+</ul>
+</li>
+</ul>
+<p><img src="15.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="16.png" srcset="/img/loading.gif" lazyload alt="错误恢复示例" /></p>
+<ul>
+<li>使用 “synch” 来表示根据相应非终结符号的 FOLLOW 集合得到的同步词法单元
+<ul>
+<li>如果语法分析器查看 M[A, a] 并发现它是空的，那么输入符号 a 就被忽略</li>
+<li>如果该条目是 “synch”，那么在试图继续分析时，栈顶的非终结符号被弹出</li>
+<li>如果栈顶的词法单元和输入符号不匹配，那么我们就按上述方式从栈中弹出这个单元</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="短语层次的恢复"><a class="markdownIt-Anchor" href="#短语层次的恢复"></a> 短语层次的恢复</h3>
+<ul>
+<li>短语层次错误恢复的实现方法是在预测语法分析表的空白条目中填写指向处理例程的指针，该例程将处理该错误情况</li>
+<li>错误例程可能是：
+<ul>
+<li>改变栈中符号或将新符号压入栈中或弹出栈中符号</li>
+<li>发出适当的错误消息</li>
+<li>改变符号表</li>
+</ul>
+</li>
+<li>必须保证分析器不会陷入无限循环
+<ul>
+<li>防止出现无限循环的一个好办法是保证任何恢复动作最终都会消耗掉某个输入符号（当到达输入结尾处时，则需要保证栈中的内容会变少）</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/">语法分析</a>
+                    
+                      <a class="hover-with-bg" href="/tags/LL-1/">LL(1)</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/softwaretest-logic-1/">
+                        <span class="hidden-mobile">逻辑覆盖｜逻辑覆盖标准</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
