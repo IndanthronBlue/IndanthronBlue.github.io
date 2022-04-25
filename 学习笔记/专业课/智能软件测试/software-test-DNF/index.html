@@ -1,0 +1,908 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="本节考虑待测的谓词处于一种特殊的形式，称为析取范式(DNF)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逻辑覆盖｜语法逻辑覆盖">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="本节考虑待测的谓词处于一种特殊的形式，称为析取范式(DNF)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/1.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/2.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/3.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/4.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/5.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/6.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/7.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/8.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/9.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/10.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/13.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/11.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/12.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/14.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/15.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/16.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/17.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/18.png">
+<meta property="article:published_time" content="2022-04-25T15:41:25.000Z">
+<meta property="article:modified_time" content="2022-04-25T15:44:29.155Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="软件测试">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/software-test-DNF/1.png">
+  
+  
+  <title>逻辑覆盖｜语法逻辑覆盖 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="逻辑覆盖｜语法逻辑覆盖">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-04-25 23:41" pubdate>
+        2022年4月25日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.4k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      28 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">逻辑覆盖｜语法逻辑覆盖</h1>
+            
+            <div class="markdown-body">
+              <h1 id="逻辑覆盖"><a class="markdownIt-Anchor" href="#逻辑覆盖"></a> 逻辑覆盖</h1>
+<h2 id="语法逻辑覆盖准则"><a class="markdownIt-Anchor" href="#语法逻辑覆盖准则"></a> 语法逻辑覆盖准则</h2>
+<ul>
+<li>
+<p>本节考虑的待测的谓词处于一种特殊的形式：<strong>析取范式(Disjunctive Normal Form,DNF)</strong></p>
+<ul>
+<li><code>字(literal)</code> : 就是子句或是子句的否定（逻辑非运算）</li>
+<li><code>项(term)</code> : 是由逻辑<code>与</code>连接的一组字</li>
+<li>一个 DNF 谓词就是由逻辑或连接的一组项
+<ul>
+<li>DNF 谓词中的项称为<code>蕴含项(implicant)</code>，如果一个单独的项为真，那么这意味着这个谓词为真</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>本节基于 DNF 测试文献中所使用的惯例</p>
+<ul>
+<li>用字<code>相邻</code>表示逻辑与的操作符</li>
+<li><code>+</code> 表示逻辑或的操作符</li>
+<li>上横线表示逻辑非的操作符</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="蕴含项覆盖"><a class="markdownIt-Anchor" href="#蕴含项覆盖"></a> 蕴含项覆盖</h3>
+<ul>
+<li>
+<p>关于 DNF 表示的一种简单的测试方法是对子句赋值使 DNF 表达式中的每个蕴含项被至少一个测试用例满足</p>
+<ul>
+<li>但是这样的测试方法中，谓词的结果均为真</li>
+<li>为了处理这个问题，需要测试谓词以及谓词的否定形式</li>
+</ul>
+</li>
+<li>
+<p><strong>蕴含项覆盖(Implicant Coverage, IC)</strong></p>
+<ul>
+<li>已知一个谓词 f 和非 f ( <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>f</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.08888em;vertical-align:-0.19444em;"></span><span class="mord overline"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span><span style="top:-3.81444em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span></span>) 的 DNF 表达式，对于 f 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>f</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.08888em;vertical-align:-0.19444em;"></span><span class="mord overline"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span><span style="top:-3.81444em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span></span> 中的每个蕴含项，TR 包括的测试需求要求蕴含项的取值为真</li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+<ul>
+<li>考虑谓词 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>=</mo><mi>a</mi><mi>b</mi><mo>+</mo><mi>b</mi><mover accent="true"><mi>c</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">f = ab+b \overline c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">b</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathdefault">c</span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>f</mi><mo stretchy="true">‾</mo></mover><mo>=</mo><mover accent="true"><mi>b</mi><mo stretchy="true">‾</mo></mover><mo>+</mo><mover accent="true"><mi>a</mi><mo stretchy="true">‾</mo></mover><mi>c</mi></mrow><annotation encoding="application/x-tex">\overline f= \overline b + \overline a c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.08888em;vertical-align:-0.19444em;"></span><span class="mord overline"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span><span style="top:-3.81444em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.97777em;vertical-align:-0.08333em;"></span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathdefault">b</span></span><span style="top:-3.81444em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.63056em;vertical-align:0em;"></span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathdefault">a</span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span><span class="mord mathdefault">c</span></span></span></span></li>
+<li>它们共有四个蕴含项：{ab, b<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>c</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline{c}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.63056em;vertical-align:0em;"></span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">c</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>b</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline{b}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.89444em;vertical-align:0em;"></span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">b</span></span></span><span style="top:-3.81444em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.63056em;vertical-align:0em;"></span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span>c}<br />
+<img src="1.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>在这个例子中满足 IC 只需要两个测试用例： {TTF, FFT}</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>IC 保证谓词的结果中包含真和假，所以它包含谓词覆盖。</p>
+</blockquote>
+<ul>
+<li>使用 IC 的问题：
+<ul>
+<li>测试用例可能会满足多个蕴含项</li>
+<li>谓词否定形式的 DNF 表达式不一定具有固定的形式</li>
+<li>总体来说，IC 是一种比较弱的覆盖标准</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="极小-dnf"><a class="markdownIt-Anchor" href="#极小-dnf"></a> 极小 DNF</h3>
+<ul>
+<li>
+<p>附加定义：</p>
+<ul>
+<li>蕴含项的适当子项<code>(proper subterm)</code>
+<ul>
+<li>是一个去除了一个或多个子项的蕴含项</li>
+<li>例如，abc 的适当子项是 ab, bc, ac, a, b, c</li>
+</ul>
+</li>
+<li>主蕴含项<code>(prime implicant)</code>
+<ul>
+<li>是一个蕴含项，并且它的适当子项不能是所在谓词中的一个蕴含项</li>
+<li>在一个主蕴含项中，移除一个项而不改变谓词的结果是不可能的</li>
+<li>例如：对于谓词 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>=</mo><mi>a</mi><mi>c</mi><mo>+</mo><mi>a</mi><mover accent="true"><mi>b</mi><mo stretchy="true">‾</mo></mover><mi>c</mi></mrow><annotation encoding="application/x-tex">f=ac+a \overline{b}c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.89444em;vertical-align:0em;"></span><span class="mord mathdefault">a</span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">b</span></span></span><span style="top:-3.81444em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span><span class="mord mathdefault">c</span></span></span></span>
+<ul>
+<li>蕴含项 ac 是主蕴含项</li>
+<li>蕴含项 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mover accent="true"><mi>b</mi><mo stretchy="true">‾</mo></mover><mi>c</mi></mrow><annotation encoding="application/x-tex">a \overline{b}c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.89444em;vertical-align:0em;"></span><span class="mord mathdefault">a</span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">b</span></span></span><span style="top:-3.81444em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span><span class="mord mathdefault">c</span></span></span></span> 不是主蕴含项，因为它的适当子项 ac 也是蕴含项</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>冗余<code>(redundant)</code>
+<ul>
+<li>一个蕴含项是冗余的，如果去掉这个蕴含项不会改变谓词的结果</li>
+<li>例如表达式：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>=</mo><mi>a</mi><mi>b</mi><mo>+</mo><mi>a</mi><mi>c</mi><mo>+</mo><mi>b</mi><mover accent="true"><mi>c</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">f=ab+ac+b \overline{c}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">b</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">c</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span>
+<ul>
+<li>蕴含项 ab 是冗余的，谓词 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>=</mo><mi>a</mi><mi>c</mi><mo>+</mo><mi>b</mi><mover accent="true"><mi>c</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">f=ac+b \overline{c}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">c</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span> 和原谓词没有区别</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>一个 DNF 表达式是 <strong>极小的(minimal)</strong> ，如果其每个蕴含项都是主蕴含项并且没有冗余的蕴含项</p>
+<ul>
+<li>极小 DNF 表达式可以通过代数计算或卡诺图手动计算来实现</li>
+</ul>
+</li>
+<li>
+<p>已知一个谓词 f 的极小 DNF 表达式，第 i 个蕴含项的 <strong>唯一真值点(unique true point, UTP)</strong> 指的是对所有子句赋值，使得只有第 i 个蕴含项为真，其余的蕴含项为假</p>
+<ul>
+<li>注意，如果其他蕴含项的结果不能为假，那么这个蕴含项是冗余的</li>
+<li>最小表示保证了每个蕴涵项至少存在一个唯一真值点</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="mutp"><a class="markdownIt-Anchor" href="#mutp"></a> MUTP</h3>
+<ul>
+<li>
+<p><strong>多项唯一真值点覆盖(Multiple Unique True Point Coverage, MUTP)</strong></p>
+<ul>
+<li>已知一个谓词 f 的极小 DNF 表达式，对于 f 中的每个蕴含项 i，选择唯一真值点 (UTP) 使得不在 i 中的子句的取值包括真和假</li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+<ul>
+<li>考虑谓词：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>=</mo><mi>a</mi><mi>b</mi><mo>+</mo><mi>b</mi><mover accent="true"><mi>c</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">f=ab+b \overline{c}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">b</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">c</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span>
+<ul>
+<li>蕴含项：{<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>b</mi><mo separator="true">,</mo><mi>b</mi><mover accent="true"><mi>c</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">ab, b \overline{c}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">b</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">b</span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">c</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span>}</li>
+<li>每个蕴含项都是主蕴含项</li>
+<li>没有冗余的蕴含项</li>
+</ul>
+</li>
+<li>唯一真值
+<ul>
+<li>对于蕴含项 ab: {TTT}</li>
+<li>对于蕴含项 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi><mover accent="true"><mo stretchy="false">(</mo><mo stretchy="true">‾</mo></mover><mi>c</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">b \overline(c)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2000000000000002em;vertical-align:-0.25em;"></span><span class="mord mathdefault">b</span><span class="mord overline"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9500000000000001em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mopen">(</span></span><span style="top:-3.87em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.25em;"><span></span></span></span></span></span><span class="mord mathdefault">c</span><span class="mclose">)</span></span></span></span>: {FTF}</li>
+<li>MUTP 要求以上两者</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="cutpnfp"><a class="markdownIt-Anchor" href="#cutpnfp"></a> CUTPNFP</h3>
+<ul>
+<li>对应唯一真值点，存在一个相对应的假植点
+<ul>
+<li>已知一个谓词 f 的 DNF 表达式，f 中蕴含项 i 的子句 c 的一个 <strong>近似假值点(near false point, NFP)</strong> 指的是：
+<ul>
+<li>对所有子句赋值，使得 f 为假</li>
+<li>但是如果对 c 取反（逻辑非运算）而其他子句取值保持不变，那么 i 的结果将变为真（因此 f 的结果也为真）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>这个子句决定整个谓词</strong></p>
+</blockquote>
+<ul>
+<li>
+<p><strong>唯一真值点-近似假值点配对覆盖(Corresponding Unique True Point and Near False Point Pair Coverage, CUTPNFP)</strong></p>
+<ul>
+<li>已知一个谓词 f 的极小 DNF 表达式，对于每个蕴含项 i 中的每个字 c，TR 包含对于 i 的一个唯一真值点和 i 中 c 的一个近似假值点，使得这两个点的区别只在于 c 的取值</li>
+<li>显然， <strong>CUTPNFP 包含了 RACC</strong></li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+<ul>
+<li>考虑谓词：f = ab + cd
+<ul>
+<li>蕴含项 ab 有 3 个唯一真值点：{TTFF, TTFT, TTTF}
+<ul>
+<li>对于字 a，可以选取唯一真值点 <u>T</u>TFF 配对近似假值点 <u>F</u>TFF</li>
+<li>对于字 b，可以选取唯一真值点 T<u>T</u>FF 配对近似假值点 T<u>F</u>FF</li>
+</ul>
+</li>
+<li>蕴含项 cd 有 3 个唯一真值点：{FFTT, FTTT, TFTT}
+<ul>
+<li>对于字 c，可以选取唯一真值点 FF<u>T</u>T 配对近似假值点 FF<u>F</u>T</li>
+<li>对于字 d，可以选取唯一真值点 FFT<u>T</u> 配对近似假值点 FFT<u>F</u></li>
+</ul>
+</li>
+<li>因此 CUTPNFP 的结果集为 {TTFF, FFTT, TFFF, FTFF, FFTF, FFFT}
+<ul>
+<li>前两个为唯一真值点，其他为近似假值点</li>
+</ul>
+</li>
+<li>CUTPNFP 所需要测试用例的粗略数量为 <code># implicants * # literals</code></li>
+<li>CUTPNFP 不一定可以替代 MUTP</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="mnfp"><a class="markdownIt-Anchor" href="#mnfp"></a> MNFP</h3>
+<ul>
+<li>
+<p><strong>多项近似假值点覆盖(Multiple Near False Point Coverage, MNFP)</strong></p>
+<ul>
+<li>已知一个谓词 f 的极小 DNF 表达式，对于每个蕴含项 i 中的每个字 c, 选择近似假值点(NFP) 使得不在 i 中的子句取值包括真和假</li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>=</mo><mi>a</mi><mi>b</mi><mo>+</mo><mi>b</mi><mover accent="true"><mi>c</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">f=ab+b \overline{c}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">b</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">c</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span>
+<ul>
+<li>蕴含项：{<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>b</mi><mo separator="true">,</mo><mi>b</mi><mover accent="true"><mi>c</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">ab, b \overline{c}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">b</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">b</span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">c</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span>}</li>
+</ul>
+</li>
+<li>真值点：
+<ul>
+<li>对于蕴含项 ab: {TTT, TTF}
+<ul>
+<li>对于 a 而言
+<ul>
+<li>c = true 的 NFP 为 FTT</li>
+<li>c = false 的 NFP 不可行，因为 FTF 使得谓词 f 为真</li>
+</ul>
+</li>
+<li>对于 b 而言，NFP 为 {TFT, TFF}</li>
+</ul>
+</li>
+<li>对于蕴含项 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi><mover accent="true"><mi>c</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">b \overline{c}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">c</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span>: {FTF, TTF}
+<ul>
+<li>对于 b 而言，NFP 为{TFF, FFF}</li>
+<li>对于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>c</mi><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline{c}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.63056em;vertical-align:0em;"></span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">c</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span></span></span></span></span></span></span> 而言，NFP 为 FTT</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>因此，对于谓词 f，它的 MNFP 集合{FTT, TFT, TFF, FFF}</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>MUMCUT</strong> ：已知一个谓词 f 的极小 DNF 表达式，对 f 应用 MUTP、CUTPNFP 和 MNFP</p>
+</blockquote>
+<hr />
+<h3 id="dnf-的错误类别"><a class="markdownIt-Anchor" href="#dnf-的错误类别"></a> DNF 的错误类别</h3>
+<p><img src="2.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="3.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<blockquote>
+<p>关键思想是故障类与测试相关: 保证检测特定故障的测试集也保证检测附加故障</p>
+</blockquote>
+<p><img src="4.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>
+<p>MUTP 可以检测字插入故障(LIF)</p>
+<ul>
+<li>唯一不能被检测的故障类型是 LOF 和 ORF*</li>
+<li>当 MUTP 不是对于谓词中所有的蕴含项都可行的话，不能检测 LIF 故障</li>
+</ul>
+</li>
+<li>
+<p>当 CUTPNFP 可行的时候，CUTPNFP 可以有效检测出：</p>
+<ul>
+<li>LOF 故障
+<ul>
+<li>因为对于项 i 中的每个子句，CUTPNFP 要求一个唯一真值点和一个近似假值点
+<ul>
+<li>这两个测试用例在子句 c 的取值不同</li>
+<li>因此如果 c 被删除了，这两个测试结果会导致相同的值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ORF*, LNF, TNF, ENF 故障</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>CUTPNFP 不一定能检测到 LIF 故障，因此不能替代 MUTP</p>
+</blockquote>
+<hr />
+<h3 id="卡诺图"><a class="markdownIt-Anchor" href="#卡诺图"></a> 卡诺图</h3>
+<blockquote>
+<p>Karnaugh Maps</p>
+</blockquote>
+<ul>
+<li>卡诺图使用表格表示带有特殊属性的谓词，表中相邻项的组合于简单的 DNF 表达式相对应</li>
+</ul>
+<p><img src="5.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>
+<p>利用卡诺图进行谓词化简：</p>
+<ul>
+<li>将邻近的标记为 1 的单元分组到一个大小为 2<sup>k</sup> 的矩形中</li>
+<li>再将没有临近标记为 1 的单元构成大小为 1 的矩形</li>
+<li>分组间允许重叠</li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+</li>
+</ul>
+<p><img src="6.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="7.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="8.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<blockquote>
+<p>卡诺图从左到右，从上到下，在边上都是连接着的</p>
+</blockquote>
+<hr />
+<ul>
+<li>目标：对用于测试逻辑表达式的概念应用卡诺图
+<ul>
+<li>识别 子句何时确定谓词</li>
+<li>识别 谓词的否定</li>
+<li>识别 主蕴涵和冗余蕴涵</li>
+<li>识别 独特的真点</li>
+<li>识别 唯真点/近假点对</li>
+</ul>
+</li>
+</ul>
+<hr />
+<ul>
+<li>判断字句决定谓词的条件
+<ul>
+<li>对于子句 c, 找到 c 的值改变并且谓词 p 的真值标记也改变的组</li>
+</ul>
+</li>
+</ul>
+<p><img src="9.png" srcset="/img/loading.gif" lazyload alt="查找b决定谓词的条件" /></p>
+<hr />
+<ul>
+<li>判断谓词取反
+<ul>
+<li>将原本标记为 t 的部分置空，将原本空的部分标记为 t</li>
+<li>然后将新的图化简即可</li>
+</ul>
+</li>
+</ul>
+<p><img src="10.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<ul>
+<li>判断主蕴含项与冗余
+<ul>
+<li>利用卡诺图将谓词化简至最简即可得到主蕴含项<br />
+<img src="13.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>如果给出的蕴含项被一个最简形式所取范围包含，则该蕴含项不是主蕴含项<br />
+<img src="11.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+<li>如果给出的蕴含项被多个最简形式所取范围包含，则该蕴含项是冗余的<br />
+<img src="12.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+</ul>
+</li>
+</ul>
+<hr />
+<ul>
+<li>找唯一真值点
+<ul>
+<li>即图中取值为真且不存在最简范围重合的点<br />
+<img src="14.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="15.png" srcset="/img/loading.gif" lazyload alt="" /></li>
+</ul>
+</li>
+</ul>
+<hr />
+<ul>
+<li>找 MUTP
+<ul>
+<li>对于 MUTP，可以确定唯一的真值点，其中的子句不在项中同时具有两个真值</li>
+</ul>
+</li>
+</ul>
+<p><img src="16.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="17.png" srcset="/img/loading.gif" lazyload alt="" /><br />
+<img src="18.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%99%BA%E8%83%BD%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/">智能软件测试</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/">软件测试</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/paser-ll-1/">
+                        <span class="hidden-mobile">语法分析｜自顶向下的语法分析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
