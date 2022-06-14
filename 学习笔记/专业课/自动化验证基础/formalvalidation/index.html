@@ -1,0 +1,801 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="挺有意思的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自动化验证基础｜期末复习">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="挺有意思的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/1.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/2.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/3.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/4.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/5.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/6.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/7.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/8.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/9.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/10.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/11.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/12.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/13.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/14.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/15.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/16.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/17.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/18.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/19.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/20.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/21.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/22.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/23.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/24.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/25.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/26.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/27.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/28.png">
+<meta property="article:published_time" content="2022-06-14T15:38:52.000Z">
+<meta property="article:modified_time" content="2022-06-14T15:53:43.897Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="期末复习">
+<meta property="article:tag" content="自动化验证">
+<meta property="article:tag" content="自动机">
+<meta property="article:tag" content="线性时态逻辑">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/1.png">
+  
+  
+  <title>自动化验证基础｜期末复习 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="自动化验证基础｜期末复习">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-06-14 23:38" pubdate>
+        2022年6月14日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.3k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      20 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">自动化验证基础｜期末复习</h1>
+            
+            <div class="markdown-body">
+              <h2 id="命题逻辑"><a class="markdownIt-Anchor" href="#命题逻辑"></a> 命题逻辑</h2>
+<p><strong>等价公式</strong></p>
+<ul>
+<li>吸收律：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>∨</mo><mo stretchy="false">(</mo><mi>A</mi><mo>∧</mo><mi>B</mi><mo stretchy="false">)</mo><mo>=</mo><mi>A</mi></mrow><annotation encoding="application/x-tex">A \lor (A\land B) = A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∨</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∧</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span></span></span></span> 、 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>∧</mo><mo stretchy="false">(</mo><mi>A</mi><mo>∨</mo><mi>B</mi><mo stretchy="false">)</mo><mo>=</mo><mi>A</mi></mrow><annotation encoding="application/x-tex">A \land (A\lor B) = A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∧</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∨</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span></span></span></span></li>
+<li>蕴含式等价：
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>B</mi><mo>⇔</mo><mi mathvariant="normal">¬</mi><mi>A</mi><mo>∨</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A \rightarrow B  \Leftrightarrow \lnot A \lor B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">¬</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∨</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>B</mi><mo>⇔</mo><mi mathvariant="normal">¬</mi><mi>B</mi><mo>→</mo><mi mathvariant="normal">¬</mi><mi>A</mi></mrow><annotation encoding="application/x-tex">A \rightarrow B  \Leftrightarrow \lnot B \rightarrow \lnot A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">¬</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">¬</span><span class="mord mathdefault">A</span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mo stretchy="false">(</mo><mi>B</mi><mo>→</mo><mi>C</mi><mo stretchy="false">)</mo><mo>⇔</mo><mo stretchy="false">(</mo><mi>A</mi><mo>∧</mo><mi>B</mi><mo stretchy="false">)</mo><mo>→</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">A \rightarrow (B \rightarrow C)  \Leftrightarrow (A \land B) \rightarrow C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∧</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span></li>
+</ul>
+</li>
+<li>等价式等价：
+<ul>
+<li>$A \leftrightarrow B \Leftrightarrow (A\land B) \lor (\lnot A\land \lnot B) $</li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>↔</mo><mi>B</mi><mo>⇔</mo><mo stretchy="false">(</mo><mi>A</mi><mo>→</mo><mi>B</mi><mo stretchy="false">)</mo><mo>∧</mo><mo stretchy="false">(</mo><mi>B</mi><mo>→</mo><mi>A</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">A \leftrightarrow B \Leftrightarrow (A\rightarrow B) \land (B\rightarrow A)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">↔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∧</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mclose">)</span></span></span></span></li>
+<li>$\lnot(A \leftrightarrow B) \Leftrightarrow A \leftrightarrow \lnot B $</li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>⨁</mo><mi>B</mi><mo>⇔</mo><mi mathvariant="normal">¬</mi><mo stretchy="false">(</mo><mi>A</mi><mo>↔</mo><mi>B</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">A \bigoplus B \Leftrightarrow \lnot(A \leftrightarrow B)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.00001em;vertical-align:-0.25001em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">⨁</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">¬</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">↔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mclose">)</span></span></span></span></li>
+</ul>
+</li>
+</ul>
+<p><strong>真值表</strong></p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A\rightarrow B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span></span></span></span></th>
+<th><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>↔</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A\leftrightarrow B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">↔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span></span></span></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>合取范式 (CNF)和析取范式 (DNF)</strong></p>
+<ul>
+<li>合取范式：具有形如 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>∧</mo><mo stretchy="false">(</mo><mo>∨</mo><mi>p</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\land(\lor p)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∧</span><span class="mopen">(</span><span class="mord">∨</span><span class="mord mathdefault">p</span><span class="mclose">)</span></span></span></span> 形式的布尔逻辑公式</li>
+<li>析取范式：具有形如 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>∨</mo><mo stretchy="false">(</mo><mo>∧</mo><mi>p</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\lor(\land p)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∨</span><span class="mopen">(</span><span class="mord">∧</span><span class="mord mathdefault">p</span><span class="mclose">)</span></span></span></span> 形式的布尔逻辑公式</li>
+<li>主流的 SAT 求解器都是基于CNF输入</li>
+</ul>
+<p><strong>Tseitin 转换</strong></p>
+<ul>
+<li>
+<p>Tseitin 算法是一个在线性时间内将命题公式转化为 CNF 范式的算法</p>
+<p><img src="1.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+<p><strong>DPLL 算法</strong></p>
+<ul>
+<li>
+<p><strong>DPLL 算法</strong>，是一种完备的，基于<strong>回溯</strong>（backtracking）的搜索算法，用于判定命题逻辑公式（为合取范式形式）的<strong>可满足性</strong>，也就是求解 SAT（布尔可满足性问题）的一种（或者一类）算法。</p>
+<p><img src="2.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+<p><strong>SAT 问题</strong></p>
+<ul>
+<li>给定一个布尔逻辑公式，判定其是否存在解的过程。</li>
+</ul>
+<hr />
+<h2 id="自动机"><a class="markdownIt-Anchor" href="#自动机"></a> 自动机</h2>
+<p><a target="_blank" rel="noopener" href="https://www.cmi.ac.in/~sri/Courses/MCSV/Slides/lecture6.pdf">lecture6.pdf (cmi.ac.in)</a></p>
+<p><strong>确定自动机与非确定自动机</strong></p>
+<p>一个有限自动机可以表示成五元组 𝐴 = (𝛴, 𝑆, 𝑇, I, 𝐹) ，其中</p>
+<ul>
+<li>𝛴 表示字母表的集合</li>
+<li>𝑆 表示状态的集合</li>
+<li>𝑇: 𝑆 × 𝛴  → 𝑆表示迁移函数</li>
+<li>I ⊆ 𝑆 表示初始状态的集合</li>
+<li>𝐹 ⊆ 𝑆 表示终止（接收）状态的集合</li>
+</ul>
+<p><img src="3.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>
+<p>非确定自动机和确定自动机接收的语言没有不同</p>
+</li>
+<li>
+<p>将非确定自动机转化为确定自动机：子集构造法</p>
+<p><img src="4.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="5.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+<p><strong>自动机相关操作</strong></p>
+<p>给定一个自动机𝐴，它能接收的所有字符串集合记为 L(A) 。L(A) 也称为 A 能接收的语言。</p>
+<ul>
+<li>
+<p><strong>自动机取反</strong></p>
+<ul>
+<li>自动机取反是给定一个自动机 𝐴1，求另外一个自动机 𝐴2使得它们<strong>接收的语言互补</strong>，即 L(A1) ∩ L(A2) = ∅，并且 L(A1) ∪ L(A2) = 𝛴∗</li>
+<li>流程：
+<ol>
+<li>给定一个自动机 𝐴，先求解对应的确定化自动机 𝐴<sup>d</sup></li>
+<li>将 A<sup>d</sup> 中<strong>接收状态和非接收状态调换</strong>，其他保持不变，得到自动机 A’</li>
+<li>A’ 即为 A 的取反自动机</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>自动机的并（Union）</strong></p>
+<ul>
+<li>自动机求并是给定两个自动机 A1 和 A2 ，求另外一个自动机 A3 使得 L(A3) = L(A1) ∪ L(A2)</li>
+<li>流程：给定两个自动机 A1、A2
+<ol>
+<li>将 A1 和 A2 的<strong>初始状态合并</strong>，其他保持不变，得到自动机 A3</li>
+<li>A3 即为所求自动机</li>
+</ol>
+</li>
+</ul>
+<p><img src="6.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+<p><strong>无限自动机（Infinite Automata）</strong></p>
+<ul>
+<li>状态是有限的</li>
+<li>接收的字符串长度是无限的</li>
+</ul>
+<p><strong>buchi 自动机</strong></p>
+<p>buchi 自动机的语义：</p>
+<ul>
+<li>有限自动机 A = (𝛴, 𝑆, 𝑇, 𝐼, 𝐹) 接收一组<strong>无限长度</strong>的字符串</li>
+<li>一个字符串 𝜂 = a<sub>0</sub>a<sub>1</sub>… 可以被 A 接收当且仅当存在 𝜂 在 𝐴 上的一条运行轨迹，并且该轨迹<strong>无限次的经过</strong> F 中的某个接收状态</li>
+<li>𝐿(𝐴) 用来表示 A 可以接收的所有字符串的集合</li>
+</ul>
+<blockquote>
+<p>不存在等价的确定  buchi 自动机</p>
+</blockquote>
+<p>buchi 自动机的交</p>
+<ul>
+<li>
+<p>自动机求交是给定两个自动机 A1 和 A2 ，求另外一个自动机 A3 使得 L(A3) = L(A1) ∩ L(A2)</p>
+</li>
+<li>
+<p>形式化写法为：</p>
+<p><img src="7.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>示例：</p>
+<p><img src="8.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+<hr />
+<h2 id="线性时态逻辑"><a class="markdownIt-Anchor" href="#线性时态逻辑"></a> 线性时态逻辑</h2>
+<p><strong>非形式化语义</strong></p>
+<p><img src="9.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="10.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><strong>案例分析</strong></p>
+<ul>
+<li>Something bad § never happens: <strong>G !p</strong></li>
+<li>It is always the case that Something Good §  eventually happens: <strong>G F p</strong></li>
+<li>p happens infinitely often: <strong>G F p</strong></li>
+<li>At some point, p will hold forever: <strong>F G p</strong></li>
+<li>Every request is followed by a grant: <strong>G (req -&gt; F grant)</strong></li>
+<li>p oscillates every time step: <strong>G ((p -&gt; X !p) &amp; (!p -&gt; X p))</strong></li>
+</ul>
+<p><strong>可满足性</strong></p>
+<p>给定一个 LTL 公式 𝜑，是否存在一个无限序列使得 𝜎 ⊨ 𝜑 成立</p>
+<p><strong>LTL to BA</strong></p>
+<ul>
+<li>
+<p>LTL = “a”</p>
+<p><img src="11.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>LTL = “X a”</p>
+<p><img src="12.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>LTL = “F a”</p>
+<p><img src="13.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>LTL = “G a”</p>
+<p><img src="14.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>LTL = “a U b”</p>
+<p><img src="15.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>LTL = “a R b”</p>
+<p><img src="16.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+<p><strong>示例：</strong> LTL = “a U b &amp; c U d”</p>
+<p><img src="17.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="18.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><strong>LTL 析取范式</strong></p>
+<p><img src="19.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="20.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="21.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="22.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi><mi>F</mi><mo stretchy="false">(</mo><mi>F</mi><mi>ϕ</mi><mo stretchy="false">)</mo><mo>=</mo><mi>ϕ</mi><mi mathvariant="normal">∣</mi><mi>X</mi><mi>F</mi><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">NF(F \phi) = \phi | X F \phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault">ϕ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">ϕ</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault">ϕ</span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi><mi>F</mi><mo stretchy="false">(</mo><mi>G</mi><mi>ϕ</mi><mo stretchy="false">)</mo><mo>=</mo><mi>ϕ</mi><mo>∧</mo><mi>X</mi><mi>G</mi><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">NF(G \phi) = \phi \land XG\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord mathdefault">G</span><span class="mord mathdefault">ϕ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∧</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord mathdefault">G</span><span class="mord mathdefault">ϕ</span></span></span></span></p>
+<p><strong>示例：</strong> LTL = “G (F a &amp; F ! a)”</p>
+<p><img src="23.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="24.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><strong>确定接收状态</strong></p>
+<ul>
+<li>不含 R 和 G 算子：true 状态</li>
+</ul>
+<hr />
+<h2 id="模型检查"><a class="markdownIt-Anchor" href="#模型检查"></a> 模型检查</h2>
+<p><strong>形式化验证</strong></p>
+<ol>
+<li>将模型抽象成自动机</li>
+<li>将规范<strong>取反</strong>并抽象成自动机</li>
+<li>将模型和规范中得到的自动机求<strong>交</strong>
+<ul>
+<li>如果自动机的交没有可接收的序列，则通过验证</li>
+</ul>
+</li>
+</ol>
+<p><strong>示例</strong></p>
+<p><img src="25.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="26.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="27.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="28.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<blockquote>
+<p>没有接收状态，因此不存在一个无限序列满足两个自动机的交</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/">自动化验证基础</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/">期末复习</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81/">自动化验证</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%87%AA%E5%8A%A8%E6%9C%BA/">自动机</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BA%BF%E6%80%A7%E6%97%B6%E6%80%81%E9%80%BB%E8%BE%91/">线性时态逻辑</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8/db-nf/">
+                        <span class="hidden-mobile">数据库系统｜关系数据库设计</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
