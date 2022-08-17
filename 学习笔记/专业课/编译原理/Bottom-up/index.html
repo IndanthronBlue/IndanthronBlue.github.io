@@ -1,0 +1,1103 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="一个自底向上的语法分析过程对应于为一个输入串构造语法分析树的过程，它从叶子结点（底部）开始逐渐向上到达根结点（顶部）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="语法分析｜自底向上的语法分析">
+<meta property="og:url" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="一个自底向上的语法分析过程对应于为一个输入串构造语法分析树的过程，它从叶子结点（底部）开始逐渐向上到达根结点（顶部）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/1.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/2.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/3.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/4.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/5.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/6.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/7.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/8.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/9.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/10.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/11.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/13.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/12.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/14.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/15.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/16.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/17.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/18.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/19.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/20.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/21.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/22.png">
+<meta property="og:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/23.png">
+<meta property="article:published_time" content="2022-08-17T17:09:40.000Z">
+<meta property="article:modified_time" content="2022-08-17T17:11:57.836Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="编译原理">
+<meta property="article:tag" content="语法分析">
+<meta property="article:tag" content="LR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Bottom-up/1.png">
+  
+  
+  <title>语法分析｜自底向上的语法分析 - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="语法分析｜自底向上的语法分析">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-08-18 01:09" pubdate>
+        2022年8月18日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      51 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">语法分析｜自底向上的语法分析</h1>
+            
+            <div class="markdown-body">
+              <h1 id="自底向上语法分析"><a class="markdownIt-Anchor" href="#自底向上语法分析"></a> 自底向上语法分析</h1>
+<ul>
+<li>
+<p>一个自底向上的语法分析过程对应于为一个输入串构造语法分析树的过程，它从叶子结点（底部）开始逐渐向上到达根结点（顶部）</p>
+<p><img src="1.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>自底向上解析也称为<strong>移入-规约(shift-reduce) 解析</strong>，因为它的两个主要操作是 shift 和 reduce</p>
+</li>
+</ul>
+<hr />
+<h2 id="归约"><a class="markdownIt-Anchor" href="#归约"></a> 归约</h2>
+<ul>
+<li>
+<p>将自底向上语法分析过程看成将一个串 w “归约”为文法开 始符号的过程</p>
+<ul>
+<li>在每个**归约（reduction）**步骤中，一个与某产生式体相匹配的特定子串被替换为该产生式头部的非终结符号</li>
+</ul>
+</li>
+<li>
+<p>一次归约是一个推导步骤的反向操作，因此，自底向上语法分析的目标是反向构造一个推导过程。</p>
+<p><img src="2.png" srcset="/img/loading.gif" lazyload alt="归约的示例" /></p>
+</li>
+</ul>
+<hr />
+<h2 id="句柄剪枝"><a class="markdownIt-Anchor" href="#句柄剪枝"></a> 句柄剪枝</h2>
+<ul>
+<li>
+<p>对输入进行从左到右的扫描，并在扫描过程中进行自底向上语法分析，就可以反向构造出一个最右推导</p>
+</li>
+<li>
+<p>非正式地讲，<strong>句柄(handle)</strong> 是和某个产生式体匹配的子串，对它的归约代表了相应的最右推导中的一个反向步骤</p>
+<ul>
+<li>和某个产生式体匹配的最左子串不一定是句柄</li>
+</ul>
+</li>
+<li>
+<p>如果有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>S</mi><msubsup><mo>⇒</mo><mrow><mi>r</mi><mi>m</mi></mrow><mo>∗</mo></msubsup><mi>α</mi><mi>A</mi><mi>w</mi><msubsup><mo>⇒</mo><mrow><mi>r</mi><mi>m</mi></mrow><mo>∗</mo></msubsup><mi>α</mi><mi>β</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">S \Rightarrow ^*_{rm} \alpha A w \Rightarrow ^*_{rm} \alpha \beta w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.935696em;vertical-align:-0.247em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel">⇒</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mord mathdefault mtight">m</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.935696em;vertical-align:-0.247em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel">⇒</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mord mathdefault mtight">m</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span></span></span></span>，那么紧跟 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span> 的产生式 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">A\rightarrow \beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span> 是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi><mi>β</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">\alpha\beta w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span></span></span></span> 的一个句柄</p>
+<ul>
+<li>句柄右边的串w一定只包含终结符号</li>
+</ul>
+</li>
+<li>
+<p>通过句柄剪枝可以得到一个反向的最右推导</p>
+<p><img src="3.png" srcset="/img/loading.gif" lazyload alt="句柄剪枝" /></p>
+</li>
+</ul>
+<hr />
+<h2 id="移入-归约语法分析"><a class="markdownIt-Anchor" href="#移入-归约语法分析"></a> 移入-归约语法分析</h2>
+<ul>
+<li>
+<p>它使用一个栈来保存文法符号，并用一个输入缓冲区来存放将要进行语法分析的其余符号</p>
+<ul>
+<li><strong>句柄总是出现在栈的顶端</strong>，绝不会出现在栈的中间</li>
+</ul>
+</li>
+<li>
+<p>使用 $ 来标记栈的底部以及输入的右端，开始的时候栈是空的，并且输入串 w 存放在输入缓冲区中</p>
+<ul>
+<li>
+<p>在对输入串的一次从左到右扫描过程中，语法分析器将零个或多个输入符号移到栈的顶端，直到它可以对栈顶的一个文法符号串 β 进行归约为止</p>
+</li>
+<li>
+<p>语法分析器不断地重复这个循环，直到它检测到一个语法错误，或者栈中包含了开始符号且输入缓冲区为空为止</p>
+<p><img src="4.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+</li>
+<li>
+<p>实际上一个移入-归约语法分析器可采取如下四种可能的动作</p>
+<ul>
+<li>移入（shift）：将下一个输入符号移到栈的顶端</li>
+<li>归约（reduce）：被归约的符号串的右端必然是栈顶。语法分析器在栈中确定这个串的左端，并决定用哪个非终结符号来替换这个串</li>
+<li>接受（accept）：宣布语法分析过程成功完成</li>
+<li>报错（error）：发现一个语法错误，并调用一个错误恢复子例程</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="移入-归约语法分析中的冲突"><a class="markdownIt-Anchor" href="#移入-归约语法分析中的冲突"></a> 移入-归约语法分析中的冲突</h2>
+<ul>
+<li>堆栈内容和下一个输入符号可能无法决定操作
+<ul>
+<li>移入/规约 冲突：无法判断应该进 行移入还是归约操作</li>
+<li>规约/规约 冲突：无法在多个可能的归约方法中选择正确的归约动作</li>
+</ul>
+</li>
+<li>如果一个语法不能使用移入-规约分析器进行语法分析，那么这个语法不是 LR(k) 语法
+<ul>
+<li>L：从左至右扫描</li>
+<li>R：反向构造出最右推导</li>
+<li>k：向前看 k 个符号</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h1 id="slr-语法分析技术"><a class="markdownIt-Anchor" href="#slr-语法分析技术"></a> SLR 语法分析技术</h1>
+<p><img src="5.png" srcset="/img/loading.gif" lazyload alt="LR分析方法包含关系" /></p>
+<ul>
+<li>covers wide range of grammars
+<ul>
+<li><strong>SLR</strong> – simple LR parser</li>
+<li><strong>LR</strong> – most general LR parser</li>
+<li><strong>LALR</strong> – intermediate LR parser (lookhead LR parser)</li>
+</ul>
+</li>
+<li>SLR、 LR 和 LALR 工作原理相同，只是它们的解析表不同</li>
+</ul>
+<hr />
+<h2 id="lr-语法分析算法"><a class="markdownIt-Anchor" href="#lr-语法分析算法"></a> LR 语法分析算法</h2>
+<p><img src="6.png" srcset="/img/loading.gif" lazyload alt="LR分析器模型" /></p>
+<ul>
+<li>
+<p>它由一个输入、一个输出、一个栈、一个驱动程序和一个语法分析表组成</p>
+<ul>
+<li>语法分析器从输入缓冲区逐个读入符号</li>
+<li>当一个移入-归约语法分析器移入一个符号时，LR语法分析器移入的是一个对应的状态</li>
+</ul>
+</li>
+<li>
+<p>语法分析表由两个部分组成：一个语法分析动作函数 ACTION 和一个转换函数 GOTO</p>
+<ul>
+<li>ACTION函数有两个参数：一个是状态 i，另一个是终结符号 acc（或者是输入结束标记$）。ACTION［i，a］的取值可以有下列四种形式：
+<ul>
+<li>移入 j，其中 j 是一个状态。语法分析器采取的动作是把输入符号 a 高效地移入栈中，但是使用状态 j 来代表 a</li>
+<li>归约 A→β。语法分析器的动作是把栈顶的 β 高效地归约为产生式头 A</li>
+<li>接受。语法分析器接受输入并完成语法分析过程</li>
+<li>报错。语法分析器在它的输入中发现了一个错误并执行某个纠正动作</li>
+</ul>
+</li>
+<li>把定义在项集上的 GOTO 函数扩展为定义在状态集上的函数：如果GOTO［I i，A］=I j，那么 GOTO 也把状态 i 和一个非终结符号 A 映射到状态 j</li>
+</ul>
+</li>
+<li>
+<p>LR 语法分析器的格局</p>
+<ul>
+<li>
+<p>语法分析器的完整状态包括：它的栈和余下的输入</p>
+<p><img src="7.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>s0（即分析器的开始状态）不代表任何文法符号，它只是作为栈底标记</p>
+</li>
+</ul>
+</li>
+<li>
+<p>LR 语法分析器的行为</p>
+<ul>
+<li>首先读入当前输入符号 ai 和栈顶的状态 Sm，然后在分析动作表中查询条目 ACTOIN［Sm, ai］
+<ul>
+<li>
+<p>移入 s：语法分析器执行一次移入动作,它将下一个状态 S 和输入符号 a 移入栈中</p>
+</li>
+<li>
+<p>规约 A → β：语法分析器执行一次归约动作</p>
+<ul>
+<li>语法分析器首先将 r（r是β的长度）个状态符号弹出栈</li>
+<li>语法分析器将S（即条目GOTO［Sm-r，A］的值）和 A 压入栈中</li>
+</ul>
+</li>
+<li>
+<p>acc 接受</p>
+</li>
+<li>
+<p>报错</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="8.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+<hr />
+<h2 id="构造-slr-语法分析表"><a class="markdownIt-Anchor" href="#构造-slr-语法分析表"></a> 构造 SLR 语法分析表</h2>
+<h3 id="项和lr0自动机"><a class="markdownIt-Anchor" href="#项和lr0自动机"></a> 项和LR(0)自动机</h3>
+<ul>
+<li>
+<p>一个文法 G 的一个LR(0) 项（简称为项）是 <strong>G 的一个产生式再加上一个位于它的体中某处的点</strong></p>
+<ul>
+<li>
+<p>产生式 A→XYZ 产生了四个项</p>
+<figure class="highlight css"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">A</span>→·XYZ<br><span class="hljs-selector-tag">A</span>→X·YZ<br><span class="hljs-selector-tag">A</span>→XY·Z<br><span class="hljs-selector-tag">A</span>→XYZ·<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>产生式 A→∈只生成一个项 A→ ·</p>
+</li>
+</ul>
+</li>
+<li>
+<p>项指明了在语法分析过程中的给定点上，已经看到了一个产生式的哪些部分</p>
+<ul>
+<li>项 A→X·YZ 说明在输入中 看到了一个可以由 X 推导得到的串，并且希望接下来看到一个能从 YZ 推导得到的串</li>
+<li>项 A→XYZ· 表示已经看到了产生式体 XYZ，已经是时候把 XYZ 归约为 A 了</li>
+</ul>
+</li>
+<li>
+<p>规范 <strong>LR(0) 项集族 (canonical LR(0)collection)</strong> 的一组项集提供了构建一个确定有穷自动机的基础。该自动机可用于做出语法分析决定。这样的有穷自动机称为 LR(0) 自动机</p>
+<ul>
+<li>这个 LR(0) 自动机的每个状态代表了规范 LR(0) 项集族中的一个项集</li>
+</ul>
+</li>
+<li>
+<p>示例：对于表达式文法</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs r">E’ →E <br>E →E<span class="hljs-operator">+</span><span class="hljs-built_in">T</span> <br>E →<span class="hljs-built_in">T</span><br><span class="hljs-built_in">T</span> →<span class="hljs-built_in">T</span><span class="hljs-operator">*</span><span class="hljs-built_in">F</span><br><span class="hljs-built_in">T</span> →<span class="hljs-built_in">F</span> <span class="hljs-built_in">T</span><br><span class="hljs-built_in">F</span> →<span class="hljs-punctuation">(</span>E<span class="hljs-punctuation">)</span><br><span class="hljs-built_in">F</span> →id <br></code></pre></td></tr></table></figure>
+<p>其 LR(0) 自动机为</p>
+<p><img src="9.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>为了构造一个文法的规范 LR(0) 项集族，需要定义一个<strong>增广文法(augmented grammar)</strong> 和两个函数：<strong>CLOSURE（闭包）</strong> 和 <strong>GOTO</strong></p>
+<ul>
+<li>
+<p>增广文法：如果 G 是一个以 S 为开始符号的文法，那么 G 的增广文法 G′ 就是在 G 中加上新开始符号 S′ 和产生式 S′→S 而得到的文法</p>
+<ul>
+<li>引入这个新的开始产生式的目的是告诉语法分析器何时应该停止语法分析并宣称接受输入符号串</li>
+<li>当且仅当语法分析器要使用规则 S′→S 进行归约时，输入符号串被接受</li>
+</ul>
+</li>
+<li>
+<p><strong>项集的闭包</strong>：如果 I 是文法 G 的一个项集，那么 CLOSURE（I）就是根据下面的两 个规则从 I 构造得到的项集</p>
+<ul>
+<li>一开始，将 I 中的各个项加入到CLOSURE（I）中</li>
+<li>如果 A→α·Bβ 在CLOSURE（I）中，B→γ 是一个产生式，并且项 B→ · γ 不在CLOSURE（I）中，就将这个项加入其中
+<ul>
+<li>不断应用这个规则，直到没有新项可以加入到CLOSURE（I）中为止</li>
+</ul>
+</li>
+</ul>
+<p><img src="10.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="11.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>内核项：包括初始项 S′→ · S 以及点不在最左端的所有项</li>
+<li>非内核项：除了S′→ · S 之外的点在最左端的所有项</li>
+</ul>
+</li>
+<li>
+<p><strong>GOTO 函数</strong></p>
+<ul>
+<li>
+<p>GOTO（I，X）被定义为 I 中所有形如［A→α·Xβ］的项所对应的项［A→αX·β］的集合的闭包</p>
+</li>
+<li>
+<p>自动机的状态对应于项集，而 GOTO（I，X）描述了<strong>当输入为  X 时离开状态 I 的转换</strong></p>
+<p><img src="13.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>构造一个增广文法 G′ 的规范 LR（0）项集族 C 的算法</p>
+<p><img src="12.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p><strong>LR（0）自动机的用法</strong></p>
+<ul>
+<li>
+<p>LR（0）自动机的开始状态是CLOSURE（{［S′→·S］}）</p>
+</li>
+<li>
+<p>“状 态j” 指的是对应于项集 Ij 的状态</p>
+</li>
+<li>
+<p>假设文法符号串 γ 使 LR（0）自动机从开始状态 0 运行到某个状态 j</p>
+<ul>
+<li>那么如果下一个输入符号为 a 且状态 j 有一个在 a 上的转换，就移入 a</li>
+<li>否则就选择归约动作，状态 j 的项将告诉我们使用哪个产生式进行归约</li>
+</ul>
+<p><img src="14.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="构造slr语法分析表"><a class="markdownIt-Anchor" href="#构造slr语法分析表"></a> 构造SLR语法分析表</h3>
+<ul>
+<li>
+<p>给定一个文法 G，通过添加新的开始符号 S′ 得到增广文法 G′</p>
+</li>
+<li>
+<p>根据 G′ 构造出 G′ 的规范项集族 C 以及 GOTO 函数</p>
+</li>
+<li>
+<p>构造 ACTION 表</p>
+<ul>
+<li>
+<p>如果［A → α · aβ］在 Ii 中并且 GOTO（Ii，a）=Ij，那么将 ACTION［i，a］设置为 “移入j”。<strong>这里 a 必须是一个终结符号</strong></p>
+</li>
+<li>
+<p>如果［A → α ·］在 Ii 中，那么对于 <strong>FOLLOW（A）<strong>中的所有 a，将 ACTION［i，a］设置为 “归约A→α”。这里</strong>A不等于S′</strong></p>
+</li>
+<li>
+<p>如果［S′→S ·］在 Ii 中，那么将 ACTION［i，$］设置为“接受”</p>
+<blockquote>
+<p>如果根据上面的规则生成了任何冲突动作，这个文法不是 SLR(1) 的</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>构造 GOTO 表</p>
+<ul>
+<li>如果 GOTO（Ii，A）=Ij，那么 GOTO［i，A］= j，A 为非终结符</li>
+</ul>
+</li>
+<li>
+<p>语法分析器的初始状态就是根据［S′→ · S］所在项集构造得到的状态</p>
+</li>
+</ul>
+<p><img src="15.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>每个SLR（1）文法都是无二义性的，但是存在很多不是 SLR（1）的无二义性文法</li>
+</ul>
+<hr />
+<h1 id="更强大的-lr-语法分析器"><a class="markdownIt-Anchor" href="#更强大的-lr-语法分析器"></a> 更强大的 LR 语法分析器</h1>
+<h2 id="lr1-项"><a class="markdownIt-Anchor" href="#lr1-项"></a> LR(1) 项</h2>
+<ul>
+<li>如果在状态中包含更多的信息，就可能排除掉一些这样的不正确的 A→α 归约，将这个额外的信息加入状态中的方法是对项进行精化，使它包含第二个分量，这个分量的值为一个终结符号</li>
+<li>项的一般形式变成了［A→α · β，a］
+<ul>
+<li>其中 A→αβ 是一个产生式</li>
+<li>a 是一个终结符号或右端结束标记 $，被称为 <strong>向前看符号</strong></li>
+</ul>
+</li>
+<li>一个形如［A → α ·，a］的项<strong>只有在下一个输入符号等于 a</strong> 时才要求按照 A → α 进行归约
+<ul>
+<li>a 的集合总是 FOLLOW（A）的子集</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="构造-lr1-集族"><a class="markdownIt-Anchor" href="#构造-lr1-集族"></a> 构造 LR(1) 集族</h2>
+<ul>
+<li>
+<p>构造有效 LR（1）项集族的方法实质上和构造规范 LR（0）项集族的方法相同。只需要修改两个过程：CLOSURE 和 GOTO</p>
+<p><img src="16.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+<hr />
+<h2 id="构造-lr1-语法分析表"><a class="markdownIt-Anchor" href="#构造-lr1-语法分析表"></a> 构造 LR(1) 语法分析表</h2>
+<ul>
+<li>
+<p>给定一个文法 G，通过添加新的开始符号 S′ 得到增广文法 G′</p>
+</li>
+<li>
+<p>根据 G′ 构造出 G′ 的规范 LR(1) 项集族 C 以及 GOTO 函数</p>
+</li>
+<li>
+<p>构造 ACTION 表：语法分析器的状态 i 根据 Ii 构造得到</p>
+<ul>
+<li>
+<p>如果［A → α · aβ，b］在 Ii 中，并且 GOTO（Ii，a）=Ij，那么将 ACTION［i,a］ 设置为“移入j”。a 是一个终结符号</p>
+</li>
+<li>
+<p>如果［A→α·，a］在 Ii 中且 A≠S′，那么将 **ACTION［i，a］**设置为“规约A→α”</p>
+</li>
+<li>
+<p>如果［S′→S·，$］在 Ii 中，那么将 ACTION［i，$］设置为“接受”</p>
+<blockquote>
+<p>如果根据上面的规则生成了任何冲突动作，这个文法不是  LR(1) 的</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>构造 GOTO 表：</p>
+<ul>
+<li>如果 GOTO（Ii，A）= Ij，那么 GOTO［i，A］= j，A 为非终结符</li>
+</ul>
+</li>
+<li>
+<p>语法分析器的初始状态就是根据［S′→ · S, $］所在项集构造得到的状态</p>
+</li>
+</ul>
+<blockquote>
+<p>每个 SLR（1）文法都是 LR（1）文法。但是对于一个 SLR（1）文法而言，规范 LR（1）语法分析器的状态要比同一文法对应的 SLR语法分析器的状态多。</p>
+</blockquote>
+<hr />
+<h2 id="构造-lalr-语法分析表"><a class="markdownIt-Anchor" href="#构造-lalr-语法分析表"></a> 构造 LALR 语法分析表</h2>
+<ul>
+<li>
+<p>LALR（向前看LR）技术</p>
+<ul>
+<li>这个方法经常在实践中使用，因为用这种方法得到的分析表比规范 LR 分析表小很多</li>
+<li>一个文法的 SLR 和 LALR 分析表总是具有相同数量的状态</li>
+</ul>
+</li>
+<li>
+<p>LR(1) 项的**核心(core)**就是其第一分量</p>
+<p><img src="17.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>
+<p>对于 LALR，在 LR(1) 项的集族中寻找具有<strong>相同核</strong>心的 LR(1) 项，并将这些项合并为一个状态</p>
+<p><img src="18.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>一般而言，一个核心就是当前正处理的文法的 LR（0）项集，一个LR（1）文法可能产生多个具有相同核心的项集</li>
+</ul>
+</li>
+<li>
+<p>因为 GOTO（I，X）的核心只由 I 的核心决定，一组被合并的项集的 GOTO 目标也可以被合并，因此，当合并项集时可以相应地修改 GOTO 函数。动作函数也需要加以修改，以反映出被合并的所有项集的非报错动作</p>
+</li>
+</ul>
+</li>
+<li>
+<p>合并具有相同核心的状态<strong>不会产生出原有状态中没有出现的移入/归约冲突</strong>，因为移入动作仅由核心决定，不考虑向前看符号</p>
+</li>
+<li>
+<p>一个简单，但空间需求大的 LALR 分析表的构造方法</p>
+<ul>
+<li>构造 LR（1）项集族 C={I0，I1，…，In}</li>
+<li>对于 LR（1）项集中的每个核心，找出所有具有这个核心的项集，并将这些项集替换为它们的并集</li>
+<li>令 C′={J0，J1，…，Jm} 是得到的 LR（1）项集族。状态 i 的语法分析动作是按照 LR(1) 分析表的方法根据 Ji 构造得到的</li>
+<li>如果 J 是一个或多个 LR（1）项集的并集，也就是说 J=I1∪I2∪…∪Ik
+<ul>
+<li>那么 GOTO（I1，X），GOTO（I2，X），…，GOTO（Ik，X）的核心是相同的，因为 I1、I2、…、Ik 具有相同的核心</li>
+<li>令 K 是所有和 GOTO（I1，X）具有相同核心的项集的并集，那么 GOTO（J，X）=K</li>
+</ul>
+</li>
+</ul>
+<p><img src="19.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+<hr />
+<h1 id="lr-语法分析中的错误恢复"><a class="markdownIt-Anchor" href="#lr-语法分析中的错误恢复"></a> LR 语法分析中的错误恢复</h1>
+<ul>
+<li>当 LR 语法分析器在查询语法分析动作表并发现一个报错条目时，它就检测到了一个语法错误
+<ul>
+<li>在查询 GOTO 表时不会发现语法错误</li>
+<li>如果当前已扫描的输入部分不可能存在正确的后续符号串，LR 语法分析器就会立刻报错
+<ul>
+<li>规范 LR 语法分析器不会做任何多余的归约动作，会立刻报告错误</li>
+<li>SLR 和 LALR 语法分析器可能会在报错之前执行几次归约动作</li>
+<li>但是它们决不会把一个错误的输入符号移入到栈中</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="恐慌模式错误恢复"><a class="markdownIt-Anchor" href="#恐慌模式错误恢复"></a> 恐慌模式错误恢复</h2>
+<blockquote>
+<p>Panic Mode Error Recovery</p>
+</blockquote>
+<ul>
+<li>恐慌模式的错误恢复策略的实现方式
+<ul>
+<li>从栈顶向下扫描，直到发现某个状态 s，它有一个对应于某个非终结符号 A 的 GOTO 目标</li>
+<li>丢弃零个或多个输入符号，直到发现一个可能合法地跟在 A 之后的符号 a 为止
+<ul>
+<li>符号 a 只是在 FOLLOW (A)中，但这可能不适用于所有情况</li>
+</ul>
+</li>
+<li>语法分析器将非终结符 A 和 GOTO（s，A）压入栈中，继续进行正常的语法分析</li>
+<li>在实践中可能会选择多个这样的非终结符号 A
+<ul>
+<li>通常这些非终结符号代表了主要的程序段，比如表达式、语句或块</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>这个错误恢复方法试图<strong>消除包含语法错误的短语</strong></li>
+</ul>
+<hr />
+<h2 id="短语层次错误恢复"><a class="markdownIt-Anchor" href="#短语层次错误恢复"></a> 短语层次错误恢复</h2>
+<ul>
+<li>实现短语层次错误恢复的方法如下：
+<ul>
+<li>检查 LR 语法分析表中的每个报错条目，并根据语言的使用方法来决定程序员所犯的何种错误最有可能引起这个语法错误</li>
+<li>构造出适当的恢复过程，通常会根据各个报错条目来确定适当的修改方法，修改栈顶状态和/或第一个输入符号</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h1 id="算符优先算法"><a class="markdownIt-Anchor" href="#算符优先算法"></a> 算符优先算法</h1>
+<ul>
+<li>
+<p>算符文法</p>
+<ul>
+<li>规模虽小，但却是语法的一个重要类别</li>
+<li>可以构造一个有效的算符优先解析器(移入-规约解析器)</li>
+</ul>
+</li>
+<li>
+<p>在算符文法中，产生式右边中不能含有：</p>
+<ul>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ϵ</span></span></span></span></p>
+</li>
+<li>
+<p>两个相邻的非终结符</p>
+<p><img src="20.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+</li>
+<li>
+<p>在算符优先解析中，定义了三个<strong>不相交的优先关系</strong></p>
+<ul>
+<li><strong>a &lt;. b</strong>：b 的优先级比 a 高</li>
+<li><strong>a =· b</strong>：b的优先级和 a 一样</li>
+<li><strong>a &gt;. b</strong>：b 的优先级比 a 低</li>
+</ul>
+</li>
+<li>
+<p>终结符之间正确的优先关系的确定是基于传统的结合性和算子优先性的概念</p>
+</li>
+<li>
+<p>算符优先关系的使用：</p>
+<ul>
+<li>优先关系的目的是寻找右句形式的句柄
+<ul>
+<li>&lt;.  ：标记句柄左端</li>
+<li>=· ：出现在句柄内部</li>
+<li>.&gt; ：标记句柄右端</li>
+</ul>
+</li>
+<li>在我们的输入字符串 $a1a2… an$中，<strong>插入终结符对之间的优先关系</strong>(该优先关系保持在该对终结符之间)</li>
+</ul>
+</li>
+</ul>
+<p><img src="21.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>
+<p>从左端扫描字符串，直到遇到第一个 · &gt;</p>
+</li>
+<li>
+<p>然后向后(向左)扫描 any = · 直到遇到 &lt; ·</p>
+</li>
+<li>
+<p>句柄包含第一个 · &gt; 左侧和遇到 &lt; · 的右侧的所有内容</p>
+<p><img src="22.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+<li>
+<p>确定算符优先级关系的方法</p>
+<ul>
+<li>
+<p>如果操作符 O1的优先级高于操作符 O2：O1 .&gt; O2 and   O2 &lt;. O1</p>
+</li>
+<li>
+<p>如果操作符 O1和操作符 O2具有相同的优先级</p>
+<ul>
+<li>是左结合运算符：O1 .&gt; O2 and   O2 .&gt; O1</li>
+<li>是右结合运算符：O1 &lt;. O2 and   O2 &lt;. O1</li>
+</ul>
+</li>
+<li>
+<p>对于所有的运算符 O：O &lt;. id,    id .&gt; O,    O &lt;. (,    (&lt;. O,    O .&gt; ),    ) .&gt; O,    O .&gt; $,  and   $ &lt;. O</p>
+</li>
+<li>
+<p>最后：(=·), $ &lt;. ( , id .&gt; ) , ) .&gt; $ ,  ( &lt;. ($ &lt;. id , id .&gt; $ , ) .&gt; ) ,  ( &lt;. id</p>
+<p><img src="23.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/">专业课</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/">语法分析</a>
+                    
+                      <a class="hover-with-bg" href="/tags/LR/">LR</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%93%E4%B8%9A%E8%AF%BE/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81%E5%9F%BA%E7%A1%80/formalvalidation/">
+                        <span class="hidden-mobile">自动化验证基础｜期末复习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
