@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="阴丹士林蓝">
+  <meta name="keywords" content="study note software">
+  
+    <meta name="description" content="最近在看6.824，提到的老论文，后面还有谷歌几篇要看">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式系统 | MapReduce">
+<meta property="og:url" content="http://example.com/%E7%9C%8B%E7%82%B9%E8%AE%BA%E6%96%87/MapReduce/index.html">
+<meta property="og:site_name" content="IndanthronBlue">
+<meta property="og:description" content="最近在看6.824，提到的老论文，后面还有谷歌几篇要看">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:%5C%E5%AD%A6%E4%B9%A0%5C%E5%A4%A7%E4%B8%89%E5%AF%92%E5%81%87%5C6.824%5Cnote%5C1.png">
+<meta property="og:image" content="d:%5C%E5%AD%A6%E4%B9%A0%5C%E5%A4%A7%E4%B8%89%E5%AF%92%E5%81%87%5C6.824%5Cnote%5C2.png">
+<meta property="article:published_time" content="2023-01-30T08:13:57.000Z">
+<meta property="article:modified_time" content="2023-01-30T08:17:00.793Z">
+<meta property="article:author" content="阴丹士林蓝">
+<meta property="article:tag" content="谷歌">
+<meta property="article:tag" content="分布式系统">
+<meta property="article:tag" content="MapReduce">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="d:%5C%E5%AD%A6%E4%B9%A0%5C%E5%A4%A7%E4%B8%89%E5%AF%92%E5%81%87%5C6.824%5Cnote%5C1.png">
+  
+  
+  <title>分布式系统 | MapReduce - IndanthronBlue</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":10},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>IndanthronBlue</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/3.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="分布式系统 | MapReduce">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      阴丹士林蓝
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-01-30 16:13" pubdate>
+        2023年1月30日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      8.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      69 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">分布式系统 | MapReduce</h1>
+            
+            <div class="markdown-body">
+              <h2 id="mapreduce"><a class="markdownIt-Anchor" href="#mapreduce"></a> MapReduce</h2>
+<ul>
+<li>MapReduce is a programming model and an associated implementation for processing and generating large data sets.
+<ul>
+<li>用户指定一个map函数，该函数处理K/V对以生成一组中间K/V，以及一个reduce函数，该功能合并与同一个中间键关联的所有中间值。</li>
+<li>用这种函数式编写的程序会自动并行化，并在大型商品机器集群上执行。运行时系统负责划分输入数据、调度程序在一组机器上的执行、处理机器故障以及管理所需的机器间通信等细节。</li>
+</ul>
+</li>
+</ul>
+<h3 id="编程模型"><a class="markdownIt-Anchor" href="#编程模型"></a> 编程模型</h3>
+<ul>
+<li>计算采用一组输入键/值对，并产生一组输出键/值配对。MapReduce库的用户将计算表示为两个函数：<strong>Map和Reduce</strong>。
+<ul>
+<li>由用户编写的Map采用输入对并生成一组中间键/值对。MapReduce库<strong>将与同一中间键I关联的所有中间值组合在一起</strong>，并将它们传递给Reduce函数</li>
+<li>Reduce函数也由用户编写，接受一个中间键I和该键的一组值。它将这些值合并在一起，形成一组可能更小的值。通常，每个Reduce调用只生成零个或一个输出值。中间值通过迭代器提供给用户的reduce函数。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="实例单词计数"><a class="markdownIt-Anchor" href="#实例单词计数"></a> 实例：单词计数</h4>
+<ul>
+<li>
+<p>考虑一个计算大量文档中每个单词出现次数的问题。用户将编写类似于以下伪代码的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><pre><code class="hljs c"><span class="hljs-built_in">map</span>(String key, String value):<br>	<span class="hljs-comment">// key: document name</span><br>	<span class="hljs-comment">// value: document contents</span><br>	<span class="hljs-keyword">for</span> each word w in value:<br>		EmitIntermediate(w, <span class="hljs-string">&quot;1&quot;</span>);<br>	<br>reduce(String key, Iterator values):<br>	<span class="hljs-comment">// key: a word</span><br>	<span class="hljs-comment">// values: a list of counts</span><br>	<span class="hljs-type">int</span> result = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span> each v in values:<br>		result += ParseInt(v);<br>	Emit(AsString(result));<br></code></pre></td></tr></table></figure>
+<ul>
+<li>map函数发出每个单词加上相关的出现次数（在这个简单的示例中仅为“1”）。</li>
+<li>reduce函数将特定单词发出的所有计数相加。</li>
+<li>此外，用户还编写代码，用输入和输出文件的名称以及可选的调优参数来填充mapreduce规范对象。然后，用户调用MapReduce函数，将规范对象传递给它。用户的代码与MapReduce库（用C++实现）链接在一起。</li>
+</ul>
+</li>
+</ul>
+<h4 id="类型"><a class="markdownIt-Anchor" href="#类型"></a> 类型</h4>
+<ul>
+<li>
+<p>尽管前面的伪代码是根据字符串输入和输出编写的，但从概念上讲，用户提供的map和reduce函数具有相关类型：</p>
+<p><img src="D:%5C%E5%AD%A6%E4%B9%A0%5C%E5%A4%A7%E4%B8%89%E5%AF%92%E5%81%87%5C6.824%5Cnote%5C1.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>输入键和值是从与输出键和值不同的域绘制的。此外，中间键和值与输出键和值来自同一域。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h3>
+<ul>
+<li>MapReduce接口的许多不同实现都是可能的。正确的选择取决于环境。例如，一种实现可能适用于小型共享内存机器，另一种适用于大型NUMA多处理器，而另一种则适用于更大的联网机器集合。</li>
+<li>本节描述了一种针对谷歌广泛使用的计算环境的实现：通过交换以太网连接在一起的大型商用PC集群。在我们的环境中：
+<ul>
+<li>机器通常是运行Linux的双处理器x86处理器，每台机器有2-4 GB内存。</li>
+<li>使用的是商品网络硬件——通常在机器级别为100兆比特/秒或1千兆比特/秒，但总体平分带宽的平均值要小得多。</li>
+<li>一个集群由数百或数千台机器组成，因此机器故障很常见。</li>
+<li>存储由直接连接到单个计算机的廉价IDE磁盘提供。内部开发的分布式文件系统用于管理存储在这些磁盘上的数据。文件系统使用复制在不可靠的硬件之上提供可用性和可靠性。</li>
+<li>用户向调度系统提交项目（job）。每个项目由一组任务（task）组成，并由调度器映射到集群中的一组可用机器。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="执行概述"><a class="markdownIt-Anchor" href="#执行概述"></a> 执行概述</h4>
+<ul>
+<li>
+<p>通过将输入数据自动划分为一组M个分割，Map调用分布在多台机器上。输入分割可以由不同的机器并行处理。通过使用分区函数（例如，hash（key）mod R）将中间键空间划分为R个片段，来分配Reduce调用。分区的数量（R）和分区函数由用户指定。</p>
+</li>
+<li>
+<p>图1显示了我们实现中MapReduce操作的总体流程。当用户程序调用MapReduce函数时，会发生以下操作序列（图1中的编号标签对应于下面列表中的编号）：</p>
+<p><img src="D:%5C%E5%AD%A6%E4%B9%A0%5C%E5%A4%A7%E4%B8%89%E5%AF%92%E5%81%87%5C6.824%5Cnote%5C2.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li>用户程序中的MapReduce库首先将输入文件分割成M个片段，每个片段通常为16兆字节到64兆字节（MB）（可由用户通过可选参数控制）。然后，它在一组机器上启动程序的许多副本。</li>
+<li>该程序的副本之一是特殊的，即主程序（Master）。其余的是由Master分配工作的工人（Worker）。有M个map任务和R个reduce任务要分配。主程序挑选空闲的Worker，并为每个Worker分配一个map任务或reduce任务。</li>
+<li>分配了Map任务的Worker读取相应输入拆分的内容。它解析输入数据中的键/值对，并将每个对传递给用户定义的Map函数。Map函数生成的中间键/值对<strong>缓冲在内存中</strong>。</li>
+<li>缓冲对定期写入<strong>本地磁盘</strong>，由分区函数分区为R个区域。这些缓冲对在本地磁盘上的位置被传递回Master，Master负责将这些位置转发给执行reduce函数的Worker。</li>
+<li>当Master通知reduce工作程序（worker）这些位置时，它使用<strong>远程过程调用</strong>从映射工作程序的本地磁盘读取缓冲数据。
+<ul>
+<li>当reduce工作程序读取了所有中间数据时，<strong>它会按中间键对其进行排序，以便将同一个键的所有出现分组在一起</strong>。</li>
+<li>需要排序，因为通常许多不同的键映射到同一个reduce任务。如果中间数据量太大，无法放入内存，则使用外部排序。</li>
+</ul>
+</li>
+<li>reduce工作程序遍历排序的中间数据，对于遇到的每个唯一的中间键，它**将该键和相应的一组中间值传递给用户的reduce函数。**Reduce函数的输出附加到此Reduce分区的最终输出文件中。</li>
+<li>当所有map task和reduce task完成后，主程序唤醒用户程序。此时，用户程序中的MapReduce调用返回到用户代码</li>
+</ul>
+</li>
+<li>
+<p>成功完成后，mapreduce执行的输出在R个输出文件中可用（每个reduce任务一个，文件名由用户指定）。通常，用户不需要将这些R输出文件合并为一个文件——<strong>他们通常将这些文件作为输入传递给另一个MapReduce调用</strong>，或者从另一个分布式应用程序使用这些文件，该应用程序能够处理分割为多个文件的输入。</p>
+</li>
+</ul>
+<hr />
+<h4 id="master-数据结构"><a class="markdownIt-Anchor" href="#master-数据结构"></a> Master 数据结构</h4>
+<ul>
+<li>Master 保留了几个数据结构。对于每个map任务和reduce任务，它存储<strong>状态（空闲、正在进行或已完成）和工作机器的标识（对于非空闲任务）</strong>。</li>
+<li>Master 是从map任务传播中间文件区域位置到reduce任务的管道。因此，对于每个已完成的map任务，master存储由map任务生成的R个中间文件区域的位置和大小。当map任务完成时，将接收对此位置和大小信息的更新。这些信息会逐步推送给正在进行reduce任务的worker。</li>
+</ul>
+<hr />
+<h4 id="容错"><a class="markdownIt-Anchor" href="#容错"></a> 容错</h4>
+<ul>
+<li>
+<p>由于MapReduce库旨在帮助使用数百或数千台机器处理大量数据，因此该库必须优雅地容忍机器故障。</p>
+</li>
+<li>
+<p>对于 Worker Failure</p>
+<ul>
+<li>master定期对每个worker进行ping。如果在一定时间内没有收到worker的响应，则master将该worker标记为失败。</li>
+<li>worker完成的任何map任务都会重置回其初始空闲状态，因此有资格在其他worker上进行调度。</li>
+<li>类似地，故障工作程序上正在进行的任何map任务或reduce任务也会重置为空闲状态，并有资格重新安排。</li>
+<li><strong>完成的map任务在发生故障时重新执行</strong>，因为它们的输出存储在故障机器的本地磁盘上，因此无法访问。<strong>完成的reduce任务不需要重新执行</strong>，因为它们的输出存储在全局文件系统中。</li>
+<li>当map任务首先由worker A执行，然后由worker B执行（因为A失败）时，**将通知所有执行reduce任务的worker重新执行。**任何尚未从worker A读取数据的reduce任务都将从worker B读取数据。</li>
+<li>MapReduce能够应对大规模的worker故障。例如，在一次MapReduce操作期间，正在运行的集群上的网络维护导致一次80台机器的组在几分钟内无法访问。MapReduce主机只需重新执行无法访问的worker机器所做的工作，并继续向前推进，最终完成MapReduce操作。</li>
+</ul>
+</li>
+<li>
+<p>对于 Master Failure</p>
+<ul>
+<li>很容易使上述master数据结构的master写入<strong>周期性检查点</strong>。<strong>如果主任务终止，则可以从最后一个检查点状态启动新副本。</strong></li>
+<li>然而，考虑到只有一个主机，其失败的可能性不大；因此，如果主机失败，我们当前的实现将中止MapReduce计算。如果需要，客户端可以检查此情况并重试MapReduce操作。</li>
+</ul>
+</li>
+<li>
+<p>故障时的语义（Semantics in the Presence of Failures）</p>
+<ul>
+<li>当用户提供的 map 和 reduce 运算符是其输入值的确定函数时，我们的分布式实现产生的输出与整个程序的非错误顺序执行产生的输出相同。</li>
+<li>依靠map和reduce任务的<strong>原子提交</strong>来实现这一特性
+<ul>
+<li>每个正在进行的任务都将其输出写入专用临时文件。一个reduce任务生成一个这样的文件，而一个map任务生成R个这样的（每个reduce一个文件）文件。</li>
+<li>当map任务完成时，worker向master发送一条消息，并在消息中包含R个临时文件的名称。如果master收到已完成map任务的完成消息，它将忽略该消息。否则，它会在master数据结构中记录R文件的名称。</li>
+<li>当reduce任务完成时，reduce工作程<strong>序将其临时输出文件自动重命名为最终输出文件。<strong>如果在多台计算机上执行相同的reduce任务，则将对同一最终输出文件执行多个重命名调用。我们依靠底层文件系统提供的原子重命名操作来保证</strong>最终的文件系统状态只包含一次执行reduce任务所生成的数据。</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="本地化"><a class="markdownIt-Anchor" href="#本地化"></a> 本地化</h4>
+<ul>
+<li>网络带宽在我们的计算环境中是一种相对稀缺的资源。我们通过利用<strong>输入数据（由GFS管理）存储在组成集群的机器的本地磁盘</strong>上来节省网络带宽。
+<ul>
+<li>GFS将每个文件分成64 MB的块，并在不同的机器上存储每个块的几个副本（通常为3个副本）。</li>
+<li>MapReduce Master 将输入文件的位置信息考虑在内，并尝试在包含相应输入数据副本的机器上调度map任务。如果失败，它将尝试<strong>在该任务的输入数据副本附近调度map任务</strong>（例如，在与包含数据的机器位于同一网络交换机上的工作机器上）。当在集群中的很大一部分工作人员上运行大型MapReduce操作时，大多数输入数据都在本地读取，不消耗网络带宽。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="任务粒度task-granularity"><a class="markdownIt-Anchor" href="#任务粒度task-granularity"></a> 任务粒度（Task Granularity）</h4>
+<ul>
+<li>如上所述，我们将map阶段细分为M个片段，将reduce阶段细分为R个片段。理想情况下，M和R应该比worker机器的数量大得多。让每个worker执行许多不同的任务可以改善动态负载平衡，并在worker失败时加快恢复速度：它完成的许多map任务可以分散到所有其他worker机器上。</li>
+<li>在实现中，<strong>M和R的大小是有实际界限的</strong>，因为Master必须做出O（M+R）调度决策，并如上所述<strong>在内存中保持O（M*R）状态</strong>。（但是，内存使用的常数因子很小：状态的O（M*R）段由每个map任务/reduce任务对大约一个字节的数据组成。）</li>
+<li>此外，<strong>R经常受到用户的限制</strong>，因为每个reduce任务的输出都会在一个单独的输出文件中结束。在实践中，我们倾向于选择M，这样每个单独的任务大约有16 MB到64 MB的输入数据（因此上述的局部优化是最有效的），并且我们<strong>使R成为我们期望使用的工作机器数量的小倍数。</strong></li>
+</ul>
+<hr />
+<h4 id="备份任务"><a class="markdownIt-Anchor" href="#备份任务"></a> 备份任务</h4>
+<ul>
+<li>延长MapReduce操作所需总时间的一个常见原因是**“掉队者（straggler）”**：一台机器需要异常长的时间来完成计算中最后几项MapReduce任务之一。
+<ul>
+<li>掉队者的出现有很多原因。例如，具有坏磁盘的计算机可能会遇到频繁的可纠正错误，从而使其读取性能从30 MB/s降低到1 MB/s。集群调度系统可能已经在机器上调度了其他任务，导致其执行MapReduce代码的速度更慢，因为CPU、内存、本地磁盘或网络带宽的竞争。</li>
+<li>我们最近遇到的一个问题是机器初始化代码中的一个错误，导致处理器缓存被禁用：受影响机器上的计算速度减慢了100倍以上</li>
+</ul>
+</li>
+<li>有一个通用的机制来缓解掉队者的问题：当MapReduce操作接近完成时，Master会安排剩余正在进行的任务的<strong>备份执行（backup executions）</strong>。每当主执行或备份执行完成时，任务都标记为已完成。我们已经对该机制进行了调整，使其通常将操作所使用的计算资源增加不超过百分之几。</li>
+</ul>
+<hr />
+<h3 id="优化"><a class="markdownIt-Anchor" href="#优化"></a> 优化</h3>
+<h4 id="分区功能"><a class="markdownIt-Anchor" href="#分区功能"></a> 分区功能</h4>
+<blockquote>
+<p>Partitioning Function</p>
+</blockquote>
+<ul>
+<li>MapReduce的用户指定他们想要的reduce任务/输出文件的数量（R）。使用中间键上的分区函数在这些任务之间对数据进行分区。提供了使用哈希的默认分区函数（例如“hash（key）mod R”）。</li>
+<li>这往往会导致分区相当均衡。然而，在某些情况下，通过键的其他功能对数据进行分区是有用的。
+<ul>
+<li>例如，有时输出键是URL，我们希望单个主机的所有条目都以相同的输出文件结尾。为了支持这种情况，MapReduce库的用户可以提供一个特殊的分区函数。例如，使用“hash（Hostname（urlkey））mod R”作为分区函数会导致来自同一主机的所有URL最终位于同一输出文件中</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="排序保证"><a class="markdownIt-Anchor" href="#排序保证"></a> 排序保证</h4>
+<ul>
+<li>我们保证在给定的分区内，<strong>中间键/值对按递增的键顺序进行处理</strong>。
+<ul>
+<li>这种排序保证可以很容易地为每个分区生成一个排序的输出文件，当输出文件格式需要支持按关键字进行的高效随机访问查找，或者输出的用户发现数据排序很方便时，这一点非常有用。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="组合器功能"><a class="markdownIt-Anchor" href="#组合器功能"></a> 组合器功能</h4>
+<ul>
+<li>在某些情况下，<strong>每个map任务产生的中间键中存在显著的重复</strong>，并且用户指定的Reduce函数是可交换和关联的。
+<ul>
+<li>第2.1节中的单词计数示例就是一个很好的例子。由于单词频率倾向于遵循Zipf分布，每个map任务将产生数百或数千条＜the，1&gt;形式的记录。</li>
+<li>所有这些计数都将通过网络发送到一个reduce任务，然后通过reduce函数将其相加，生成一个数字。</li>
+<li>我们允许用户<strong>指定一个可选的Combiner函数，该函数在通过网络发送数据之前对数据进行部分合并</strong>。</li>
+</ul>
+</li>
+<li>组合器功能在执行map任务的每台机器上执行。通常，相同的代码用于实现组合器和reduce函数。<strong>reduce函数和组合器函数之间的唯一区别是MapReduce库如何处理函数的输出</strong>。reduce函数的输出将写入最终输出文件。组合器函数的输出被写入将被发送到reduce任务的中间文件。</li>
+</ul>
+<hr />
+<h4 id="输入和输出类型"><a class="markdownIt-Anchor" href="#输入和输出类型"></a> 输入和输出类型</h4>
+<ul>
+<li>MapReduce库支持读取几种不同格式的输入数据。
+<ul>
+<li>&quot;text&quot;模式输入将每一行视为键/值对：键是文件中的偏移量，值是行的内容。</li>
+<li>另一种常见的支持格式存储按键排序的键/值对序列。</li>
+</ul>
+</li>
+<li>每个输入类型实现都知道如何将自己划分为有意义的范围，以便作为单独的map任务（例如：text 模式的范围分割确保范围分割仅在行边界处发生）。用户可以通过提供一个简单的**阅读器（reader）**界面的实现来添加对新输入类型的支持，尽管大多数用户只使用少量预定义输入类型中的一种。
+<ul>
+<li>读取器不一定需要提供从文件读取的数据。例如，很容易定义从数据库或从内存中映射的数据结构读取记录的读取器。</li>
+<li>以类似的方式，我们支持一组输出类型以生成不同格式的数据，用户代码很容易添加对新输出类型的支持。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="跳过坏记录"><a class="markdownIt-Anchor" href="#跳过坏记录"></a> 跳过坏记录</h4>
+<ul>
+<li>有时，用户代码中存在错误，导致Map或Reduce函数在某些记录上崩溃。此类错误会阻止MapReduce操作完成。
+<ul>
+<li>通常的做法是修复错误，但有时这是不可行的；也许bug在源代码不可用的第三方库中。</li>
+<li>此外，有时可以<strong>忽略一些记录</strong>，例如在对大型数据集进行统计分析时。</li>
+</ul>
+</li>
+<li>我们提供了一种可选的执行模式，其中MapReduce库检测哪些记录会导致确定性崩溃，并跳过这些记录以向前推进。
+<ul>
+<li>每个worker进程都安装一个信号处理程序，用于捕获分段违规和总线错误。</li>
+<li>在调用用户Map或Reduce操作之前，MapReduce库将参数的序列号存储在全局变量中。如果用户代码生成了一个信号，信号处理程序会向MapReduce主机发送一个包含序列号的**“最后喘息（last gasp）”UDP数据包**。当Master设备在特定记录上看到多个故障时，它表示在下次重新执行相应的Map或Reduce任务时应跳过该记录</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="本地执行"><a class="markdownIt-Anchor" href="#本地执行"></a> 本地执行</h4>
+<ul>
+<li>Map或Reduce函数中的调试问题可能很棘手，<strong>因为实际的计算发生在分布式系统中</strong>，通常在几千台机器上，工作分配决策由主机动态做出。</li>
+<li>为了帮助简化调试、评测和小规模测试，我们开发了MapReduce库的另一种实现，它在<strong>本地计算机上顺序执行</strong>MapReduce操作的所有工作。
+<ul>
+<li>控件被提供给用户，使得计算可以被限制到特定的map任务。用户用一个特殊的标志调用他们的程序，然后可以轻松地使用他们认为有用的任何调试或测试工具（例如gdb）。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="状态信息"><a class="markdownIt-Anchor" href="#状态信息"></a> 状态信息</h4>
+<ul>
+<li>Master运行一个内部HTTP服务器，并导出一组状态页供用户使用。
+<ul>
+<li>状态页显示<strong>计算的进度，例如已完成多少任务、正在进行的任务、输入字节数、中间数据字节数、输出字节数、处理率</strong>等。</li>
+<li>这些页还包含到每个任务生成的标准错误和标准输出文件的链接。用户可以使用这些数据来预测计算需要多长时间，以及是否应该向计算中添加更多资源。</li>
+<li>这些页面还可用于确定计算速度何时比预期慢得多。</li>
+</ul>
+</li>
+<li>此外，最上层页面显示哪些worker失败，以及失败时他们正在处理的map和reduce任务。当试图诊断用户代码中的错误时，此信息非常有用。</li>
+</ul>
+<hr />
+<h4 id="计数器"><a class="markdownIt-Anchor" href="#计数器"></a> 计数器</h4>
+<ul>
+<li>
+<p>MapReduce库提供了计数各种事件发生次数的计数器功能。例如，用户代码可能希望计算处理的单词总数或编入索引的德语文档数等</p>
+</li>
+<li>
+<p>要使用此功能，用户代码创建一个命名的计数器对象，然后在Map和/或Reduce函数中适当地增加计数器。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c">Counter* uppercase;<br>uppercase = GetCounter(<span class="hljs-string">&quot;uppercase&quot;</span>);<br><span class="hljs-built_in">map</span>(String name, String contents):<br>	<span class="hljs-keyword">for</span> each word w in contents:<br>		<span class="hljs-keyword">if</span> (IsCapitalized(w)):<br>			uppercase-&gt;Increment();<br>		EmitIntermediate(w, <span class="hljs-string">&quot;1&quot;</span>);<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>来自各个worker的计数器值定期传播到master（附带在ping响应上）。当MapReduce操作完成时，master聚合成功的map和reduce任务的计数器值，并将其返回给用户代码。</p>
+<ul>
+<li>当前计数器值也显示在主状态页面上，以便用户可以查看实时计算的进度。当聚集计数器值时，master消除了重复执行同一map或reduce任务的影响，以避免重复计数。（重复执行可能是由于我们使用备份任务以及由于失败而重新执行任务造成的。）</li>
+</ul>
+</li>
+<li>
+<p>MapReduce库会自动维护一些计数器值，例如处理的输入键/值对的数量和生成的输出键/值的数量。</p>
+</li>
+<li>
+<p>计数器工具对于检查MapReduce操作的行为是否正常有用。例如，在某些MapReduce操作中，用户代码可能希望确保生成的输出对的数量恰好等于处理的输入对的数量，或者确保处理的德语文档的比例在处理的文档总数的某个可容忍的比例内。</p>
+</li>
+</ul>
+<hr />
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<ul>
+<li>MapReduce编程模型已在Google成功地用于许多不同的目的。我们将这一成功归因于几个原因。
+<ul>
+<li>首先，该模型易于使用，即使对于没有并行和分布式系统经验的程序员也是如此，因为它隐藏了并行化、容错、局部优化和负载平衡的细节。</li>
+<li>第二，大量问题很容易用MapReduce计算来表示。例如，MapReduce用于为Google的生产web搜索服务、排序、数据挖掘、机器学习和许多其他系统生成数据。</li>
+<li>第三，我们开发了MapReduce的实现，它可以扩展到由数千台机器组成的大型机器集群。该实现有效地利用了这些机器资源，因此适用于Google遇到的许多大型计算问题。</li>
+</ul>
+</li>
+<li>我们从这项工作中学到了一些东西。
+<ul>
+<li>首先，限制编程模型使并行化和分布式计算变得容易，并使此类计算具有容错性。</li>
+<li>第二，网络带宽是一种稀缺资源。因此，我们系统中的许多优化旨在减少通过网络发送的数据量：位置优化允许我们从本地磁盘读取数据，将中间数据的单个副本写入本地磁盘可以节省网络带宽。</li>
+<li>第三，可以使用冗余执行来减少慢速机器的影响，并处理机器故障和数据丢失。</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%9C%8B%E7%82%B9%E8%AE%BA%E6%96%87/">看点论文</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%B0%B7%E6%AD%8C/">谷歌</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">分布式系统</a>
+                    
+                      <a class="hover-with-bg" href="/tags/MapReduce/">MapReduce</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%9C%8B%E7%82%B9%E8%AE%BA%E6%96%87/WSN/">
+                        <span class="hidden-mobile">物联网&传感网 | 综述</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ju71pT7Kr10EISdANOvPh7gC-gzGzoHsz","appKey":"FoQggxB4tHGzYQQoLrF0qKux","path":"window.location.pathname","placeholder":"吐槽","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
